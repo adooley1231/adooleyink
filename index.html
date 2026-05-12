@@ -1,0 +1,2605 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anna Dooley — UX/UI Designer & Digital Strategist</title>
+<meta name="description" content="UX/UI Designer and Digital Strategist based in Denver. Research-informed interfaces for enterprise platforms, regulated products, and the parts of the journey nobody wants to map.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap">
+
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = saved || (prefersDark ? 'dark' : 'light');
+      if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    } catch (e) {}
+  })();
+</script>
+
+<style>
+  /* ----- DESIGN TOKENS ----- */
+  /* Swap fonts here when you have your own files. Add @font-face above and change vars. */
+  :root {
+    --paper: #ebe5d6;
+    --ink: #0a0a0a;
+    --hi: #d63100;          /* darker than #ff3d00 for AA on cream */
+    --acc: #0033ff;
+    --green: #00853a;       /* darker green, AA-safe on cream */
+    --paper-2: #e2dccb;     /* one step darker for subtle elevation */
+    --display: 'Archivo Black', Impact, sans-serif;
+    --body: 'Space Grotesk', system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --bw: 2px;
+    --pad: 24px;
+  }
+
+  /* ----- DARK MODE — distinct night identity, not a pure invert ----- */
+  /* Surfaces: warm near-black (darkroom, not OLED). Type: amber-bone (tungsten-lit). */
+  /* Accents lift for AA on dark. Sections that read --ink as bg auto-flip to cream */
+  /* islands (footer, hero strip, .ai, etc.) — preserves the inversion-as-device. */
+  [data-theme="dark"] {
+    --paper: #14110d;
+    --paper-2: #1f1b16;
+    --ink: #ede5d0;
+    --hi: #e83a14;
+    --acc: #5b6dff;
+    --green: #3acf7a;
+  }
+  [data-theme="dark"] .case-locked input:focus { background: var(--paper-2); }
+
+  /* ----- RESET ----- */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-weight: 400;
+    line-height: 1.5;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  body.case-open { overflow: hidden; }
+  body.no-cursor, body.no-cursor * { cursor: none !important; }
+
+  img, svg { display: block; max-width: 100%; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  a { color: inherit; }
+
+  /* ----- ACCESSIBILITY ----- */
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0;
+    margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;
+  }
+  .skip {
+    position: absolute; left: -9999px; top: 0;
+    background: var(--ink); color: var(--paper); padding: 12px 16px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: .08em;
+    text-transform: uppercase; text-decoration: none; z-index: 100;
+  }
+  .skip:focus { left: 0; top: 0; }
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 3px solid var(--acc);
+    outline-offset: 3px;
+  }
+  nav a:focus-visible, .cta:focus-visible, .work-card:focus-visible {
+    outline-offset: -3px;
+  }
+
+  /* ----- TYPOGRAPHY ----- */
+  .display { font-family: var(--display); font-weight: 900; letter-spacing: -.04em; line-height: .85; text-transform: uppercase; }
+  .display-2 { font-family: var(--body); font-weight: 700; letter-spacing: -.025em; line-height: .95; text-transform: uppercase; }
+  .mono { font-family: var(--mono); }
+
+  /* ----- NAV ----- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    border-bottom: var(--bw) solid var(--ink);
+    background: var(--paper);
+    display: grid; grid-template-columns: auto 1fr auto auto; align-items: stretch;
+  }
+  nav .brand {
+    padding: 14px 20px; border-right: var(--bw) solid var(--ink);
+    font-family: var(--display); font-size: 18px; letter-spacing: -.02em;
+    text-transform: uppercase; display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  nav .brand .dot {
+    width: 10px; height: 10px; background: var(--green);
+    border-radius: 50%;
+  }
+  nav .links { display: flex; align-items: stretch; }
+  nav .links a {
+    padding: 14px 20px; border-left: var(--bw) solid var(--ink);
+    font-family: var(--mono); font-size: 12px; font-weight: 500;
+    color: var(--ink); text-decoration: none;
+    text-transform: uppercase; letter-spacing: .06em;
+    display: flex; align-items: center;
+    transition: background .18s ease, color .18s ease;
+  }
+  nav .links a:hover { background: var(--ink); color: var(--paper); }
+  nav .cta {
+    padding: 14px 24px; border-left: var(--bw) solid var(--ink);
+    background: var(--hi); color: var(--paper);
+    font-family: var(--mono); font-weight: 700; font-size: 12px;
+    letter-spacing: .06em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px; text-decoration: none;
+    transition: background .18s ease, color .18s ease;
+  }
+  nav .cta:hover { background: var(--ink); color: var(--hi); }
+  nav .cta .arr { transition: transform .18s ease; }
+  nav .cta:hover .arr { transform: translateX(3px); }
+
+  .theme-toggle {
+    padding: 14px 16px; border-left: var(--bw) solid var(--ink);
+    background: var(--paper); color: var(--ink); cursor: pointer;
+    font-family: var(--mono); font-size: 12px; font-weight: 500;
+    letter-spacing: .08em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+    transition: background .18s ease, color .18s ease;
+  }
+  .theme-toggle:hover { background: var(--ink); color: var(--paper); }
+  .theme-toggle .ico {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--ink);
+    box-shadow: inset -3px 0 0 0 var(--paper);
+    transition: background .18s ease, box-shadow .18s ease;
+  }
+  .theme-toggle:hover .ico {
+    background: var(--paper);
+    box-shadow: inset -3px 0 0 0 var(--ink);
+  }
+  [data-theme="dark"] .theme-toggle .ico {
+    box-shadow: inset 3px 0 0 0 var(--paper);
+  }
+  [data-theme="dark"] .theme-toggle:hover .ico {
+    box-shadow: inset 3px 0 0 0 var(--ink);
+  }
+  .theme-toggle .lbl {
+    font-feature-settings: "tnum"; min-width: 3.2em; text-align: left;
+  }
+  @media (max-width: 520px) {
+    .theme-toggle .lbl { display: none; }
+    .theme-toggle { padding: 14px 14px; }
+  }
+
+  .nav-toggle {
+    display: none;
+    padding: 14px 20px; border-left: var(--bw) solid var(--ink);
+    background: var(--paper); cursor: pointer;
+    align-items: center; gap: 10px;
+  }
+  .nav-toggle .bar {
+    width: 22px; height: 2px; background: var(--ink);
+    position: relative;
+  }
+  .nav-toggle .bar::before, .nav-toggle .bar::after {
+    content: ''; position: absolute; left: 0; width: 100%; height: 2px; background: var(--ink);
+    transition: transform .25s ease, top .25s ease;
+  }
+  .nav-toggle .bar::before { top: -7px; }
+  .nav-toggle .bar::after { top: 7px; }
+  body.menu-open .nav-toggle .bar { background: transparent; }
+  body.menu-open .nav-toggle .bar::before { top: 0; transform: rotate(45deg); }
+  body.menu-open .nav-toggle .bar::after  { top: 0; transform: rotate(-45deg); }
+
+  /* mobile menu drawer */
+  .menu-drawer {
+    position: fixed; top: 50px; left: 0; right: 0; bottom: 0;
+    background: var(--ink); color: var(--paper);
+    z-index: 40; padding: 32px 24px;
+    transform: translateY(-100%);
+    transition: transform .35s cubic-bezier(.7,0,.3,1);
+    overflow-y: auto;
+  }
+  body.menu-open .menu-drawer { transform: translateY(0); }
+  .menu-drawer a {
+    display: block; padding: 18px 0;
+    border-bottom: 1px solid var(--paper);
+    font-family: var(--display); font-size: 32px;
+    letter-spacing: -.02em; text-transform: uppercase;
+    text-decoration: none; color: var(--paper);
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .menu-drawer a span { font-family: var(--mono); font-size: 11px; opacity: .6; }
+
+  /* ----- HERO ----- */
+  .hero {
+    padding: 110px 24px 0;
+    border-bottom: var(--bw) solid var(--ink);
+    position: relative;
+  }
+  .hero h1 {
+    font-size: clamp(64px, 16vw, 280px);
+    line-height: .82;
+    letter-spacing: -.05em;
+    font-family: var(--display); font-weight: 900; text-transform: uppercase;
+  }
+  .hero h1 .red { color: var(--hi); }
+  .hero h1 .strike { text-decoration: line-through; text-decoration-thickness: clamp(4px, .8vw, 10px); }
+  .hero h1 .out {
+    -webkit-text-stroke: 3px var(--ink);
+    color: transparent;
+    font-style: normal;
+  }
+
+  /* type-set animation: each char starts displaced + faded.
+     Words are wrapped in .word (white-space: nowrap) so chars never break mid-word. */
+  .hero h1 .word { display: inline-block; white-space: nowrap; }
+  .hero h1 .ch {
+    display: inline-block;
+    will-change: transform, opacity;
+  }
+  .hero h1.tumble .ch {
+    opacity: 0;
+    transform: translate(var(--tx, 0), var(--ty, -40px)) rotate(var(--tr, 0deg));
+  }
+  .hero h1.set .ch {
+    opacity: 1;
+    transform: translate(0,0) rotate(0deg);
+    transition:
+      opacity .45s ease,
+      transform .85s cubic-bezier(.2, 1.4, .35, 1);
+    transition-delay: var(--delay, 0ms);
+  }
+
+  .hero .deck {
+    margin-top: clamp(32px, 5vw, 56px);
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    border-top: var(--bw) solid var(--ink);
+  }
+  .hero .deck > div { padding: 24px; border-right: var(--bw) solid var(--ink); }
+  .hero .deck > div:last-child { border-right: none; }
+  .hero .deck h5 {
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase; margin-bottom: 14px;
+  }
+  .hero .deck p { font-size: 15px; line-height: 1.55; }
+  .hero .deck .pill {
+    display: inline-block; background: var(--ink); color: var(--paper);
+    padding: 5px 10px; font-family: var(--mono); font-size: 10px;
+    letter-spacing: .08em; text-transform: uppercase; margin-top: 12px;
+  }
+  .hero .strip {
+    background: var(--ink); color: var(--paper);
+    padding: 14px 24px;
+    font-family: var(--mono); font-weight: 500; font-size: 13px;
+    letter-spacing: .04em; text-transform: uppercase;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+    border-top: var(--bw) solid var(--ink);
+  }
+  .hero .strip .green { color: #58e09a; } /* lighter green for ink bg */
+  .hero .strip .live::before {
+    content: '●';
+    color: #58e09a;
+    margin-right: 8px;
+  }
+
+  /* ----- TICKER (replaces marquee) ----- */
+  .ticker {
+    background: var(--paper);
+    border-bottom: var(--bw) solid var(--ink);
+    padding: 14px 24px;
+    font-family: var(--mono); font-weight: 500; font-size: 13px;
+    letter-spacing: .06em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 12px;
+    min-height: 48px;
+  }
+  .ticker .label {
+    background: var(--ink); color: var(--paper);
+    padding: 4px 8px; font-weight: 700; font-size: 11px;
+  }
+  .ticker .text { color: var(--ink); }
+  .ticker .caret {
+    display: inline-block; width: 8px; height: 14px;
+    background: var(--ink); margin-left: 2px; vertical-align: -2px;
+    animation: caret 1s steps(2) infinite;
+  }
+  @keyframes caret { 50% { opacity: 0; } }
+
+  /* ----- SECTIONS ----- */
+  section { border-bottom: var(--bw) solid var(--ink); position: relative; }
+  .sec-head {
+    padding: 22px var(--pad);
+    border-bottom: var(--bw) solid var(--ink);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+    background: var(--paper);
+  }
+  .sec-head h2 {
+    font-family: var(--display); font-size: clamp(40px, 5vw, 72px);
+    letter-spacing: -.04em; text-transform: uppercase; line-height: .9;
+  }
+  .sec-head h2 .red { color: var(--hi); }
+  .sec-head .tag {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+    text-transform: uppercase; background: var(--ink); color: var(--paper);
+    padding: 6px 12px;
+  }
+
+  /* ----- WORK GRID ----- */
+  .work-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+  .work-card {
+    border-right: var(--bw) solid var(--ink);
+    border-bottom: var(--bw) solid var(--ink);
+    padding: var(--pad);
+    background: var(--paper); color: var(--ink);
+    text-align: left; cursor: pointer;
+    display: flex; flex-direction: column; gap: 20px;
+    min-height: 540px; position: relative;
+    transition: background .25s ease, color .25s ease, transform .25s ease;
+    width: 100%; font-family: inherit;
+  }
+  .work-card:nth-child(2n) { border-right: none; }
+  .work-card:nth-last-child(-n+2) { border-bottom: 0; }
+  .work-card:hover, .work-card:focus-visible {
+    background: var(--ink); color: var(--paper);
+  }
+  .work-card .num {
+    font-family: var(--display); font-size: 80px; line-height: .85;
+    letter-spacing: -.04em;
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .work-card .num .tag {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .08em;
+    background: var(--hi); color: var(--paper);
+    padding: 6px 10px; text-transform: uppercase; font-weight: 700;
+    align-self: flex-start; margin-top: 8px;
+  }
+  .work-card h3 {
+    font-family: var(--body); font-weight: 700;
+    font-size: clamp(26px, 2.6vw, 36px);
+    letter-spacing: -.025em; line-height: .98; text-transform: uppercase;
+  }
+  .work-card .meta-line {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .06em; text-transform: uppercase;
+  }
+  .work-card .meta-line span {
+    padding: 4px 8px; border: 1px solid currentColor;
+  }
+  .work-card .meta-line .lock::before { content: '⊘ '; opacity: .7; }
+  .work-card p { font-size: 14px; line-height: 1.55; flex: 1; }
+
+  .work-card .cap {
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase;
+    margin-bottom: -12px; opacity: .7;
+  }
+  .work-card .visual {
+    min-height: 160px; border: var(--bw) solid currentColor;
+    background: var(--paper); position: relative; overflow: hidden;
+  }
+
+  /* enter chip — replaces invert hack on hover */
+  .work-card .enter {
+    align-self: flex-start;
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    padding: 6px 10px; border: 1px solid currentColor;
+    transition: background .2s ease, color .2s ease, transform .2s ease;
+    margin-top: auto;
+  }
+  .work-card:hover .enter, .work-card:focus-visible .enter {
+    background: var(--hi); color: var(--paper); border-color: var(--hi);
+    transform: translateX(4px);
+  }
+
+  /* V1: PRODUCT-CARD MATRIX */
+  .v-matrix {
+    display: grid; grid-template-columns: repeat(13, 1fr); grid-auto-rows: 14px;
+    gap: 2px; padding: 14px; background: var(--ink);
+  }
+  .v-matrix i { display: block; background: var(--paper); }
+  .v-matrix i.on { background: var(--hi); }
+  .v-matrix i.lit { background: var(--acc); }
+
+  /* V2: SWIMLANE */
+  .v-lanes {
+    display: grid; grid-template-rows: repeat(3, 1fr); height: 160px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--paper); background: var(--acc);
+  }
+  .v-lanes .ln {
+    display: grid; grid-template-columns: 80px 1fr;
+    border-bottom: 1px solid var(--paper); align-items: center;
+  }
+  .v-lanes .ln:last-child { border-bottom: 0; }
+  .v-lanes .ln b {
+    padding: 0 10px; border-right: 1px solid var(--paper);
+    height: 100%; display: flex; align-items: center; font-weight: 700;
+  }
+  .v-lanes .ln .stops {
+    display: flex; align-items: center; padding: 0 10px;
+    height: 100%; position: relative;
+  }
+  .v-lanes .ln .stops::before {
+    content: ''; position: absolute; left: 10px; right: 10px;
+    height: 1px; background: var(--paper); opacity: .4;
+  }
+  .v-lanes .ln .stops em {
+    position: relative; z-index: 2; width: 10px; height: 10px;
+    background: var(--paper); margin-right: auto; font-style: normal;
+  }
+  .v-lanes .ln .stops em.gap { background: var(--hi); outline: 2px solid var(--paper); }
+
+  /* V3: FUNNEL */
+  .v-funnel {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    background: var(--ink); color: var(--paper);
+    height: 160px; font-family: var(--display);
+  }
+  .v-funnel .col {
+    padding: 14px; border-right: 1px solid var(--paper);
+    display: flex; flex-direction: column; gap: 8px;
+    justify-content: space-between; position: relative;
+  }
+  .v-funnel .col:last-child {
+    border-right: 0; background: var(--hi); color: var(--paper);
+  }
+  .v-funnel .col .k {
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; opacity: .7;
+  }
+  .v-funnel .col .n { font-size: 48px; line-height: .85; letter-spacing: -.04em; }
+  .v-funnel .col .dots { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+  .v-funnel .col .dots i { width: 6px; height: 6px; background: var(--paper); }
+  .v-funnel .col:last-child .dots i { background: var(--paper); opacity: .5; }
+  .v-funnel .col::after {
+    content: '→'; position: absolute; right: -8px; top: 50%;
+    transform: translateY(-50%); font-family: var(--display); font-size: 18px;
+    color: var(--ink); background: var(--paper);
+    width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center; z-index: 2;
+  }
+  .v-funnel .col:last-child::after { display: none; }
+
+  /* V4: PARITY DUO — desktop landscape, mobile portrait, same content visible */
+  .v-parity {
+    display: grid; grid-template-columns: 1.6fr .9fr;
+    height: 160px; background: var(--green); gap: 12px; padding: 12px;
+  }
+  .v-parity .frame {
+    background: var(--paper); border: 1px solid var(--ink);
+    position: relative; overflow: hidden; padding: 14px 8px 8px;
+  }
+  .v-parity .frame::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 8px; background: var(--ink); border-bottom: 1px solid var(--ink);
+  }
+  .v-parity .frame .bars { display: flex; flex-direction: column; gap: 4px; }
+  .v-parity .frame .bars i { display: block; height: 6px; background: var(--ink); }
+  .v-parity .frame .bars i:nth-child(1) { width: 60%; }
+  .v-parity .frame .bars i:nth-child(2) { width: 90%; }
+  .v-parity .frame .bars i:nth-child(3) { width: 75%; background: var(--hi); }
+  .v-parity .frame .bars i:nth-child(4) { width: 45%; }
+  .v-parity .lbl {
+    position: absolute; bottom: 6px; left: 6px;
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: .08em; color: var(--ink);
+    background: var(--paper); padding: 1px 4px;
+  }
+  .v-parity .frame.mob {
+    aspect-ratio: 1 / 2.2;
+    align-self: center; max-height: 140px;
+  }
+
+  /* V5: HEURISTIC GRID */
+  .v-heur {
+    display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(2, 1fr);
+    height: 160px; background: var(--hi);
+  }
+  .v-heur i {
+    border: 1px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display); font-size: 18px; letter-spacing: -.02em;
+    color: var(--ink); position: relative; background: var(--hi);
+  }
+  .v-heur i.bad { background: var(--ink); color: var(--paper); }
+  .v-heur i.mid { background: var(--paper); color: var(--ink); }
+  .v-heur i .n {
+    position: absolute; top: 2px; left: 4px;
+    font-family: var(--mono); font-size: 8px; font-weight: 700; opacity: .85;
+  }
+
+  /* V6: PROTO STATES — varied screens (entry, form, error, success) */
+  .v-proto {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    height: 160px; background: var(--acc); padding: 14px; gap: 8px; align-items: center;
+  }
+  .v-proto .scr {
+    background: var(--paper); border: 1px solid var(--ink);
+    height: 100%; position: relative; padding: 12px 6px 6px;
+    display: flex; flex-direction: column; gap: 3px;
+  }
+  .v-proto .scr::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 6px; background: var(--ink);
+  }
+  .v-proto .scr i { display: block; height: 4px; background: var(--ink); }
+  .v-proto .scr.s1 i:nth-child(2) { width: 30%; }
+  .v-proto .scr.s2 i:nth-child(2) { width: 80%; }
+  .v-proto .scr.s2 i:nth-child(3) { width: 100%; height: 18px; background: var(--paper); border: 1px solid var(--ink); }
+  .v-proto .scr.s3 i:nth-child(2) { width: 70%; background: var(--hi); }
+  .v-proto .scr.s3 i:nth-child(3) { width: 100%; height: 14px; background: var(--hi); }
+  .v-proto .scr.s4 i:nth-child(2) { width: 90%; background: var(--green); }
+  .v-proto .scr.s4 i:nth-child(3) { width: 50%; background: var(--green); }
+  .v-proto .scr .num {
+    position: absolute; bottom: 4px; right: 4px;
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* V7: LOTTERY — five weighted ranks descending */
+  .v-lottery {
+    display: flex; flex-direction: column; gap: 4px;
+    height: 160px; padding: 14px; align-items: flex-start;
+    background: var(--paper-2); justify-content: center;
+  }
+  .v-lottery i {
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: .08em; font-style: normal;
+    padding: 4px 8px; gap: 12px;
+    width: calc(40% + var(--w, 1) * 60%); min-width: 60px;
+  }
+  .v-lottery i:first-child { background: var(--hi); }
+  .v-lottery i .p { opacity: .65; }
+
+  /* ----- AI MANIFESTO ----- */
+  .ai { background: var(--ink); color: var(--paper); }
+  .ai .sec-head { background: var(--ink); color: var(--paper); border-bottom: var(--bw) solid var(--paper); }
+  .ai .sec-head h2 .red { color: var(--hi); }
+  .ai .sec-head .tag { background: var(--hi); color: var(--paper); }
+  .ai .body { padding: 56px var(--pad); }
+  .ai .massive {
+    font-family: var(--display);
+    font-size: clamp(56px, 10vw, 180px);
+    line-height: .85; letter-spacing: -.05em; text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+  .ai .massive .out { -webkit-text-stroke: 2px var(--paper); color: transparent; }
+  .ai .massive .red { color: var(--hi); }
+  .ai .lede {
+    max-width: 720px; font-size: 18px; line-height: 1.6;
+    margin-bottom: 48px;
+  }
+  .ai .lede b { font-weight: 700; }
+  .ai .grid4 {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border-top: var(--bw) solid var(--paper);
+    border-left: var(--bw) solid var(--paper);
+  }
+  .ai .grid4 .item {
+    padding: 24px; border-right: var(--bw) solid var(--paper);
+    border-bottom: var(--bw) solid var(--paper);
+    min-height: 240px; display: flex; flex-direction: column; gap: 16px;
+    transition: background .2s ease, color .2s ease;
+  }
+  .ai .grid4 .item:hover { background: var(--hi); }
+  .ai .grid4 .item .n {
+    font-family: var(--display); font-size: 48px; line-height: .85;
+    color: var(--hi); transition: color .2s ease;
+  }
+  .ai .grid4 .item:hover .n { color: var(--paper); }
+  .ai .grid4 .item h4 {
+    font-family: var(--display); font-size: 20px;
+    letter-spacing: -.01em; text-transform: uppercase; line-height: .98;
+  }
+  .ai .grid4 .item p { font-size: 13px; line-height: 1.55; flex: 1; }
+  .ai .pull {
+    margin-top: 48px; padding: 32px;
+    border: var(--bw) solid var(--paper);
+    font-family: var(--display);
+    font-size: clamp(22px, 2.6vw, 36px);
+    line-height: 1.1; letter-spacing: -.02em; text-transform: uppercase;
+  }
+  .ai .pull .red { color: var(--hi); }
+
+  /* ----- STRATEGY STACK ----- */
+  .strat-stack {}
+  .strat-row {
+    border-bottom: var(--bw) solid var(--ink);
+    display: grid; grid-template-columns: 100px 1fr 1.1fr 70px;
+    align-items: stretch;
+    transition: background .18s ease, color .18s ease;
+  }
+  .strat-row:last-child { border-bottom: 0; }
+  .strat-row > * {
+    padding: 28px var(--pad); border-right: var(--bw) solid var(--ink);
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .strat-row > *:last-child { border-right: 0; }
+  .strat-row .num {
+    font-family: var(--display); font-size: 56px; line-height: .85;
+    letter-spacing: -.04em; background: var(--paper);
+  }
+  .strat-row h4 {
+    font-family: var(--display); font-size: 24px;
+    letter-spacing: -.02em; text-transform: uppercase; line-height: 1;
+  }
+  .strat-row p { font-size: 14px; line-height: 1.6; }
+  .strat-row .arr {
+    font-family: var(--display); font-size: 36px;
+    text-align: center; align-items: center; justify-content: center;
+    background: var(--paper);
+  }
+  .strat-row:hover { background: var(--hi); color: var(--paper); }
+  .strat-row:hover .num,
+  .strat-row:hover .arr { background: var(--ink); color: var(--paper); }
+
+  /* ----- ABOUT ----- */
+  .about { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; }
+  .about .l {
+    padding: 48px var(--pad); border-right: var(--bw) solid var(--ink);
+    display: flex; flex-direction: column; gap: 18px;
+    background: var(--hi); color: var(--paper);
+  }
+  .about .l h3 {
+    font-family: var(--display); font-size: clamp(36px, 5vw, 72px);
+    letter-spacing: -.04em; line-height: .9; text-transform: uppercase;
+  }
+  .about .l h3 .out { -webkit-text-stroke: 2px var(--paper); color: transparent; }
+  .about .l p { font-size: 16px; line-height: 1.6; max-width: 540px; }
+  .about .l p.lead { font-size: 19px; line-height: 1.5; }
+  .about .r { background: var(--paper); display: flex; flex-direction: column; }
+  .about .r .row {
+    padding: var(--pad); border-bottom: var(--bw) solid var(--ink);
+    display: grid; grid-template-columns: 160px 1fr; gap: 16px; align-items: start;
+  }
+  .about .r .row:last-child { border-bottom: 0; }
+  .about .r .row .k {
+    font-family: var(--mono); font-weight: 700; font-size: 11px;
+    letter-spacing: .08em; text-transform: uppercase;
+  }
+  .about .r .row .v { font-size: 15px; line-height: 1.55; }
+  .about .r .row.big .v {
+    font-family: var(--display); font-size: 28px;
+    letter-spacing: -.02em; text-transform: uppercase; line-height: .98;
+  }
+  .about .r .row .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .about .r .row .chips span {
+    padding: 4px 8px; border: var(--bw) solid var(--ink);
+    font-family: var(--mono); font-size: 11px; letter-spacing: .04em; text-transform: uppercase;
+  }
+  .about .r .row .chips span.fill { background: var(--ink); color: var(--paper); }
+
+  /* ----- TESTIMONIALS ----- */
+  .test-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .test {
+    padding: 32px var(--pad); border-right: var(--bw) solid var(--ink);
+    display: flex; flex-direction: column; gap: 18px; min-height: 320px;
+    transition: background .2s ease, color .2s ease;
+  }
+  .test:last-child { border-right: 0; }
+  .test:nth-child(1):hover { background: var(--hi); color: var(--paper); }
+  .test:nth-child(2):hover { background: var(--acc); color: var(--paper); }
+  .test:nth-child(3):hover { background: var(--green); color: var(--paper); }
+  .test .mark {
+    font-family: var(--display); font-size: 110px; line-height: .5;
+    letter-spacing: -.05em;
+  }
+  .test blockquote {
+    font-family: var(--body); font-weight: 500; font-size: 19px;
+    line-height: 1.35; flex: 1; letter-spacing: -.01em;
+  }
+  .test cite { font-style: normal; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+  .test cite b {
+    display: block; font-family: var(--display); font-size: 17px;
+    letter-spacing: -.01em; text-transform: uppercase; font-weight: 900; margin-bottom: 4px;
+  }
+
+  /* ----- FOOTER ----- */
+  footer { background: var(--ink); color: var(--paper); }
+  footer .word {
+    padding: var(--pad);
+    font-family: var(--display);
+    font-size: clamp(56px, 15.5vw, 240px);
+    line-height: .82; letter-spacing: -.06em; text-transform: uppercase;
+    border-bottom: var(--bw) solid var(--paper);
+  }
+  @media (max-width: 520px) {
+    footer .word { padding: 16px 12px; font-size: clamp(52px, 16vw, 88px); }
+  }
+  footer .word .red { color: var(--hi); }
+  footer .word .out { -webkit-text-stroke: 3px var(--paper); color: transparent; }
+  footer .grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+  footer .grid .col {
+    padding: var(--pad); border-right: var(--bw) solid var(--paper);
+    min-height: 200px;
+  }
+  footer .grid .col:last-child { border-right: 0; background: var(--hi); color: var(--paper); }
+  footer .grid .col h5 {
+    font-family: var(--mono); font-weight: 700; font-size: 11px;
+    letter-spacing: .08em; text-transform: uppercase; margin-bottom: 14px;
+  }
+  footer .grid .col a, footer .grid .col p {
+    display: block; font-family: var(--display); font-size: 22px;
+    letter-spacing: -.02em; line-height: 1.05; text-transform: uppercase;
+    color: inherit; text-decoration: none; margin-bottom: 8px;
+    transition: color .15s ease;
+  }
+  footer .grid .col a:hover { color: var(--hi); }
+  footer .grid .col:last-child a:hover { color: var(--ink); }
+  footer .colophon {
+    padding: 14px var(--pad); border-top: var(--bw) solid var(--paper);
+    font-family: var(--mono); font-size: 11px; letter-spacing: .06em;
+    text-transform: uppercase; display: flex; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px;
+  }
+  footer .grid .col a.copy {
+    font-size: 14px; font-family: var(--mono); text-transform: none;
+    letter-spacing: 0; opacity: .7;
+  }
+
+  /* ----- REVEAL (with no-JS fallback) ----- */
+  .no-js .reveal { opacity: 1; transform: none; }
+  html.js .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  html.js .reveal.in { opacity: 1; transform: none; }
+
+  /* ----- CUSTOM CURSOR ----- */
+  .work-cursor {
+    position: fixed; top: 0; left: 0; z-index: 60;
+    pointer-events: none;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    padding: 6px 9px;
+    transform: translate(-50%, -50%) scale(.6);
+    opacity: 0;
+    transition: opacity .15s ease, transform .15s ease;
+    will-change: transform, opacity;
+  }
+  .work-cursor.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+  /* ----- CASE VIEW (full takeover; mobile = bottom sheet) ----- */
+  #case-view {
+    position: fixed; inset: 0; z-index: 80;
+    background: var(--paper); color: var(--ink);
+    overflow-y: auto; overflow-x: hidden;
+    transform: translateY(100%);
+    transition: transform .45s cubic-bezier(.7,0,.2,1);
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  #case-view.open { transform: translateY(0); }
+  #case-view.dragging { transition: none; }
+  /* When a case is open on mobile, scale the page behind it slightly
+     so the sheet reads as a layered surface, not a swap. */
+  body.case-open main, body.case-open footer, body.case-open nav {
+    transition: transform .45s cubic-bezier(.7,0,.2,1), opacity .45s ease;
+  }
+  @media (max-width: 960px) {
+    #case-view {
+      border-radius: 18px 18px 0 0;
+      box-shadow: 0 -8px 24px rgba(0,0,0,.18), 0 -1px 0 var(--ink);
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+    body.case-open main, body.case-open footer {
+      transform: scale(.96);
+      transform-origin: top center;
+      opacity: .55;
+      filter: saturate(.7);
+      pointer-events: none;
+    }
+    body.case-open nav { transform: translateY(-8px); opacity: 0; pointer-events: none; }
+  }
+  .case-bar {
+    position: sticky; top: 0; z-index: 2;
+    background: var(--paper); border-bottom: var(--bw) solid var(--ink);
+    display: grid; grid-template-columns: auto 1fr auto;
+    align-items: stretch;
+  }
+  /* Mobile drag handle on top of sheet */
+  .case-bar::before {
+    content: ''; display: none;
+    position: absolute; top: 8px; left: 50%;
+    transform: translateX(-50%);
+    width: 44px; height: 5px; border-radius: 999px;
+    background: var(--ink); opacity: .35;
+    pointer-events: none;
+    transition: opacity .15s ease, transform .15s ease, width .15s ease;
+  }
+  .case-bar.dragging::before { opacity: .9; transform: translateX(-50%) scaleX(1.15); }
+  /* mobile-only X close button */
+  .case-close {
+    display: none;
+    align-items: center; justify-content: center;
+    width: 48px; height: 48px;
+    font-size: 26px; line-height: 1; font-weight: 700;
+    color: var(--ink); background: transparent; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .case-close:active { background: var(--ink); color: var(--paper); }
+  @media (max-width: 960px) {
+    .case-bar {
+      grid-template-columns: 1fr auto;
+      padding-top: 18px; min-height: 60px;
+      touch-action: none;             /* let JS own all touches in the bar */
+      user-select: none; -webkit-user-select: none;
+    }
+    .case-bar::before { display: block; }
+    /* hide top back/next on mobile; bottom action bar handles paging.
+       !important because the desktop .back/.next display:flex rule appears later
+       in source order and would otherwise win at equal specificity. */
+    .case-bar .back, .case-bar .next { display: none !important; }
+    .case-bar .crumb {
+      padding: 0 12px !important;
+      font-size: 12px !important;
+      border-right: 1px solid var(--ink);
+    }
+    .case-close { display: flex; }
+  }
+
+  /* mobile bottom action bar */
+  .case-actionbar {
+    display: none;
+    position: sticky; bottom: 0; z-index: 3;
+    background: var(--ink); color: var(--paper);
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0));
+    grid-template-columns: 1fr auto 1fr;
+    gap: 10px; align-items: center;
+    border-top: var(--bw) solid var(--ink);
+  }
+  @media (max-width: 960px) {
+    .case-actionbar { display: grid; }
+  }
+  .case-actionbar button {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 12px 14px; min-height: 44px;
+    font-family: var(--mono); font-size: 12px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    background: transparent; color: var(--paper);
+    border: 1px solid var(--paper);
+    border-radius: 0;
+    transition: background .15s ease, color .15s ease, transform .12s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .case-actionbar button:active { background: var(--paper); color: var(--ink); transform: scale(.97); }
+  .case-actionbar button[data-act="close"] {
+    background: var(--hi); border-color: var(--hi);
+  }
+  .case-actionbar button[data-act="close"]:active { background: var(--paper); color: var(--ink); }
+  .case-actionbar .pager {
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    text-align: center; padding: 0 6px;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+  }
+  .case-actionbar .pager .dots { display: flex; gap: 4px; }
+  .case-actionbar .pager .dots i {
+    width: 5px; height: 5px; background: var(--paper);
+    opacity: .35; border-radius: 50%;
+  }
+  .case-actionbar .pager .dots i.on { opacity: 1; }
+
+  /* slide transitions when paging cases */
+  #case-body.slide-out-left { animation: slideOutL .25s cubic-bezier(.7,0,.2,1) forwards; }
+  #case-body.slide-out-right { animation: slideOutR .25s cubic-bezier(.7,0,.2,1) forwards; }
+  #case-body.slide-in-left { animation: slideInL .3s cubic-bezier(.2,.8,.2,1) forwards; }
+  #case-body.slide-in-right { animation: slideInR .3s cubic-bezier(.2,.8,.2,1) forwards; }
+  @keyframes slideOutL { to { transform: translateX(-30%); opacity: 0; } }
+  @keyframes slideOutR { to { transform: translateX(30%); opacity: 0; } }
+  @keyframes slideInL { from { transform: translateX(30%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  @keyframes slideInR { from { transform: translateX(-30%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  .case-bar .back, .case-bar .next {
+    display: flex; align-items: center; gap: 10px;
+    padding: 16px 20px; font-family: var(--mono); font-size: 12px;
+    font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    text-decoration: none; color: var(--ink);
+    transition: background .18s ease, color .18s ease;
+  }
+  .case-bar .back { border-right: var(--bw) solid var(--ink); }
+  .case-bar .next { border-left: var(--bw) solid var(--ink); }
+  .case-bar .back:hover, .case-bar .next:hover { background: var(--ink); color: var(--paper); }
+  .case-bar .crumb {
+    display: flex; align-items: center; padding: 0 20px;
+    font-family: var(--mono); font-size: 12px; font-weight: 500;
+    letter-spacing: .08em; text-transform: uppercase;
+    overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  }
+  .case-bar .crumb b { color: var(--hi); margin-right: 8px; }
+
+  .case-content { padding: 0; }
+  .case-hero {
+    padding: 80px var(--pad) 60px;
+    border-bottom: var(--bw) solid var(--ink);
+  }
+  .case-hero .num {
+    font-family: var(--mono); font-size: 13px; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .case-hero h1 {
+    font-family: var(--display);
+    font-size: clamp(48px, 10vw, 160px);
+    line-height: .85; letter-spacing: -.04em; text-transform: uppercase;
+  }
+  .case-hero h1 .red { color: var(--hi); }
+  .case-hero p.lede {
+    margin-top: 24px; max-width: 720px;
+    font-size: clamp(18px, 1.6vw, 22px); line-height: 1.45;
+  }
+  .case-meta {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border-bottom: var(--bw) solid var(--ink);
+  }
+  .case-meta .cell {
+    padding: 18px var(--pad); border-right: var(--bw) solid var(--ink);
+  }
+  .case-meta .cell:last-child { border-right: 0; }
+  .case-meta .k {
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase; opacity: .7;
+    margin-bottom: 6px;
+  }
+  .case-meta .v {
+    font-family: var(--body); font-weight: 700; font-size: 16px;
+    letter-spacing: -.01em; text-transform: uppercase;
+  }
+
+  .case-section {
+    padding: 60px var(--pad);
+    border-bottom: var(--bw) solid var(--ink);
+  }
+  .case-section:last-of-type { border-bottom: 0; }
+  .case-section .heading {
+    display: grid; grid-template-columns: 240px 1fr; gap: 32px;
+    align-items: baseline; margin-bottom: 32px;
+  }
+  .case-section .heading .k {
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase; opacity: .7;
+  }
+  .case-section h2 {
+    font-family: var(--display); font-size: clamp(32px, 4vw, 56px);
+    letter-spacing: -.03em; text-transform: uppercase; line-height: .95;
+  }
+  .case-section .body {
+    display: grid; grid-template-columns: 240px 1fr; gap: 32px;
+  }
+  /* When a body has no gutter, keep prose in column 2 so it aligns with
+     gutter'd prose and subsection prose. The 240px gutter column stays empty. */
+  .case-section .body > .prose:only-child {
+    grid-column: 2 / -1;
+  }
+  .case-section .body .gutter {
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase; opacity: .7;
+  }
+  .case-section .body .prose { max-width: 720px; }
+  .case-section .body .prose p {
+    font-size: 17px; line-height: 1.65; margin-bottom: 18px;
+  }
+  .case-section .body .prose p:last-child { margin-bottom: 0; }
+  /* Body emphasis: ink-bold + orange underline for accent without contrast fail */
+  .case-section .body .prose b {
+    font-weight: 700; color: var(--ink);
+    background: linear-gradient(transparent 70%, rgba(214,49,0,.28) 70%);
+    padding: 0 .05em;
+  }
+  .case-section .body .prose ul {
+    list-style: none; margin: 18px 0; padding: 0;
+  }
+  .case-section .body .prose li {
+    font-size: 16px; line-height: 1.6; padding: 10px 0 10px 28px;
+    border-top: 1px solid var(--ink); position: relative;
+  }
+  .case-section .body .prose li:last-child { border-bottom: 1px solid var(--ink); }
+  .case-section .body .prose li::before {
+    content: '→'; position: absolute; left: 0; top: 10px;
+    font-family: var(--display); color: var(--hi);
+  }
+
+  /* Subsection prose: mirror the section-level prose typography so
+     paragraphs in .case-subsection > .row > .prose get the same
+     spacing/size as those in .case-section > .body > .prose */
+  .case-subsection .row .prose { max-width: 720px; }
+  .case-subsection .row .prose p {
+    font-size: 17px; line-height: 1.65; margin-bottom: 18px;
+  }
+  .case-subsection .row .prose p:last-child { margin-bottom: 0; }
+  .case-subsection .row .prose b {
+    font-weight: 700; color: var(--ink);
+    background: linear-gradient(transparent 70%, rgba(214,49,0,.28) 70%);
+    padding: 0 .05em;
+  }
+
+  /* Pullquote: display-weight quote inside section prose */
+  .case-section .pullquote, .case-section blockquote {
+    font-family: var(--display); font-weight: 900;
+    font-size: clamp(22px, 2.6vw, 34px); line-height: 1.05;
+    letter-spacing: -.02em; text-transform: none;
+    border-left: 4px solid var(--hi);
+    padding: 6px 0 6px 18px; margin: 28px 0;
+    max-width: 720px; color: var(--ink);
+  }
+
+  /* Image caption: small italic mono below img blocks/grids/ba */
+  .case-section .caption,
+  .case-hero-figure .caption {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: .03em; line-height: 1.55;
+    color: rgba(10,10,10,.65);
+    font-style: italic;
+    margin: 8px 0 24px; max-width: 720px;
+    padding: 0 var(--pad);
+  }
+
+  /* Hero figure: full-bleed prototype demo between meta and section 01 */
+  .case-hero-figure {
+    padding: 32px var(--pad) 8px;
+    border-bottom: var(--bw) solid var(--ink);
+  }
+  .case-hero-figure .img-block { aspect-ratio: 21 / 9; }
+  .case-hero-figure .img-block .lbl {
+    position: absolute; top: 8px; left: 8px;
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    background: var(--ink); color: var(--paper); padding: 3px 7px;
+  }
+  .case-hero-figure .caption { padding: 0; margin-top: 12px; }
+
+  /* Detail variant: img-block sized smaller (paired with primary) */
+  .case-section .img-detail {
+    margin: 24px 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    align-items: start;
+  }
+  .case-section .img-detail .img-block { aspect-ratio: 16 / 11; }
+
+  .case-subsection {
+    margin-top: 48px;
+    border-top: var(--bw) solid var(--ink); padding-top: 32px;
+  }
+  .case-subsection h3 {
+    font-family: var(--body); font-weight: 700;
+    font-size: clamp(22px, 2.4vw, 32px);
+    letter-spacing: -.02em; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .case-subsection .row {
+    display: grid; grid-template-columns: 240px 1fr; gap: 32px;
+    margin-bottom: 24px;
+  }
+
+  /* image placeholder boxes */
+  .img-block {
+    background: var(--paper-2);
+    border: var(--bw) solid var(--ink);
+    aspect-ratio: 16 / 10; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .img-block.tall { aspect-ratio: 4 / 5; }
+  .img-block.wide { aspect-ratio: 21 / 9; }
+  .img-block .ph {
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    background: var(--ink); color: var(--paper); padding: 4px 8px;
+  }
+  .img-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 16px; margin: 24px 0;
+  }
+  .img-grid.three { grid-template-columns: repeat(3, 1fr); }
+  .img-grid.iter { grid-template-columns: repeat(4, 1fr); }
+  .img-row { margin: 24px 0; }
+  .ba {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0;
+  }
+  /* Corner label on ANY img-block (was scoped to .ba only — generalized) */
+  .ba .lbl, .img-block .lbl {
+    position: absolute; top: 8px; left: 8px;
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    background: var(--ink); color: var(--paper); padding: 3px 7px;
+  }
+
+  /* password gate */
+  .case-locked {
+    padding: 80px var(--pad);
+    display: grid; place-items: center;
+    min-height: 80vh;
+  }
+  .case-locked .box {
+    max-width: 520px; width: 100%;
+    border: var(--bw) solid var(--ink); padding: 32px;
+    background: var(--paper);
+  }
+  .case-locked .lock {
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    background: var(--ink); color: var(--paper);
+    padding: 4px 8px; display: inline-block; margin-bottom: 18px;
+  }
+  .case-locked h2 {
+    font-family: var(--display);
+    font-size: clamp(32px, 4vw, 56px);
+    letter-spacing: -.03em; text-transform: uppercase;
+    line-height: .95; margin-bottom: 16px;
+  }
+  .case-locked p {
+    font-size: 16px; line-height: 1.55; margin-bottom: 24px;
+  }
+  .case-locked form {
+    display: grid; grid-template-columns: 1fr auto; gap: 0;
+    border: var(--bw) solid var(--ink);
+  }
+  .case-locked input {
+    padding: 14px 16px; font: inherit;
+    font-family: var(--mono); font-size: 14px; letter-spacing: .04em;
+    border: 0; background: var(--paper); color: var(--ink);
+    border-right: var(--bw) solid var(--ink);
+    width: 100%;
+  }
+  .case-locked input:focus { outline: none; background: #f4eedc; }
+  .case-locked button {
+    padding: 14px 20px; background: var(--ink); color: var(--paper);
+    font-family: var(--mono); font-size: 12px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+  }
+  .case-locked button:hover { background: var(--hi); }
+  .case-locked .err {
+    color: var(--hi); font-family: var(--mono); font-size: 12px;
+    margin-top: 12px; min-height: 18px;
+  }
+  .case-locked .ask {
+    margin-top: 18px; font-family: var(--mono); font-size: 12px;
+    letter-spacing: .04em;
+  }
+  .case-locked .ask a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--hi); text-decoration-thickness: 2px; }
+
+  /* stub case content */
+  .case-stub {
+    padding: 80px var(--pad);
+    display: grid; place-items: center;
+  }
+  .case-stub .box {
+    max-width: 600px; text-align: center;
+  }
+  .case-stub h2 {
+    font-family: var(--display);
+    font-size: clamp(32px, 4vw, 56px);
+    letter-spacing: -.03em; text-transform: uppercase;
+    line-height: .95; margin-bottom: 18px;
+  }
+  .case-stub p { font-size: 17px; line-height: 1.55; margin-bottom: 24px; }
+  .case-stub a.btn {
+    display: inline-block;
+    padding: 14px 22px; background: var(--ink); color: var(--paper);
+    font-family: var(--mono); font-size: 13px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; text-decoration: none;
+  }
+  .case-stub a.btn:hover { background: var(--hi); }
+
+  /* ----- RESPONSIVE ----- */
+  @media (max-width: 960px) {
+    nav { grid-template-columns: 1fr auto auto auto; }
+    nav .links { display: none; }
+    nav .cta { padding: 14px 16px; font-size: 11px; }
+    .nav-toggle { display: flex; }
+
+    .hero { padding: 90px 16px 0; }
+    .hero .deck { grid-template-columns: 1fr; }
+    .hero .deck > div { border-right: 0; border-bottom: var(--bw) solid var(--ink); }
+    .hero .deck > div:last-child { border-bottom: 0; }
+
+    .work-grid {
+      grid-template-columns: 1fr;
+      scroll-snap-type: y proximity;
+    }
+    .work-card {
+      border-right: 0 !important; min-height: 420px;
+      scroll-snap-align: start;
+      scroll-snap-stop: normal;
+    }
+
+    .ai .grid4 { grid-template-columns: 1fr 1fr; }
+    .ai .body { padding: 36px var(--pad); }
+
+    .strat-row {
+      grid-template-columns: 56px 1fr;
+      grid-template-rows: auto auto;
+    }
+    .strat-row > * { border-right: 0; padding: 18px 16px; }
+    .strat-row .num {
+      grid-row: 1 / 3;
+      font-size: 26px;
+      padding: 18px 8px;
+      align-items: flex-start;
+      border-right: var(--bw) solid var(--ink);
+    }
+    .strat-row > div:nth-child(2) { padding: 18px 16px 6px; border-bottom: 0; }
+    .strat-row > div:nth-child(2) h4 { font-size: 18px; line-height: 1.05; }
+    .strat-row > div:nth-child(3) { padding: 0 16px 18px; border-bottom: 0; border-right: 0; grid-column: 2; }
+    .strat-row > div:nth-child(3) p { font-size: 14px; }
+    .strat-row .arr { display: none; }
+
+    .about { grid-template-columns: 1fr; }
+    .about .l { border-right: 0; border-bottom: var(--bw) solid var(--ink); padding: 36px var(--pad); }
+    .about .r .row { grid-template-columns: 1fr; gap: 8px; }
+
+    .test-grid { grid-template-columns: 1fr; }
+    .test { border-right: 0; border-bottom: var(--bw) solid var(--ink); }
+    .test:last-child { border-bottom: 0; }
+
+    footer .grid { grid-template-columns: 1fr 1fr; }
+
+    .case-meta { grid-template-columns: 1fr 1fr; }
+    .case-meta .cell { border-right: var(--bw) solid var(--ink); border-bottom: var(--bw) solid var(--ink); }
+    .case-meta .cell:nth-child(2n) { border-right: 0; }
+    .case-section .heading { grid-template-columns: 1fr; gap: 14px; }
+    .case-section .body { grid-template-columns: 1fr; gap: 18px; }
+    .case-subsection .row { grid-template-columns: 1fr; gap: 14px; }
+    .img-grid, .img-grid.three, .img-grid.iter, .ba { grid-template-columns: 1fr; }
+    /* mobile case-bar back/next are hidden via the dedicated mobile block above */
+  }
+
+  @media (max-width: 520px) {
+    .hero h1 { font-size: clamp(56px, 18vw, 120px); }
+    .work-card .num { font-size: 60px; }
+    nav .brand { font-size: 16px; padding: 12px 14px; }
+  }
+
+  /* ----- REDUCED MOTION ----- */
+  @media (prefers-reduced-motion: reduce) {
+    html.js .reveal { opacity: 1; transform: none; transition: none; }
+    .hero h1.tumble .ch, .hero h1.set .ch {
+      opacity: 1; transform: none; transition: none;
+    }
+    .ticker .caret { animation: none; }
+    .work-cursor { display: none; }
+    body.no-cursor, body.no-cursor * { cursor: auto !important; }
+    #case-view { transition: none; }
+    .menu-drawer { transition: none; }
+    body.case-open main, body.case-open footer, body.case-open nav { transition: none; transform: none; }
+    #case-body.slide-out-left, #case-body.slide-out-right,
+    #case-body.slide-in-left, #case-body.slide-in-right { animation: none; }
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip">Skip to content</a>
+
+<nav role="navigation" aria-label="Primary">
+  <a href="#top" class="brand">
+    <span class="dot" aria-hidden="true"></span>
+    A.DOOLEY
+  </a>
+  <div class="links">
+    <a href="#work">01 / Work</a>
+    <a href="#ai">02 / AI</a>
+    <a href="#strategy">03 / Strategy</a>
+    <a href="#about">04 / About</a>
+    <a href="#refs">05 / Refs</a>
+  </div>
+  <button class="theme-toggle" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">
+    <span class="ico" aria-hidden="true"></span>
+    <span class="lbl" aria-hidden="true">Night</span>
+  </button>
+  <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="menu-drawer">
+    <span class="bar" aria-hidden="true"></span>
+  </button>
+  <a href="#contact" class="cta">Hire me <span class="arr" aria-hidden="true">→</span></a>
+</nav>
+
+<div id="menu-drawer" class="menu-drawer" aria-hidden="true">
+  <a href="#work">Work <span>01</span></a>
+  <a href="#ai">AI <span>02</span></a>
+  <a href="#strategy">Strategy <span>03</span></a>
+  <a href="#about">About <span>04</span></a>
+  <a href="#refs">References <span>05</span></a>
+  <a href="#contact">Contact <span>06</span></a>
+</div>
+
+<main id="main">
+
+<header class="hero" id="top">
+  <h1 class="display tumble" data-tumble>Anna Dooley<br><span class="red">designs</span> the<br>boring <span class="strike">bits</span><br><span class="out">on purpose.</span></h1>
+
+  <div class="deck">
+    <div>
+      <h5>Who</h5>
+      <p>UX/UI Designer &amp; Digital Strategist based in Denver, Colorado. Five years in marketing and automation before pivoting full-time into product UX.</p>
+      <span class="pill">Spring '26 — Open to roles</span>
+    </div>
+    <div>
+      <h5>What</h5>
+      <p>Research-informed interfaces and the systems underneath them. Enterprise platforms, regulated products, and the parts of the journey nobody wants to map.</p>
+      <span class="pill">Strategy + Systems</span>
+    </div>
+    <div>
+      <h5>How</h5>
+      <p>Curiosity. Collaboration. A stubborn habit of asking <em>why</em> one more time than is strictly polite. Lately — AI as part of the toolkit, not a replacement for craft.</p>
+      <span class="pill">Open to remote</span>
+    </div>
+  </div>
+
+  <div class="strip" role="status" aria-live="polite">
+    <span class="live">STATUS: <span class="green">AVAILABLE</span></span>
+    <span id="clock">DENVER · LOADING…</span>
+    <span>FORMER LIFE: MARKETING + AUTOMATION (5 YRS)</span>
+    <span><a href="#work" style="color:inherit;text-decoration:none">SCROLL ↓</a></span>
+  </div>
+</header>
+
+<div class="ticker" aria-label="Currently working on">
+  <span class="label">NOW</span>
+  <span class="text" id="ticker-text">Rebuilding this portfolio</span><span class="caret" aria-hidden="true"></span>
+</div>
+
+<!-- WORK -->
+<section id="work" aria-labelledby="work-h">
+  <div class="sec-head">
+    <h2 id="work-h">Selected <span class="red">Work</span></h2>
+    <span class="tag">2022 — 2025 · 06 cases</span>
+  </div>
+
+  <div class="work-grid">
+    <button class="work-card reveal" data-case="us-foods" aria-label="Open case study: US Foods MOXē">
+      <div class="num">01<span class="tag">1.5 YRS</span></div>
+      <h3>US Foods<br>MOXē</h3>
+      <div class="cap">// Product card matrix</div>
+      <div class="visual" aria-label="13 product card toggles producing 40+ permutations"><div class="v-matrix" aria-hidden="true"></div></div>
+      <div class="meta-line"><span>Web + App</span><span>Lead UX</span><span>Solo</span></div>
+      <p>Transitioned a traditionally offline customer base — restaurants, hospitals, hotels — to a digital-first ordering platform. Built a flexible product card with 13 toggles &amp; 40+ permutations.</p>
+      <span class="enter">Open case study →</span>
+    </button>
+
+    <button class="work-card reveal" data-case="syngenta-cx" aria-label="Open case study: Syngenta CX Blueprint (password protected)">
+      <div class="num">02<span class="tag">3 MO</span></div>
+      <h3>Syngenta<br>CX Blueprint</h3>
+      <div class="cap">// Cross-team swimlane</div>
+      <div class="visual" aria-label="Swimlane blueprint mapping sales, marketing, ops handoffs">
+        <div class="v-lanes" aria-hidden="true">
+          <div class="ln"><b>Sales</b><div class="stops"><em></em><em></em><em class="gap"></em><em></em><em></em><em></em><em></em></div></div>
+          <div class="ln"><b>Mktg</b><div class="stops"><em></em><em class="gap"></em><em></em><em></em><em></em><em class="gap"></em><em></em></div></div>
+          <div class="ln"><b>Ops</b><div class="stops"><em></em><em></em><em></em><em></em><em class="gap"></em><em></em><em></em></div></div>
+        </div>
+      </div>
+      <div class="meta-line"><span>CX Strategy</span><span>Co-lead</span><span class="lock">Password</span></div>
+      <p>Co-led an effort to map Syngenta's end-to-end customer experience across sales and marketing. Surfaced gaps in data, process, and team alignment.</p>
+      <span class="enter">Request access →</span>
+    </button>
+
+    <button class="work-card reveal" data-case="syngenta-it" aria-label="Open case study: Syngenta IT Simplify (password protected)">
+      <div class="num">03<span class="tag">3 MO</span></div>
+      <h3>Syngenta<br>IT Simplify</h3>
+      <div class="cap">// 35→370→4 synthesis</div>
+      <div class="visual" aria-label="Funnel: 35 interviews to 370 insights to 4 drivers">
+        <div class="v-funnel" aria-hidden="true">
+          <div class="col"><span class="k">// Interviews</span><span class="n">35</span><div class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+          <div class="col"><span class="k">// Insights</span><span class="n">370</span><div class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+          <div class="col"><span class="k">// Drivers</span><span class="n">04</span><div class="dots"><i></i><i></i><i></i><i></i></div></div>
+        </div>
+      </div>
+      <div class="meta-line"><span>UX Strategy</span><span>Research</span><span class="lock">Password</span></div>
+      <p>35+ interviews uncovering root causes of operational complexity. 370 insights synthesized into four core drivers leadership could act on.</p>
+      <span class="enter">Request access →</span>
+    </button>
+
+    <button class="work-card reveal" data-case="healthfirst" aria-label="Open case study: Healthfirst (password protected)">
+      <div class="num">04<span class="tag">8 MO</span></div>
+      <h3>Health<br>First</h3>
+      <div class="cap">// Platform parity</div>
+      <div class="visual" aria-label="Desktop and mobile frames showing parity">
+        <div class="v-parity" aria-hidden="true">
+          <div class="frame"><div class="bars"><i></i><i></i><i></i><i></i></div><span class="lbl">Desktop</span></div>
+          <div class="frame mob"><div class="bars"><i></i><i></i><i></i></div><span class="lbl">Mobile</span></div>
+        </div>
+      </div>
+      <div class="meta-line"><span>Web + Mobile</span><span>Mobile Lead</span><span class="lock">Password</span></div>
+      <p>Led mobile UX across payments, transportation, and account settings for Medicaid/Medicare members. Advocated for platform parity, unified flows, research-first.</p>
+      <span class="enter">Request access →</span>
+    </button>
+
+    <button class="work-card reveal" data-case="ulta" aria-label="Open case study: Ulta heuristics audit">
+      <div class="num">05<span class="tag">3 MO</span></div>
+      <h3>Ulta<br>Heuristics</h3>
+      <div class="cap">// 10-heuristic scorecard</div>
+      <div class="visual" aria-label="10 heuristics scored across pass, partial, fail">
+        <div class="v-heur" aria-hidden="true">
+          <i><span class="n">01</span>✓</i><i class="mid"><span class="n">02</span>~</i><i class="bad"><span class="n">03</span>✕</i><i><span class="n">04</span>✓</i><i class="bad"><span class="n">05</span>✕</i>
+          <i class="mid"><span class="n">06</span>~</i><i><span class="n">07</span>✓</i><i class="bad"><span class="n">08</span>✕</i><i class="mid"><span class="n">09</span>~</i><i><span class="n">10</span>✓</i>
+        </div>
+      </div>
+      <div class="meta-line"><span>Heuristic Audit</span><span>Strategy Lead</span><span>Public</span></div>
+      <p>Strategic UX audit of Ulta's mobile app using NN/g's framework, paired with competitive benchmarking. Five strategic opportunity areas tying UX gaps to loyalty &amp; conversion.</p>
+      <span class="enter">Open case study →</span>
+    </button>
+
+    <button class="work-card reveal" data-case="country-financial" aria-label="Open case study: Country Financial prototypes">
+      <div class="num">06<span class="tag">3 MO</span></div>
+      <h3>Country<br>Financial</h3>
+      <div class="cap">// Prototype state chain</div>
+      <div class="visual" aria-label="Four prototype states: entry, form, error, success">
+        <div class="v-proto" aria-hidden="true">
+          <div class="scr s1"><i></i><i></i><i></i><i></i><span class="num">01</span></div>
+          <div class="scr s2"><i></i><i></i><i></i><i></i><span class="num">02</span></div>
+          <div class="scr s3"><i></i><i></i><i></i><i></i><span class="num">03</span></div>
+          <div class="scr s4"><i></i><i></i><i></i><i></i><span class="num">04</span></div>
+        </div>
+      </div>
+      <div class="meta-line"><span>ProtoPie</span><span>Dynamic Proto</span><span>2022</span></div>
+      <p>Production-fidelity ProtoPie flows for stakeholder validation before development hand-off. The original AI-prototyping muscle, before AI made it cheap.</p>
+      <span class="enter">Open case study →</span>
+    </button>
+
+    <button class="work-card reveal" data-case="destination-lottery" aria-label="Open case study: Exclusive Resorts RAS">
+      <div class="num">07<span class="tag">2026</span></div>
+      <h3>Exclusive<br>Resorts RAS</h3>
+      <div class="cap">// Five-factor weighted ranking</div>
+      <div class="visual" aria-label="Five ranked items with descending point allocations">
+        <div class="v-lottery" aria-hidden="true">
+          <i style="--w:1"><span class="r">01</span><span class="p">12pt</span></i>
+          <i style="--w:.78"><span class="r">02</span><span class="p">8pt</span></i>
+          <i style="--w:.58"><span class="r">03</span><span class="p">6pt</span></i>
+          <i style="--w:.40"><span class="r">04</span><span class="p">4pt</span></i>
+          <i style="--w:.26"><span class="r">05</span><span class="p">2pt</span></i>
+        </div>
+      </div>
+      <div class="meta-line"><span>Web</span><span>Lead UX</span><span>2026</span></div>
+      <p>Replacing a fastest-finger booking race with a fairer, quarterly weighted lottery. Members got real levers; ambassadors got a portfolio dashboard; the React prototype became the alignment artifact.</p>
+      <span class="enter">Open case study →</span>
+    </button>
+  </div>
+</section>
+
+<!-- AI -->
+<section class="ai" id="ai" aria-labelledby="ai-h">
+  <div class="sec-head">
+    <h2 id="ai-h">AI in <span class="red">the work</span></h2>
+    <span class="tag">02 / Manifesto</span>
+  </div>
+
+  <div class="body">
+    <h3 class="massive">Fast <span class="red">tools</span>.<br><span class="out">Slow</span> thinking.</h3>
+    <p class="lede">AI runs through every stage now — research synthesis, strategic framing, and prototypes that drive stakeholder conversations before pixels harden. I work in code and in the terminal as fluently as I work in Figma. The question isn't <b>can</b> AI do this. It's <b>where</b> in the process does it compress time without compressing thinking.</p>
+
+    <div class="grid4">
+      <div class="item">
+        <div class="n">01</div>
+        <h4>Research synthesis</h4>
+        <p>370 raw notes, 35 interviews. AI helps cluster, surface frequency, pressure-test themes. The framing — what the data means, what to do about it — stays mine.</p>
+      </div>
+      <div class="item">
+        <div class="n">02</div>
+        <h4>Strategic framing</h4>
+        <p>A thinking partner for systems work — pressure-testing operational models, naming the drivers under the noise, sharpening the recommendation before it hits a deck.</p>
+      </div>
+      <div class="item">
+        <div class="n">03</div>
+        <h4>Vibe-coded prototypes</h4>
+        <p>Built in code, not stitched in a no-code tool. From a Figma flow to production-fidelity HTML in a day — real states, real data shapes, real edge cases. This portfolio is exhibit A.</p>
+      </div>
+      <div class="item">
+        <div class="n">04</div>
+        <h4>Stakeholder demos</h4>
+        <p>Real flows, real recoveries, built fast enough to walk through in a working session. Feedback gets specific. Dev gets a working spec, not a slide.</p>
+      </div>
+    </div>
+
+    <div class="pull">→ AI doesn't replace the design call. It just makes the <span class="red">cheapest</span> version of "let's see it" actually possible.</div>
+  </div>
+</section>
+
+<!-- STRATEGY -->
+<section id="strategy" aria-labelledby="strat-h">
+  <div class="sec-head">
+    <h2 id="strat-h">Strategic <span class="red">experience</span></h2>
+    <span class="tag">06 modes</span>
+  </div>
+  <div class="strat-stack">
+    <div class="strat-row reveal">
+      <div class="num">01</div>
+      <div><h4>Read the system, not the screen.</h4></div>
+      <div><p>Operational complexity rarely lives in one feature. At Syngenta, the answer wasn't a redesign — it was naming the four drivers underneath everything.</p></div>
+      <div class="arr">→</div>
+    </div>
+    <div class="strat-row reveal">
+      <div class="num">02</div>
+      <div><h4>Map journeys across teams.</h4></div>
+      <div><p>CX blueprints make handoffs visible. When sales, marketing, and product see the same artifact, alignment stops being a meeting and starts being a deliverable.</p></div>
+      <div class="arr">→</div>
+    </div>
+    <div class="strat-row reveal">
+      <div class="num">03</div>
+      <div><h4>Critique grounded in principle.</h4></div>
+      <div><p>NN/g's ten heuristics, applied with discipline, turn vague "this feels off" into specific, prioritizable, business-aligned moves.</p></div>
+      <div class="arr">→</div>
+    </div>
+    <div class="strat-row reveal">
+      <div class="num">04</div>
+      <div><h4>Components that scale.</h4></div>
+      <div><p>13 toggles. 40+ permutations. One product card. The artifact is small; the leverage is enormous.</p></div>
+      <div class="arr">→</div>
+    </div>
+    <div class="strat-row reveal">
+      <div class="num">05</div>
+      <div><h4>Stay two sprints ahead.</h4></div>
+      <div><p>Detailed design links on tickets early, bi-weekly dev syncs, standardized component usage. Process is a design surface too.</p></div>
+      <div class="arr">→</div>
+    </div>
+    <div class="strat-row reveal">
+      <div class="num">06</div>
+      <div><h4>Tie UX to the business.</h4></div>
+      <div><p>Findability → loyalty engagement. Hierarchy → conversion. The audit is only useful if leadership can see what it pays back.</p></div>
+      <div class="arr">→</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" aria-labelledby="about-h">
+  <div class="sec-head">
+    <h2 id="about-h">The <span class="red">designer</span> in person</h2>
+    <span class="tag">04 / Profile</span>
+  </div>
+  <div class="about">
+    <div class="l reveal">
+      <h3>A regular<br><span class="out">mythbuster</span><br>in the work.</h3>
+      <p class="lead">I grew up in Oregon, spent a few years exploring the Arizona desert, and have called the Rocky Mountains home since 2020.</p>
+      <p>From a young age I've been drawn to problem-solving — queue hours of MythBusters marathons. In college I realized that while becoming the next Adam Savage wasn't realistic, I could pursue a career that blended artistic influence with my analytical nature.</p>
+      <p>I'm first and foremost a team player. I like being set loose on my own for projects but always for the greater good of my coworkers. Constructive criticism pushes me to be better.</p>
+      <p>I actually enjoy critical thinking. I chalk it up to my love for problem solving — I may have wanted to major in criminology at one point.</p>
+    </div>
+    <div class="r reveal">
+      <div class="row big"><div class="k">Name</div><div class="v">Anna Dooley</div></div>
+      <div class="row"><div class="k">Practice</div><div class="v">UX/UI Design + Digital Strategy</div></div>
+      <div class="row"><div class="k">Based</div><div class="v">Denver, CO · Open to remote</div></div>
+      <div class="row"><div class="k">Origin</div><div class="v">Oregon → Arizona → Rockies (2020)</div></div>
+      <div class="row"><div class="k">Skills</div><div class="v">
+        <div class="chips">
+          <span class="fill">UX Research</span><span class="fill">UI Design</span><span class="fill">CX Blueprinting</span>
+          <span>Strategy</span><span>Analytics</span><span>SEO</span><span>Marketing Auto</span>
+          <span class="fill">AI Iteration</span><span class="fill">Rapid Prototyping</span><span class="fill">Flow Modeling</span>
+        </div>
+      </div></div>
+      <div class="row"><div class="k">For fun</div><div class="v">
+        <div class="chips">
+          <span>Skiing</span><span>Art</span><span>Camping</span><span>Boxing</span>
+        </div>
+      </div></div>
+      <div class="row"><div class="k">Looking for</div><div class="v">A role that challenges me. A team that fosters learning. The freedom to find my own solutions and ask for input when I need it. Work-life balance, non-negotiable.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- REFS -->
+<section id="refs" aria-labelledby="refs-h">
+  <div class="sec-head">
+    <h2 id="refs-h">References <span class="red">on record</span></h2>
+    <span class="tag">Contacts on request</span>
+  </div>
+  <div class="test-grid">
+    <article class="test reveal">
+      <div class="mark" aria-hidden="true">"</div>
+      <blockquote>Anna stayed two sprints ahead of dev throughout MOXē — a single designer holding the line on a complex enterprise platform without losing the plot. Rare.</blockquote>
+      <cite><b>Trey Secord</b>Sr. UX Designer · Valtech</cite>
+    </article>
+    <article class="test reveal">
+      <div class="mark" aria-hidden="true">"</div>
+      <blockquote>She doesn't just ship pixels — she advocates for parity, for research, for the user the org keeps forgetting. The kind of partner you want on a regulated product.</blockquote>
+      <cite><b>Lisa Woodruff</b>Product Owner · Healthfirst</cite>
+    </article>
+    <article class="test reveal">
+      <div class="mark" aria-hidden="true">"</div>
+      <blockquote>Anna can take 35 interviews and 370 messy notes and come back with four drivers leadership can actually act on. That's strategic UX, not deck UX.</blockquote>
+      <cite><b>Kate Ardelen</b>Lead UX Designer · Valtech</cite>
+    </article>
+  </div>
+</section>
+
+</main>
+
+<!-- CONTACT -->
+<footer id="contact">
+  <div class="word">Let's<br><span class="red">work</span><br><span class="out">together</span></div>
+  <div class="grid">
+    <div class="col">
+      <h5>Email</h5>
+      <a href="mailto:hello@annadooleyink.com">Hello @<br>annadooley<br>ink.com</a>
+      <a href="mailto:hello@annadooleyink.com" class="copy">hello@annadooleyink.com</a>
+    </div>
+    <div class="col">
+      <h5>Elsewhere</h5>
+      <a href="#" data-link="linkedin">LinkedIn →</a>
+      <a href="#" data-link="readcv">Read.cv →</a>
+      <a href="#" data-link="resume">Resume PDF →</a>
+    </div>
+    <div class="col">
+      <h5>Location</h5>
+      <p>Denver, CO<br>Open to remote</p>
+    </div>
+    <div class="col">
+      <h5>Status</h5>
+      <p>● Open<br>Spring 2026<br>FT / PT / Contract</p>
+    </div>
+  </div>
+  <div class="colophon">
+    <span>© 2026 Anna Dooley Ink</span>
+    <span>Set in Archivo Black · Space Grotesk · IBM Plex Mono</span>
+    <span>v.04 — built &amp; designed by Anna</span>
+  </div>
+</footer>
+
+<!-- CASE VIEW (full takeover; mobile = bottom sheet) -->
+<div id="case-view" role="dialog" aria-modal="true" aria-labelledby="case-title" hidden>
+  <div class="case-bar">
+    <a href="#" class="back" id="case-back">← Back</a>
+    <div class="crumb"><b>Case</b> <span id="case-crumb">—</span></div>
+    <button type="button" class="case-close" id="case-x" aria-label="Close case study">×</button>
+    <a href="#" class="next" id="case-next">Next →</a>
+  </div>
+  <div id="case-body"></div>
+  <div class="case-actionbar" role="toolbar" aria-label="Case study controls">
+    <button type="button" data-act="prev" aria-label="Previous case">← Prev</button>
+    <div class="pager">
+      <span id="ab-counter">01 / 06</span>
+      <span class="dots" id="ab-dots" aria-hidden="true"></span>
+    </div>
+    <button type="button" data-act="next" aria-label="Next case">Next →</button>
+  </div>
+</div>
+
+<!-- CASE STUDY TEMPLATES (hidden, cloned at runtime) -->
+<template id="tpl-us-foods">
+  <div class="case-content">
+    <div class="case-hero">
+      <div class="num">Case 01 · 2023 — 2024 · 1.5 yrs</div>
+      <h1 id="case-title">US Foods <span class="red">MOXē</span></h1>
+      <p class="lede">Transitioning a traditionally offline customer base — restaurants, hospitals, hotels — to a digital-first ordering platform.</p>
+    </div>
+    <div class="case-meta">
+      <div class="cell"><div class="k">Role</div><div class="v">Lead UX, Solo</div></div>
+      <div class="cell"><div class="k">Scope</div><div class="v">Web + iOS / Android app</div></div>
+      <div class="cell"><div class="k">Timeline</div><div class="v">18 months</div></div>
+      <div class="cell"><div class="k">Status</div><div class="v">Shipped, in production</div></div>
+    </div>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 01 — The Project</div><h2>Context &amp; my role</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>Post-COVID, US Foods needed to move a long-tail of foodservice customers from phone-and-fax ordering to a digital-first platform. MOXē became that platform — across web and native apps — for restaurants, hospitals, hotels, schools, and small operators.</p>
+          <p>My role involved leading design across the ordering, inventory, and reporting surfaces. I worked solo on the UX side embedded in a multi-pod engineering team, partnered with a single PM, and reported into the broader product design org.</p>
+          <p>The user base was unusually heterogeneous — a chef counting walk-in inventory on a phone, an accountant pulling end-of-month reports on a desktop, a kitchen manager re-ordering on an iPad in a service window. Designing for all three from one component system was the central technical and conceptual problem.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 02 — The Challenge</div><h2>What we were really up against</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>Three constraints stacked: a customer base that hadn't asked to go digital, an engineering velocity that wanted weekly releases, and a product surface that touched ordering, inventory, reporting, and account management across two platforms. The design system had to absorb that variability without fragmenting.</p>
+          <ul>
+            <li>Users with low digital literacy alongside power users running multi-location operations</li>
+            <li>Mobile contexts that required one-handed use in noisy kitchens and walk-ins</li>
+            <li>Desktop contexts that required dense data review and bulk actions</li>
+            <li>An evolving back-end that often shipped data shapes ahead of UI specs</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 03 — The Research</div><h2>What we learned before drawing</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>I conducted user interviews with a sample spanning the customer types, ran competitive teardowns of Amazon Business, Instacart, and Walmart B2B, and partnered with category PMs and the data team to ground assumptions in real ordering behavior.</p>
+          <p>The critical needs that surfaced repeatedly: <b>fast re-order from history</b>, <b>flexible product representation</b> (since the same SKU could behave differently across customer types), <b>inventory visibility tied to ordering</b>, and <b>accessibility on the warehouse floor</b> — high contrast, large touch targets, minimal typing.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 04 — The Design Solution</div><h2>What we built, piece by piece</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>Rather than redesigning surface by surface, I started with the most-shared component — the product card — and used its constraints to drive system decisions outward. From there: inventory, count mode, and reporting.</p>
+        </div>
+      </div>
+
+      <div class="case-subsection">
+        <h3>1 / Product cards — 13 toggles, 40+ permutations</h3>
+        <div class="row">
+          <div class="gutter">Component</div>
+          <div class="prose">
+            <p>The same product card had to render for a single SKU, a multi-pack, a substitution suggestion, an out-of-stock state, a price-locked promo, a customer-specific contract item, and several others. I built a single Figma component with <b>13 toggles</b> producing over 40 valid permutations — every permutation accounted for in design tokens, spacing, and accessibility tree.</p>
+            <p>Engineering implemented one card; product turned the toggles. The leverage was enormous: a new card type became a flag, not a redesign.</p>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="img-block"><span class="lbl">Before</span><span class="ph">[ Card v0 — flat ]</span></div>
+          <div class="img-block"><span class="lbl">After</span><span class="ph">[ Card v1 — 13 toggles ]</span></div>
+        </div>
+      </div>
+
+      <div class="case-subsection">
+        <h3>2 / Inventory — landing, onboarding, count mode</h3>
+        <div class="row">
+          <div class="gutter">Flow</div>
+          <div class="prose">
+            <p>Inventory was the surface most tied to physical context. Most users counted stock on a phone in a walk-in or pantry. I rebuilt the experience mobile-first, with progress trackers, drag-and-drop reordering of count lists, an offline-tolerant draft state, and a simplified <b>count mode</b> that stripped chrome down to the count action and a back button.</p>
+            <p>Onboarding moved into a confirmable sequence rather than a tutorial — first count, first save, first exported report, each celebrated and reversible.</p>
+          </div>
+        </div>
+        <div class="img-grid three">
+          <div class="img-block tall"><span class="ph">[ Landing ]</span></div>
+          <div class="img-block tall"><span class="ph">[ Onboarding ]</span></div>
+          <div class="img-block tall"><span class="ph">[ Count mode ]</span></div>
+        </div>
+      </div>
+
+      <div class="case-subsection">
+        <h3>3 / Edit mode — borrowing what works</h3>
+        <div class="row">
+          <div class="gutter">Pattern</div>
+          <div class="prose">
+            <p>For multi-select edit on count lists, I borrowed the long-press-to-select pattern from Squarespace's editor and the floating action toolbar from LinkedIn's saved posts — both already familiar to a wide swath of users. Accessibility maintained: every gesture had a visible button equivalent, and screen reader announcements were tested with VoiceOver and TalkBack.</p>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="img-block"><span class="lbl">Idle</span><span class="ph">[ List, no selection ]</span></div>
+          <div class="img-block"><span class="lbl">Edit mode</span><span class="ph">[ Multi-select toolbar ]</span></div>
+        </div>
+      </div>
+
+      <div class="case-subsection">
+        <h3>4 / Non-US Foods products</h3>
+        <div class="row">
+          <div class="gutter">Edge case</div>
+          <div class="prose">
+            <p>Customers often tracked items they bought outside US Foods — produce from a local supplier, paper goods from Costco. We let users add these as "non-US Foods items" with a clearly different visual treatment so the data model and the UX both stayed honest about origin.</p>
+          </div>
+        </div>
+        <div class="img-grid">
+          <div class="img-block"><span class="ph">[ Add non-USF item ]</span></div>
+          <div class="img-block"><span class="ph">[ List with mixed origins ]</span></div>
+        </div>
+      </div>
+
+      <div class="case-subsection">
+        <h3>5 / Overview cards &amp; PDF reports</h3>
+        <div class="row">
+          <div class="gutter">Iteration</div>
+          <div class="prose">
+            <p>End-of-period reports were the surface where stakeholders saw their data. We iterated five times on the overview cards before landing on a layout that read at a glance and printed cleanly to PDF — and updated the PDF template alongside the digital one to keep parity.</p>
+          </div>
+        </div>
+        <div class="img-grid iter">
+          <div class="img-block"><span class="ph">[ Iter 1 ]</span></div>
+          <div class="img-block"><span class="ph">[ Iter 2 ]</span></div>
+          <div class="img-block"><span class="ph">[ Iter 3 ]</span></div>
+          <div class="img-block"><span class="ph">[ Iter 5 ]</span></div>
+        </div>
+        <div class="ba">
+          <div class="img-block"><span class="lbl">PDF — before</span><span class="ph">[ Old report ]</span></div>
+          <div class="img-block"><span class="lbl">PDF — after</span><span class="ph">[ New report ]</span></div>
+        </div>
+      </div>
+
+      <div class="case-subsection">
+        <h3>6 / Process improvements</h3>
+        <div class="row">
+          <div class="gutter">Working method</div>
+          <div class="prose">
+            <p>Throughout the project I kept design two sprints ahead of dev, posted detailed design links on tickets at refinement, and held a bi-weekly walkthrough with engineering to keep component usage consistent. The work was solo on the design side; the leverage came from process.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 05 — Impact &amp; Learnings</div><h2>What it changed, what I'd do differently</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>MOXē shipped on schedule across web and both native apps, with the product card system absorbing every new SKU pattern through the toggles rather than design rework. Inventory adoption climbed once count mode landed, and the bi-weekly engineering syncs became a model for the broader design org.</p>
+          <p>Personally, the project taught me that on a regulated, slow-moving customer base, the win isn't the redesign — it's the component decisions that make the next ten redesigns cheap. The single product card with 13 toggles is the artifact I'm proudest of; the process that kept design ahead of dev is the muscle I rely on most now.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<template id="tpl-ulta">
+  <div class="case-content">
+    <div class="case-hero">
+      <div class="num">Case 05 · 2023 · 3 mo</div>
+      <h1 id="case-title">Ulta <span class="red">Heuristics</span></h1>
+      <p class="lede">Strategic UX audit of Ulta's mobile app using NN/g's framework, paired with competitive benchmarking against Sephora, Target, and Glossier.</p>
+    </div>
+    <div class="case-meta">
+      <div class="cell"><div class="k">Role</div><div class="v">Strategy Lead</div></div>
+      <div class="cell"><div class="k">Scope</div><div class="v">Mobile audit + opportunity map</div></div>
+      <div class="cell"><div class="k">Timeline</div><div class="v">3 months</div></div>
+      <div class="cell"><div class="k">Status</div><div class="v">Public — full case study coming soon</div></div>
+    </div>
+    <div class="case-stub">
+      <div class="box">
+        <h2>Full case study in progress</h2>
+        <p>I'm rebuilding this case study as part of the portfolio refresh. The short version: ten heuristics applied with discipline, five strategic opportunity areas, each tied to loyalty engagement and conversion impact. Full walkthrough available on request.</p>
+        <a href="mailto:hello@annadooleyink.com?subject=Ulta%20case%20study%20walkthrough" class="btn">Request walkthrough →</a>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-country-financial">
+  <div class="case-content">
+    <div class="case-hero">
+      <div class="num">Case 06 · 2022 · 3 mo</div>
+      <h1 id="case-title">Country <span class="red">Financial</span></h1>
+      <p class="lede">Production-fidelity ProtoPie flows for stakeholder validation before development hand-off — the original AI-prototyping muscle, before AI made it cheap.</p>
+    </div>
+    <div class="case-meta">
+      <div class="cell"><div class="k">Role</div><div class="v">Prototype lead</div></div>
+      <div class="cell"><div class="k">Scope</div><div class="v">Dynamic ProtoPie flows</div></div>
+      <div class="cell"><div class="k">Timeline</div><div class="v">3 months</div></div>
+      <div class="cell"><div class="k">Status</div><div class="v">Public — full case study coming soon</div></div>
+    </div>
+    <div class="case-stub">
+      <div class="box">
+        <h2>Full case study in progress</h2>
+        <p>Dynamic prototypes that tested branching auth, error, and recovery states with real stakeholders before any pixel hardened. The pattern I still use today, just with AI as a force multiplier instead of ProtoPie.</p>
+        <a href="mailto:hello@annadooleyink.com?subject=Country%20Financial%20case%20study%20walkthrough" class="btn">Request walkthrough →</a>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="tpl-destination-lottery">
+  <div class="case-content">
+    <div class="case-hero">
+      <div class="num">Case 07 · 2026 · Exclusive Resorts</div>
+      <h1 id="case-title">Exclusive Resorts <span class="red">RAS</span></h1>
+      <p class="lede">Replacing a fastest-finger booking race with a fairer, quarterly weighted lottery.</p>
+    </div>
+    <div class="case-meta">
+      <div class="cell"><div class="k">Role</div><div class="v">Lead UX, Solo</div></div>
+      <div class="cell"><div class="k">Surface</div><div class="v">Web &mdash; member portal + Compass v2</div></div>
+      <div class="cell"><div class="k">Duration</div><div class="v">~6 months</div></div>
+      <div class="cell"><div class="k">Status</div><div class="v">In roadmap, March 2027 release</div></div>
+    </div>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 01 &mdash; Setup</div><h2>Context &amp; my role</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>Exclusive Resorts is a private members-only luxury travel club. For years, members got access to vacation inventory through a system called &ldquo;roll-in&rdquo; &mdash; a fastest-finger race where everyone competed to book the moment dates dropped. The fix was a quarterly weighted lottery called the Reservation Allocation System (RAS): members submit a wishlist of destinations, rank them, allocate flat per-tier points to signal preference intensity, and a backend draw decides who gets what.</p>
+          <p>I led design across two surfaces: the member experience (a 3-step wishlist submission flow) and an ambassador dashboard concept that would plug into Compass v2, the existing internal operations platform, during quarterly RAS cycles. I worked with engineering directly on the algorithm itself &mdash; five multiplicative factors, fairness boosts for repeat losers, penalties for repeat winners &mdash; and built a working React prototype with AI as my dev collaborator that became the alignment artifact for stakeholder reviews, including a presentation to the member advisory board (MAC).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 02 &mdash; The big move</div><h2>Why I built the prototype, not the deck</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>The members who won most consistently in the previous system &mdash; &ldquo;roll-in,&rdquo; a fastest-finger booking race &mdash; weren&rsquo;t the ones who wanted the trip most. They were the ones with the most flexible schedules. The redesign couldn&rsquo;t just be fairer; it had to give members real influence over the outcome, even though most of the actual fairness work would happen in a backend they&rsquo;d never see.</p>
+          <p>That backend was a five-factor multiplicative weight &mdash; rank &times; points &times; tier multiplier &times; loss multiplier &times; recently-vacationed penalty &mdash; each with its own rules and edge cases. Plenty of moving parts. Stakeholders (product, the new president, eventually the MAC board) needed to commit to a direction before engineering could scope the build, and the conventional move would&rsquo;ve been a Figma click-through with state mocked frame by frame. But you can&rsquo;t really evaluate a system this dependent on live behavior &mdash; drag-to-rank, points reallocation, on-behalf flows, results acceptance &mdash; by clicking through static screens. The mock would&rsquo;ve lied about what the experience actually felt like.</p>
+          <p>So I built it. React, Vite, Tailwind, dnd-kit, no router. AI was my dev collaborator &mdash; Claude Code for the architecture and component build, with me directing through detailed prompts and component specs. One designer&rsquo;s pace ended up matching the team&rsquo;s pace, because I wasn&rsquo;t waiting on a separate engineer.</p>
+          <p>The prototype&rsquo;s architecture quietly tells you it was the meeting. Three Browse layouts (classic, planning rail, studio-first) selectable through a header toggle and persisted in localStorage, so a design review could switch lenses mid-discussion without losing state. A &ldquo;Prototype&rdquo; pill in the header, in case anyone forgot. A mode segmented control between Member, Ambassador, and How it works, so a single review could move between three audiences without me cracking open three different files.</p>
+          <p>A working prototype built fast can still feel rudimentary in a stakeholder review if the visual layer isn&rsquo;t there. I ran iterative AI-driven design critiques against the live prototype to pull brand fidelity up &mdash; square editorial markers replacing the checkout-funnel progress circles, an asymmetric featured hero in place of two equal-weight cards, a dark navy break in the destination grid. The brand work was secondary to the user flow, but it mattered for one specific reason: when stakeholders looked at the prototype, it had to feel like an Exclusive Resorts product, not a wireframe in costume.</p>
+        </div>
+      </div>
+
+      <div class="img-block wide">
+        <span class="lbl">Video</span>
+        <span class="ph">[ Prototype walkthrough &middot; mode-switching: Member / Ambassador / How it works ]</span>
+      </div>
+
+      <div class="body">
+        <div class="prose">
+          <p>What was inside the prototype mattered as much as the prototype existing at all. The hardest design problem was knowing what the interface should expose and what it had to rigorously hide. The challenge wasn&rsquo;t choosing whether to show the algorithm. It was knowing exactly where to draw the line.</p>
+          <p>I picked a middle path: calibrate what the interface exposes (points budget, rank order, a strategy hint or two) and rigorously hide the rest (weight formulas, multipliers, loss boosts, demand modifiers).</p>
+          <blockquote class="pullquote">The hardest design problems are the ones where the complexity has to be invisible.</blockquote>
+          <p><b>The flexibility window</b> is the agency lever I introduced for members. The previous system gave them no control at all. I added a date flexibility option &mdash; Exact, &plusmn;1 day, &plusmn;2 days, &plusmn;3 days, &plusmn;1 week &mdash; built right into the destination request flow. It looks like a calendar nicety. Mechanically, it&rsquo;s how members tune their own match probability: loosening flexibility gives the lottery more options to match them, which materially improves their odds without exposing any of the math. A direct answer to the headline emotional problem with roll-in: <em>&ldquo;I never get my top destinations.&rdquo;</em></p>
+          <p><b>The Sunday check-in tip.</b> Operations had quietly known for years that requests starting on Sundays tended to match better &mdash; Sundays freed up more inventory than other start days. That kind of insight tends to live in tribal knowledge and ambassador conversations, not in the product where it could actually help anyone. I surfaced it in-context, inside the destination request flyout, framed as a tip rather than buried in a help doc. The member gets actionable information; the system doesn&rsquo;t show its hand.</p>
+        </div>
+      </div>
+
+      <div class="img-grid iter">
+        <div class="img-block tall"><span class="ph">[ Step 1 &middot; destination request + flexibility window ]</span></div>
+        <div class="img-block tall"><span class="ph">[ Step 2 &middot; rank &amp; allocate points ]</span></div>
+        <div class="img-block tall"><span class="ph">[ Flexibility window &middot; detail crop ]</span></div>
+        <div class="img-block tall"><span class="ph">[ Sunday tip &middot; in-context guidance ]</span></div>
+      </div>
+
+      <div class="body">
+        <div class="prose">
+          <p>Members were one half of the prototype. Residence ambassadors were the other &mdash; they live in their internal operations platform, Compass v2, every day, but during each RAS cycle they need a clean, focused way to see what each of their member families is doing: who&rsquo;s submitted, who hasn&rsquo;t, who has results to accept, and who they&rsquo;re going to need to act on behalf of. Two cadences, different surfaces, one underlying system.</p>
+          <p>The wrong move would&rsquo;ve been to design the member flow first and then layer ambassadors on top as an internal admin view. That treats ambassadors as a second-class user, which they aren&rsquo;t &mdash; for some members, the ambassador <em>is</em> how they interact with the company. The right move was to design members and ambassadors as one system with two lenses, sharing the same underlying request model but with different surfaces, attribution rules, and information density.</p>
+          <p>The ambassador surface gets a portfolio dashboard with status indicators, submission progress per member, and demand-tier badges visible only to ambassadors. (Members don&rsquo;t see demand tiers for the same reason they don&rsquo;t see the rest of the algorithm: exposing demand creates anxiety and invites gaming. Ambassadors need it as operational context.)</p>
+          <p>The interaction patterns are designed for trust because every ambassador action is on behalf of someone else with money and emotion at stake. The CTA wording is explicit: &ldquo;Submit on Behalf,&rdquo; &ldquo;Accept on Behalf&rdquo; &mdash; not &ldquo;Submit&rdquo; or &ldquo;Accept&rdquo; with an attribution footnote no one reads. The confirmation modals state plainly that the action is auditable and attributed to the ambassador, with the ambassador&rsquo;s name visible in the same modal that previews what the action will do. When you act on someone else&rsquo;s behalf, accountability isn&rsquo;t a footnote &mdash; it&rsquo;s the message of the screen.</p>
+        </div>
+      </div>
+
+      <div class="img-grid iter">
+        <div class="img-block tall"><span class="ph">[ Ambassador dashboard &middot; portfolio view ]</span></div>
+        <div class="img-block tall"><span class="ph">[ Member detail panel ]</span></div>
+        <div class="img-block tall"><span class="ph">[ Accept on Behalf &middot; confirmation modal ]</span></div>
+        <div class="img-block tall"><span class="ph">[ Member progress states &middot; 4-up ]</span></div>
+      </div>
+
+      <div class="body">
+        <div class="prose">
+          <p>Two architectural calls landed after I left. Both are invisible at the screen layer, and both are the work that survived past my exit.</p>
+          <p><b>The variable points architecture.</b> Points are the explicit signal of preference intensity &mdash; members allocate them across ranked requests to say <em>&ldquo;this one matters more.&rdquo;</em> The business hadn&rsquo;t actually decided the final points distribution model when I started, and there were a few competing proposals on the table. So I designed the architecture to be agnostic to specific values. The interface holds whatever the business decides &mdash; flat per tier, scaled to vacation days, scaled to membership type &mdash; without a redesign. The design didn&rsquo;t have to wait on a business decision that wasn&rsquo;t ready to be made.</p>
+          <p><b>The algorithm simplification.</b> Working with engineering on the algorithm itself produced one simplification that landed in the next spec revision: reclassifying property demand from algorithm input to analytics-only. The math showed that demand applied uniformly to every competitor for the same slot was neutral &mdash; it inflated all the weights equally and had zero effect on relative win probability. Removing it simplified the formula without changing any outcomes.</p>
+        </div>
+      </div>
+
+      <div class="img-block wide">
+        <span class="ph">[ Diagram or annotated screen &middot; variable points architecture: how the same UI holds different point models ]</span>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 03 &mdash; What landed</div><h2>What landed, what&rsquo;s still open</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>The clearest signal that the work landed is what happened next. The project was presented to the member MAC (Member Advisory Council) board as an upcoming feature on the way to a March 2027 first release. The next revision of the backend specification, written after my work, incorporated the design constraints I&rsquo;d established &mdash; including the algorithmic simplification of moving property demand out of the formula. Engineering scoped the implementation against the prototype.</p>
+          <p>The honest acknowledgment: the project hasn&rsquo;t shipped yet, and won&rsquo;t until 2027. Several decisions stayed open at handoff, most notably the member-facing demand indicator, which was mine to help resolve. But none of that takes away from what the foundation enabled &mdash; the working alignment artifact, the stakeholder buy-in, the announced roadmap commitment. The project kept going without me, which is what a foundation is supposed to do.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<template id="tpl-locked">
+  <div class="case-content">
+    <div class="case-hero">
+      <div class="num" data-num>Case — Protected</div>
+      <h1 id="case-title" data-title>Protected case study</h1>
+      <p class="lede" data-lede>Some clients ask for confidentiality. Reasonable. Email me for the password if you're a hiring manager actively reviewing.</p>
+    </div>
+    <div class="case-locked">
+      <div class="box">
+        <span class="lock">⊘ Password protected</span>
+        <h2 data-h>Enter password</h2>
+        <p data-p>The password is shared with serious recruiters and hiring managers on request. Email me and I'll send it with a one-line note about scope.</p>
+        <form data-form autocomplete="off">
+          <input type="password" placeholder="Password" aria-label="Case study password" required>
+          <button type="submit">Unlock</button>
+        </form>
+        <div class="err" data-err></div>
+        <p class="ask">No password? <a href="mailto:hello@annadooleyink.com?subject=Case%20study%20access">Email me — I'll send it.</a></p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<div class="work-cursor" id="work-cursor" aria-hidden="true">Open →</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ---- Boot: mark JS-enabled, respect reduced motion ----
+  document.documentElement.classList.remove('no-js');
+  document.documentElement.classList.add('js');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- Hero type-set entrance ----
+  function tumbleHero() {
+    const h1 = document.querySelector('h1.tumble');
+    if (!h1) return;
+    if (reducedMotion) {
+      h1.classList.remove('tumble');
+      h1.classList.add('set');
+      return;
+    }
+
+    // Walk text nodes. For each text node, split into words; each word becomes
+    // a .word (inline-block, no-wrap) wrapping its chars. Spaces remain spaces
+    // between word wrappers so the line still breaks naturally between words.
+    const walker = document.createTreeWalker(h1, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    let n;
+    while ((n = walker.nextNode())) nodes.push(n);
+
+    let chars = [];
+    nodes.forEach(node => {
+      const text = node.nodeValue;
+      if (!text.trim()) return;
+      const frag = document.createDocumentFragment();
+      // split keeping the spaces so we can re-emit them
+      const parts = text.split(/(\s+)/);
+      parts.forEach(part => {
+        if (part === '') return;
+        if (/^\s+$/.test(part)) {
+          frag.appendChild(document.createTextNode(part));
+          return;
+        }
+        const word = document.createElement('span');
+        word.className = 'word';
+        for (const ch of part) {
+          const span = document.createElement('span');
+          span.className = 'ch';
+          span.textContent = ch;
+          word.appendChild(span);
+          chars.push(span);
+        }
+        frag.appendChild(word);
+      });
+      node.parentNode.replaceChild(frag, node);
+    });
+
+    // Randomize start positions
+    chars.forEach((ch, i) => {
+      const tx = (Math.random() - 0.5) * 80;
+      const ty = -40 - Math.random() * 80;
+      const tr = (Math.random() - 0.5) * 24;
+      ch.style.setProperty('--tx', tx + 'px');
+      ch.style.setProperty('--ty', ty + 'px');
+      ch.style.setProperty('--tr', tr + 'deg');
+      ch.style.setProperty('--delay', (i * 22) + 'ms');
+    });
+
+    // Fire after layout
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        h1.classList.remove('tumble');
+        h1.classList.add('set');
+      });
+    });
+  }
+  tumbleHero();
+
+  // ---- Live clock in status strip ----
+  function updateClock() {
+    const el = document.getElementById('clock');
+    if (!el) return;
+    const now = new Date();
+    // Force MT-7 / MT-6 (Denver)
+    const denver = new Date(now.toLocaleString('en-US', { timeZone: 'America/Denver' }));
+    const h = denver.getHours();
+    const m = String(denver.getMinutes()).padStart(2, '0');
+    const period = h < 5 ? 'LATE' : h < 12 ? 'MORNING' : h < 17 ? 'AFTERNOON' : h < 21 ? 'EVENING' : 'NIGHT';
+    const hh = ((h % 12) || 12);
+    el.textContent = `${period} · DENVER · ${hh}:${m}`;
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  // ---- Typewriter ticker ----
+  const tickerLines = [
+    'Rebuilding this portfolio',
+    'Sketching case study v0.4',
+    'Reading NN/g, again',
+    'Pressure-testing AI in research synthesis',
+    'Two sprints ahead of dev',
+    'Mapping the parts of the journey nobody wants to map'
+  ];
+  function runTicker() {
+    const el = document.getElementById('ticker-text');
+    if (!el) return;
+    if (reducedMotion) {
+      // Just rotate every 6s, no typing
+      let i = 0;
+      el.textContent = tickerLines[0];
+      setInterval(() => {
+        i = (i + 1) % tickerLines.length;
+        el.textContent = tickerLines[i];
+      }, 6000);
+      return;
+    }
+    let lineIdx = 0;
+    let charIdx = 0;
+    let mode = 'typing'; // typing, holding, deleting
+    let holdStart = 0;
+    const TYPE_MS = 45;
+    const DEL_MS = 22;
+    const HOLD_MS = 2200;
+
+    function tick() {
+      const line = tickerLines[lineIdx];
+      if (mode === 'typing') {
+        charIdx++;
+        el.textContent = line.slice(0, charIdx);
+        if (charIdx >= line.length) {
+          mode = 'holding';
+          holdStart = performance.now();
+          setTimeout(tick, HOLD_MS);
+          return;
+        }
+        setTimeout(tick, TYPE_MS + Math.random() * 30);
+      } else if (mode === 'holding') {
+        mode = 'deleting';
+        setTimeout(tick, DEL_MS);
+      } else {
+        charIdx--;
+        el.textContent = line.slice(0, charIdx);
+        if (charIdx <= 0) {
+          lineIdx = (lineIdx + 1) % tickerLines.length;
+          mode = 'typing';
+          setTimeout(tick, 350);
+          return;
+        }
+        setTimeout(tick, DEL_MS);
+      }
+    }
+    tick();
+  }
+  runTicker();
+
+  // ---- Reveal-on-scroll ----
+  if ('IntersectionObserver' in window && !reducedMotion) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  }
+
+  // ---- Custom cursor on work grid ----
+  function initWorkCursor() {
+    if (reducedMotion) return;
+    if (matchMedia('(hover: none)').matches) return; // skip touch
+    const grid = document.querySelector('.work-grid');
+    const cursor = document.getElementById('work-cursor');
+    if (!grid || !cursor) return;
+
+    let inside = false;
+    let rafId = null;
+    let tx = 0, ty = 0;
+
+    function hideCursor() {
+      inside = false;
+      cursor.classList.remove('show');
+      document.body.classList.remove('no-cursor');
+      // explicit inline reset — class removal alone loses to inline opacity
+      // set by the mousemove handler
+      cursor.style.opacity = '0';
+    }
+
+    grid.addEventListener('mouseenter', () => {
+      inside = true;
+      cursor.classList.add('show');
+      document.body.classList.add('no-cursor');
+    });
+    grid.addEventListener('mouseleave', hideCursor);
+    grid.addEventListener('mousemove', (e) => {
+      if (!inside) return;
+      tx = e.clientX;
+      ty = e.clientY;
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        cursor.style.transform = `translate(calc(${tx}px - 50%), calc(${ty}px - 50%)) scale(1)`;
+        cursor.style.opacity = '1';
+        rafId = null;
+      });
+    });
+
+    // Belt-and-braces: if the mouse leaves the window entirely (e.g., to the
+    // browser chrome) some browsers don't fire mouseleave on the grid.
+    document.addEventListener('mouseleave', hideCursor);
+    // Also hide when a case study opens (cursor is z-below case-view but
+    // the .no-cursor body class would still suppress the native cursor).
+    window.addEventListener('hashchange', () => {
+      if (location.hash.startsWith('#case/')) hideCursor();
+    });
+
+    // Update label when over a card
+    grid.querySelectorAll('.work-card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        const locked = card.querySelector('.lock');
+        cursor.textContent = locked ? 'Request →' : 'Open →';
+      });
+    });
+  }
+  initWorkCursor();
+
+  // ---- Theme toggle ----
+  const themeToggle = document.querySelector('[data-theme-toggle]');
+  if (themeToggle) {
+    const lbl = themeToggle.querySelector('.lbl');
+    const sync = () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      themeToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+      themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+      if (lbl) lbl.textContent = isDark ? 'Day' : 'Night';
+    };
+    sync();
+    themeToggle.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      if (next === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      else document.documentElement.removeAttribute('data-theme');
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      sync();
+    });
+  }
+
+  // ---- Mobile menu ----
+  const navToggle = document.querySelector('.nav-toggle');
+  const drawer = document.getElementById('menu-drawer');
+  if (navToggle && drawer) {
+    navToggle.addEventListener('click', () => {
+      const open = document.body.classList.toggle('menu-open');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+    });
+    drawer.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        document.body.classList.remove('menu-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        drawer.setAttribute('aria-hidden', 'true');
+      });
+    });
+  }
+
+  // ---- Case view system ----
+  const CASES = {
+    'us-foods':         { num: '01', title: 'US Foods MOXē',         tpl: 'tpl-us-foods',   locked: false, password: null },
+    'syngenta-cx':      { num: '02', title: 'Syngenta CX Blueprint', tpl: 'tpl-locked',     locked: true,  password: 'syngenta-cx-2024',
+                          unlockTpl: null, lockedCopy: 'Co-led an end-to-end CX blueprint across sales and marketing. Outputs are under NDA.' },
+    'syngenta-it':      { num: '03', title: 'Syngenta IT Simplify',  tpl: 'tpl-locked',     locked: true,  password: 'syngenta-it-2024',
+                          unlockTpl: null, lockedCopy: '35+ interviews, 370 insights, 4 drivers. Workshops, blueprints, and recommendations are under NDA.' },
+    'healthfirst':      { num: '04', title: 'Healthfirst',           tpl: 'tpl-locked',     locked: true,  password: 'healthfirst-2024',
+                          unlockTpl: null, lockedCopy: 'Mobile UX across payments, transportation, and account settings for a Medicaid/Medicare member base. Screens are under NDA.' },
+    'ulta':             { num: '05', title: 'Ulta Heuristics',       tpl: 'tpl-ulta',       locked: false, password: null },
+    'country-financial':{ num: '06', title: 'Country Financial',     tpl: 'tpl-country-financial', locked: false, password: null },
+    'destination-lottery':{ num: '07', title: 'Exclusive Resorts RAS', tpl: 'tpl-destination-lottery', locked: false, password: null }
+  };
+  const ORDER = ['us-foods', 'syngenta-cx', 'syngenta-it', 'healthfirst', 'ulta', 'country-financial', 'destination-lottery'];
+
+  const view = document.getElementById('case-view');
+  const body = document.getElementById('case-body');
+  const crumb = document.getElementById('case-crumb');
+  const back = document.getElementById('case-back');
+  const next = document.getElementById('case-next');
+  const caseBar = view.querySelector('.case-bar');
+  const actionBar = view.querySelector('.case-actionbar');
+  const abCounter = document.getElementById('ab-counter');
+  const abDots = document.getElementById('ab-dots');
+
+  // Build dot indicators (one per case)
+  ORDER.forEach(() => {
+    const i = document.createElement('i');
+    abDots.appendChild(i);
+  });
+
+  // Light haptic feedback on supported devices (Android Chrome). iOS web has no
+  // haptic API; this is a silent no-op there.
+  function haptic(ms) {
+    try { if (navigator.vibrate) navigator.vibrate(ms || 8); } catch (e) {}
+  }
+
+  let lastFocus = null;
+  let currentSlug = null;
+
+  function renderCaseInto(target, slug) {
+    const def = CASES[slug];
+    if (!def) return;
+    const tpl = document.getElementById(def.tpl);
+    if (!tpl) return;
+    target.innerHTML = '';
+    const node = tpl.content.cloneNode(true);
+    if (def.locked) populateLocked(node, def);
+    target.appendChild(node);
+    return def;
+  }
+
+  function populateLocked(node, def) {
+    const num = node.querySelector('[data-num]');
+    const title = node.querySelector('[data-title]');
+    const lede = node.querySelector('[data-lede]');
+    if (num) num.textContent = `Case ${def.num} · Protected`;
+    if (title) title.textContent = def.title;
+    if (lede && def.lockedCopy) lede.textContent = def.lockedCopy;
+    const form = node.querySelector('[data-form]');
+    const err = node.querySelector('[data-err]');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = form.querySelector('input');
+        const val = (input && input.value || '').trim();
+        if (val === def.password) {
+          err.textContent = '';
+          body.innerHTML = `
+            <div class="case-content">
+              <div class="case-hero">
+                <div class="num">Case ${def.num} · Unlocked</div>
+                <h1 id="case-title">${def.title}</h1>
+                <p class="lede">Access granted. Full case study content lives in this slot — placeholder until I drop in the deck.</p>
+              </div>
+              <div class="case-stub">
+                <div class="box">
+                  <h2>Content placeholder</h2>
+                  <p>Replace this template with the unlocked case-study content. Same section structure as US Foods MOXē above.</p>
+                  <a href="mailto:hello@annadooleyink.com" class="btn">Email Anna →</a>
+                </div>
+              </div>
+            </div>`;
+          haptic(12);
+        } else {
+          err.textContent = 'Wrong password. Email hello@annadooleyink.com.';
+          haptic([20, 30, 20]);
+          input.focus();
+          input.select();
+        }
+      });
+    }
+  }
+
+  function updateActionBar(slug) {
+    const idx = ORDER.indexOf(slug);
+    abCounter.textContent = `${String(idx + 1).padStart(2, '0')} / ${String(ORDER.length).padStart(2, '0')}`;
+    [...abDots.children].forEach((d, i) => d.classList.toggle('on', i === idx));
+  }
+
+  function openCase(slug) {
+    const def = CASES[slug];
+    if (!def) return;
+
+    const tpl = document.getElementById(def.tpl);
+    if (!tpl) return;
+    body.innerHTML = '';
+    const node = tpl.content.cloneNode(true);
+
+    if (def.locked) populateLocked(node, def);
+    body.appendChild(node);
+    crumb.textContent = `${def.num} · ${def.title}`;
+    currentSlug = slug;
+    updateActionBar(slug);
+
+    // open with animation (only if not already open)
+    const wasOpen = view.classList.contains('open');
+    view.hidden = false;
+    if (!wasOpen) {
+      requestAnimationFrame(() => view.classList.add('open'));
+      haptic(8);
+    }
+    document.body.classList.add('case-open');
+    view.scrollTop = 0;
+
+    // focus management
+    if (!wasOpen) lastFocus = document.activeElement;
+    const focusTarget = view.querySelector('h1') || back;
+    focusTarget.setAttribute('tabindex', '-1');
+    focusTarget.focus({ preventScroll: true });
+
+    // wire next link
+    const idx = ORDER.indexOf(slug);
+    const nextSlug = ORDER[(idx + 1) % ORDER.length];
+    next.setAttribute('data-next', nextSlug);
+  }
+
+  // Page from one case to another with a slide transition (if same view is open)
+  function pageTo(slug, direction) {
+    if (!view.classList.contains('open')) {
+      location.hash = `#case/${slug}`;
+      return;
+    }
+    if (reducedMotion) {
+      location.hash = `#case/${slug}`;
+      return;
+    }
+    const outClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
+    const inClass = direction === 'next' ? 'slide-in-left' : 'slide-in-right';
+    body.classList.add(outClass);
+    haptic(6);
+    setTimeout(() => {
+      body.classList.remove(outClass);
+      // suppress hashchange handler running the open path; we'll do it ourselves
+      history.replaceState({ case: slug }, '', `#case/${slug}`);
+      openCase(slug);
+      body.classList.add(inClass);
+      setTimeout(() => body.classList.remove(inClass), 320);
+    }, 240);
+  }
+
+  function closeCase(scrollToHash) {
+    if (!view.classList.contains('open')) return;
+    view.classList.remove('open');
+    view.classList.remove('dragging');
+    view.style.transform = '';
+    document.body.classList.remove('case-open');
+    haptic(8);
+    setTimeout(() => {
+      view.hidden = true;
+      body.innerHTML = '';
+      currentSlug = null;
+    }, 460);
+    if (lastFocus) {
+      lastFocus.focus({ preventScroll: true });
+      lastFocus = null;
+    }
+    if (history.state && history.state.case) {
+      history.pushState({}, '', '#work');
+    }
+  }
+
+  function syncFromHash() {
+    const h = location.hash;
+    const m = h.match(/^#case\/([a-z0-9-]+)$/);
+    if (m && CASES[m[1]]) {
+      openCase(m[1]);
+      history.replaceState({ case: m[1] }, '', h);
+    } else {
+      closeCase();
+    }
+  }
+
+  // wire card buttons
+  document.querySelectorAll('[data-case]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const slug = btn.getAttribute('data-case');
+      location.hash = `#case/${slug}`;
+    });
+  });
+  back.addEventListener('click', (e) => {
+    e.preventDefault();
+    location.hash = '#work';
+  });
+  next.addEventListener('click', (e) => {
+    e.preventDefault();
+    const slug = next.getAttribute('data-next');
+    if (slug) pageTo(slug, 'next');
+  });
+
+  // ---- Bottom action bar (mobile) ----
+  actionBar.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const act = btn.dataset.act;
+    if (act === 'close') {
+      location.hash = '#work';
+    } else if (act === 'next' || act === 'prev') {
+      const idx = ORDER.indexOf(currentSlug);
+      if (idx === -1) return;
+      const nextIdx = act === 'next'
+        ? (idx + 1) % ORDER.length
+        : (idx - 1 + ORDER.length) % ORDER.length;
+      pageTo(ORDER[nextIdx], act);
+    }
+  });
+
+  // ---- X close button (mobile) ----
+  const caseX = document.getElementById('case-x');
+  if (caseX) {
+    caseX.addEventListener('click', () => {
+      location.hash = '#work';
+    });
+  }
+
+  // ---- Drag-down-to-close gesture (mobile only, touch events) ----
+  // Touch events are more reliable than Pointer Events on iOS Safari for this
+  // pattern. We claim the case-bar entirely (touch-action: none in CSS) so the
+  // browser doesn't fight us with native scroll.
+  (function initSheetDrag() {
+    if (reducedMotion) return;
+    let startY = 0, startX = 0, dy = 0, dx = 0;
+    let dragging = false;
+    let axis = null;          // null | 'y' | 'x' once direction is locked
+    let startScrollTop = 0;
+
+    function isMobile() { return window.matchMedia('(max-width: 960px)').matches; }
+
+    function onStart(e) {
+      if (!isMobile()) return;
+      const t = e.touches[0];
+      startY = t.clientY;
+      startX = t.clientX;
+      dy = 0; dx = 0;
+      dragging = true;
+      axis = null;
+      startScrollTop = view.scrollTop;
+      view.classList.add('dragging');
+      caseBar.classList.add('dragging');
+    }
+
+    function onMove(e) {
+      if (!dragging) return;
+      const t = e.touches[0];
+      dy = t.clientY - startY;
+      dx = t.clientX - startX;
+
+      // Lock direction after first 6px of intent
+      if (!axis) {
+        if (Math.abs(dy) < 6 && Math.abs(dx) < 6) return;
+        axis = Math.abs(dy) > Math.abs(dx) ? 'y' : 'x';
+      }
+
+      // Only drag the sheet down (positive dy). Ignore upward drags so the
+      // user can still scroll content if they grabbed the bar by mistake.
+      if (axis === 'y' && dy > 0) {
+        // Block native scroll while we drag
+        e.preventDefault();
+        // Mild rubber-band past 200px
+        const damped = dy <= 200 ? dy : 200 + (dy - 200) * 0.5;
+        view.style.transform = `translateY(${damped}px)`;
+      }
+    }
+
+    function onEnd() {
+      if (!dragging) return;
+      dragging = false;
+      caseBar.classList.remove('dragging');
+      const closeThreshold = Math.max(100, window.innerHeight * 0.18);
+      if (axis === 'y' && dy > closeThreshold) {
+        // Pass the current dy to closeCase so the slide-down starts from where
+        // the finger left it (no jump back to fully open before sliding down)
+        closeCase();
+      } else {
+        // Snap back
+        view.style.transform = '';
+        // Re-enable transition for the snap
+        view.classList.remove('dragging');
+      }
+    }
+
+    caseBar.addEventListener('touchstart', onStart, { passive: true });
+    caseBar.addEventListener('touchmove', onMove, { passive: false });
+    caseBar.addEventListener('touchend', onEnd);
+    caseBar.addEventListener('touchcancel', onEnd);
+  })();
+
+  // ESC closes
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (view.classList.contains('open')) {
+        location.hash = '#work';
+      } else if (document.body.classList.contains('menu-open')) {
+        document.body.classList.remove('menu-open');
+        navToggle && navToggle.setAttribute('aria-expanded', 'false');
+        drawer && drawer.setAttribute('aria-hidden', 'true');
+      }
+    }
+  });
+
+  window.addEventListener('hashchange', syncFromHash);
+  // run on load
+  syncFromHash();
+
+  // ---- External link placeholders: friendly "coming soon" alert until real URLs added ----
+  document.querySelectorAll('a[data-link]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      if (a.getAttribute('href') === '#') {
+        e.preventDefault();
+        alert(a.dataset.link.toUpperCase() + ' — link coming soon. Email hello@annadooleyink.com to get my full materials.');
+      }
+    });
+  });
+
+  // populate matrix viz
+  (function () {
+    const m = document.querySelector('.v-matrix');
+    if (!m) return;
+    const onSet = new Set([1, 4, 7, 10, 12, 14, 17, 20, 24, 28, 31, 33, 38, 42, 45, 48, 50]);
+    const litSet = new Set([3, 9, 15, 22, 27, 36, 41, 46]);
+    for (let i = 0; i < 52; i++) {
+      const c = document.createElement('i');
+      if (onSet.has(i)) c.className = 'on';
+      else if (litSet.has(i)) c.className = 'lit';
+      m.appendChild(c);
+    }
+  })();
+
+})();
+</script>
+</body>
+</html>
