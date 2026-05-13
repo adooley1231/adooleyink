@@ -577,6 +577,27 @@
   }
   .v-clubhouse .pillar:first-child { background: var(--hi); color: var(--paper); }
 
+  /* V9: MOBILE STRATEGY — audit-report key/value rows */
+  .v-mobile {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 14px; height: 160px;
+    background: var(--ink); justify-content: center;
+  }
+  .v-mobile .line {
+    display: flex; justify-content: space-between; align-items: baseline;
+    background: var(--paper); padding: 4px 10px;
+  }
+  .v-mobile .line .k {
+    font-family: var(--mono); font-size: 9px; font-weight: 500;
+    letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink); opacity: .7;
+  }
+  .v-mobile .line .v {
+    font-family: var(--display); font-size: 14px;
+    color: var(--ink); letter-spacing: -.01em;
+  }
+  .v-mobile .line:last-child .v { color: var(--hi); }
+
   /* ----- AI MANIFESTO ----- */
   .ai { background: var(--ink); color: var(--paper); }
   .ai .sec-head { background: var(--ink); color: var(--paper); border-bottom: var(--bw) solid var(--paper); }
@@ -1494,6 +1515,22 @@
       <p>End-to-end product strategy for a private member community &mdash; full IA, MoSCoW prioritization across two phases of growth, and a Phase 3 system designed in advance of build.</p>
       <span class="enter">Open case study →</span>
     </button>
+    <button class="work-card reveal" data-case="mobile-strategy" aria-label="Open case study: Mobile Strategy">
+      <div class="num">09<span class="tag">3 MO</span></div>
+      <h3>Mobile<br>Strategy</h3>
+      <div class="cap">// Audit + survey integration</div>
+      <div class="visual" aria-label="Audit findings: 23 font sizes, 763 hardcoded values, 4 error reds, 3.50 app satisfaction">
+        <div class="v-mobile" aria-hidden="true">
+          <div class="line"><span class="k">Font sizes</span><span class="v">23</span></div>
+          <div class="line"><span class="k">Hardcoded values</span><span class="v">763</span></div>
+          <div class="line"><span class="k">Error reds</span><span class="v">4</span></div>
+          <div class="line"><span class="k">App satisfaction</span><span class="v">3.50</span></div>
+        </div>
+      </div>
+      <div class="meta-line"><span>Native + Web</span><span>Sr. Product</span><span>2026</span></div>
+      <p>A self-initiated UX/UI audit across two mobile codebases &mdash; built without a mandate, dismissed at the leadership level, rebuilt around the member survey that validated it.</p>
+      <span class="enter">Open case study →</span>
+    </button>
   </div>
 </section>
 
@@ -2223,6 +2260,112 @@
   </div>
 </template>
 
+<template id="tpl-mobile-strategy">
+  <div class="case-content">
+    <div class="case-hero">
+      <div class="num">Case 09 · 2025&ndash;26 · Luxury destination club</div>
+      <h1 id="case-title">Mobile <span class="red">Strategy</span></h1>
+      <p class="lede">A self-initiated UX/UI audit across two mobile codebases &mdash; built without a mandate, dismissed at the leadership level, rebuilt around the member survey that validated it.</p>
+    </div>
+    <div class="case-meta">
+      <div class="cell"><div class="k">Role</div><div class="v">Sr. Product Designer, Self-initiated</div></div>
+      <div class="cell"><div class="k">Surface</div><div class="v">Native iOS + Android + Mobile Web</div></div>
+      <div class="cell"><div class="k">Duration</div><div class="v">Feb&ndash;Apr 2026 (~3 months)</div></div>
+      <div class="cell"><div class="k">Status</div><div class="v">Delivered &mdash; design work started, roadmap on deck</div></div>
+    </div>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 01 &mdash; The gap</div><h2>Finding a UX gap nobody owned</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>When I joined as Sr. Product Designer in September 2025, the second-day walkthrough of the native mobile app surfaced the gap. <em>The Club</em> &mdash; the native iOS + Android app &mdash; and <em>The Source v2</em> &mdash; the responsive Next.js portal embedded as a webview inside The Club &mdash; had been built by different teams with no shared design system, no platform ownership model, and no awareness of each other. The webview showed its own nav and footer alongside the native app&rsquo;s nav. Touch targets fell below the iOS minimum on both platforms. The native app had 23 font sizes defined and a color palette that included four different reds for errors.</p>
+          <p>Members felt the fragmentation. Bookings capped at 90 days when the desktop portal allowed further. Profile features were missing. The mobile product was bounds behind what the portal could do.</p>
+        </div>
+      </div>
+
+      <div class="img-block wide">
+        <span class="ph">[ The Club (native) + The Source v2 (webview) &middot; layered nav redundancy ]</span>
+      </div>
+
+      <div class="body">
+        <div class="prose">
+          <p>It wasn&rsquo;t on the roadmap for the next several quarters. The team was short-staffed and prioritized elsewhere.</p>
+          <p>I did the audit anyway.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 02 &mdash; The pivot</div><h2>Rebuilding the audit around the survey that validated it</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>The audit ran February through April 2026 on my own time. Code-level on both products. 154 files of native code, 763 hardcoded values, full mobile-responsive review of the Next.js portal, with the webview-awareness gap as the central technical insight. The web app inside the native app had no idea it was inside a native app &mdash; it showed its own header, its own footer, its own back-button behavior, all redundant with what the native app already provided. Two platforms running parallel implementations of Explore and Search, creating maintenance burden and inconsistent experiences for the same task.</p>
+          <p>I drafted a platform decision framework &mdash; native for device integration, performance-critical screens, and platform conventions; webview for content-heavy flows, frequently-changing content, forms, and administrative interactions. Then I mapped 19 features against current vs. recommended platform ownership. I produced a 20-item priority matrix and a 4-phase roadmap.</p>
+          <p>Then the 2026 member survey came back. App satisfaction 3.50 out of 5. Booking ease 3.54. The open-ended feedback aligned with everything the audit had already surfaced.</p>
+          <p>The first attempt to share the audit alongside the survey readout didn&rsquo;t land at the leadership level. The survey had the team&rsquo;s attention; an analytical artifact built on the same problems didn&rsquo;t.</p>
+          <p>So I rebuilt the deliverable. With the survey data in hand, I layered it into the audit and built an interactive HTML report in Claude Code &mdash; a six-tab navigable artifact with the survey data visualized alongside the audit findings on the same page. The alignment was no longer something I had to argue for. It was something stakeholders could see for themselves.</p>
+        </div>
+      </div>
+
+      <div class="img-block wide">
+        <span class="ph">[ Interactive audit report &middot; Survey Data tab alongside audit findings ]</span>
+      </div>
+
+      <div class="body">
+        <div class="prose">
+          <p>The second distribution went to Head of Product and PMs as an async-readable artifact &mdash; one they could navigate on their own time, land on the Survey Data tab first if that was the question they cared about, then move to Recommendations or Roadmap in whatever order matched their thinking. It landed.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 03 &mdash; The strategy</div><h2>What gets built, when, and why</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>The integrated audit produced three strategic artifacts the team didn&rsquo;t yet have for mobile.</p>
+          <p><b>The platform decision framework.</b> Before fixing any individual issue, the team needed a principle for which platform each feature belonged on. Native for device integration (camera, GPS, push notifications, biometrics), offline capability, performance-critical screens, and platform conventions. Webview for content-heavy flows, frequently-changing content, forms, and administrative interactions. Paired with a feature-by-feature mapping &mdash; 19 features audited for current implementation vs. recommended platform. Some moved (Get Ready flows shifted from native to web, where form complexity belongs and where changes don&rsquo;t need an app release). Others stayed &mdash; Connect and messaging in native, because real-time push depends on it. The hardest were the ones running in parallel: Explore was duplicated in both places at once, which was the maintenance burden and inconsistency root cause.</p>
+        </div>
+      </div>
+
+      <div class="img-block wide">
+        <span class="ph">[ Platform mapping &middot; 19 features, current vs. recommended platform ]</span>
+      </div>
+
+      <div class="body">
+        <div class="prose">
+          <p><b>The priority matrix and the 4-phase roadmap.</b> Twenty issues, ranked by impact and effort, sorted into P0 / P1 / P2. P0 fixes &mdash; webview detection so the web app could hide its nav and footer inside the native app, 44px touch targets enforced on both platforms, the formal platform-ownership decision &mdash; sized to ship in a single sprint. P1 was next-quarter scope (unified design tokens, sticky CTAs on conversion flows, keyboard avoidance on forms, deep linking, typography cleanup). P2 was longer-horizon (accessibility remediation, form component libraries, the native-to-web bridge for auth and push). The phasing sequenced these into four phases: <em>Establish the Contract</em> (define ownership, kill the duplication), <em>Fix the Foundation</em> (close the critical UX gaps every member touches), <em>Consolidate Native Flows</em> (migrate Get Ready to web), <em>Elevate to Luxury</em> (visual polish that earns the brand on the platform members actually use it on). The roadmap translated diagnosis into a buildable plan.</p>
+        </div>
+      </div>
+
+      <div class="img-block wide">
+        <span class="ph">[ Priority matrix (P0/P1/P2) or 4-phase roadmap diagram ]</span>
+      </div>
+
+      <div class="body">
+        <div class="prose">
+          <p><b>The interactive HTML report, built in Claude Code.</b> The integrated audit was built as a six-tab navigable HTML report &mdash; Overview, Native, Mobile Web, Survey Data, Recommendations, Roadmap &mdash; in Claude Code. The format was a deliberate choice. Stakeholders consume strategic artifacts on their own time, not in a meeting where I&rsquo;d be there to walk them through it. An interactive report meant they could land on the tab that mattered to their question, see the survey data sitting next to the audit findings on the same page, and form their own read. I&rsquo;ve worked across the AI tool stack &mdash; bolt, cursor, Figma make &mdash; but for shareable, technical artifacts like this one, Claude Code is where I land.</p>
+        </div>
+      </div>
+
+      <div class="img-block wide">
+        <span class="ph">[ Audit report &middot; Recommendations or Roadmap tab, or code-level audit excerpt ]</span>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 04 &mdash; What landed</div><h2>Feedback received, design started, strategy on deck</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>The integrated audit landed with Head of Product and PMs. Feedback was positive. Some of the work started: bottom buttons on destination pages &mdash; a small slice of the native mobile design direction the roadmap called for &mdash; moved into next-quarter scope. The platform decision framework gave the team a vocabulary for the native-vs-webview conversation they hadn&rsquo;t had before. The audit content has been referenced in subsequent platform discussions.</p>
+          <p>The full 4-phase roadmap hasn&rsquo;t been adopted. The organization ships on deliberate timelines, and mobile is one priority among many at a short-staffed team. Whether the broader work gets picked up in the next two quarters or later, I don&rsquo;t know.</p>
+          <p>What I can claim is that the strategic spine is on the shelf and ready. The audit established the problem with code-level evidence and member-voice validation. The framework established the criteria for what belongs where. The matrix and roadmap established the sequencing. The interactive report made all of it consumable without me there to walk through it. When the team is ready to take the work on, they don&rsquo;t have to start from a blank page.</p>
+          <p>The audit was self-initiated. The strategy is ready when the team is.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
 <template id="tpl-locked">
   <div class="case-content">
     <div class="case-hero">
@@ -2522,9 +2665,10 @@
     'ulta':             { num: '05', title: 'Ulta Heuristics',       tpl: 'tpl-ulta',       locked: false, password: null },
     'country-financial':{ num: '06', title: 'Country Financial',     tpl: 'tpl-country-financial', locked: false, password: null },
     'destination-lottery':{ num: '07', title: 'Exclusive Resorts RAS', tpl: 'tpl-destination-lottery', locked: false, password: null },
-    'clubhouse':        { num: '08', title: 'The Clubhouse',         tpl: 'tpl-clubhouse',  locked: false, password: null }
+    'clubhouse':        { num: '08', title: 'The Clubhouse',         tpl: 'tpl-clubhouse',  locked: false, password: null },
+    'mobile-strategy':  { num: '09', title: 'Mobile Strategy',        tpl: 'tpl-mobile-strategy', locked: false, password: null }
   };
-  const ORDER = ['us-foods', 'syngenta-cx', 'syngenta-it', 'healthfirst', 'ulta', 'country-financial', 'destination-lottery', 'clubhouse'];
+  const ORDER = ['us-foods', 'syngenta-cx', 'syngenta-it', 'healthfirst', 'ulta', 'country-financial', 'destination-lottery', 'clubhouse', 'mobile-strategy'];
 
   const view = document.getElementById('case-view');
   const body = document.getElementById('case-body');
