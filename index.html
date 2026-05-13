@@ -556,6 +556,27 @@
   .v-lottery i:first-child { background: var(--hi); }
   .v-lottery i .p { opacity: .65; }
 
+  /* V8: CLUBHOUSE — four-pillar IA */
+  .v-clubhouse {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 2px; padding: 14px; height: 160px;
+    background: var(--ink);
+  }
+  .v-clubhouse .pillar {
+    background: var(--paper); color: var(--ink);
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 8px 6px; overflow: hidden;
+  }
+  .v-clubhouse .pillar .n {
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: .08em;
+  }
+  .v-clubhouse .pillar .lbl {
+    font-family: var(--display); font-size: 11px;
+    letter-spacing: -.01em; text-transform: uppercase; line-height: 1;
+  }
+  .v-clubhouse .pillar:first-child { background: var(--hi); color: var(--paper); }
+
   /* ----- AI MANIFESTO ----- */
   .ai { background: var(--ink); color: var(--paper); }
   .ai .sec-head { background: var(--ink); color: var(--paper); border-bottom: var(--bw) solid var(--paper); }
@@ -1457,6 +1478,22 @@
       <p>Replacing a fastest-finger booking race with a fairer, quarterly weighted lottery. Members got real levers; ambassadors got a portfolio dashboard; the React prototype became the alignment artifact.</p>
       <span class="enter">Open case study →</span>
     </button>
+    <button class="work-card reveal" data-case="clubhouse" aria-label="Open case study: The Clubhouse">
+      <div class="num">08<span class="tag">8 MO</span></div>
+      <h3>The<br>Clubhouse</h3>
+      <div class="cap">// Four-pillar architecture</div>
+      <div class="visual" aria-label="Four-pillar Clubhouse architecture: The Latest, Passions, Circles, Editorial">
+        <div class="v-clubhouse" aria-hidden="true">
+          <div class="pillar"><span class="n">01</span><span class="lbl">The<br>Latest</span></div>
+          <div class="pillar"><span class="n">02</span><span class="lbl">Passions</span></div>
+          <div class="pillar"><span class="n">03</span><span class="lbl">Circles</span></div>
+          <div class="pillar"><span class="n">04</span><span class="lbl">Editorial</span></div>
+        </div>
+      </div>
+      <div class="meta-line"><span>Web</span><span>Sr. Product</span><span>2025&ndash;26</span></div>
+      <p>End-to-end product strategy for a private member community &mdash; full IA, MoSCoW prioritization across two phases of growth, and a Phase 3 system designed in advance of build.</p>
+      <span class="enter">Open case study →</span>
+    </button>
   </div>
 </section>
 
@@ -2062,6 +2099,130 @@
   </div>
 </template>
 
+<template id="tpl-clubhouse">
+  <div class="case-content">
+    <div class="case-hero">
+      <div class="num">Case 08 · 2025&ndash;26 · Exclusive Resorts</div>
+      <h1 id="case-title">The <span class="red">Clubhouse</span></h1>
+      <p class="lede">Joining a private member community at MVP, doing end-to-end product strategy across two phases of growth, and shaping what the Clubhouse becomes.</p>
+    </div>
+    <div class="case-meta">
+      <div class="cell"><div class="k">Role</div><div class="v">Sr. Product Designer, Solo</div></div>
+      <div class="cell"><div class="k">Surface</div><div class="v">Web &mdash; Member portal</div></div>
+      <div class="cell"><div class="k">Duration</div><div class="v">~8 months</div></div>
+      <div class="cell"><div class="k">Status</div><div class="v">Phase 2 in development, Phase 3 designed</div></div>
+    </div>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 01 &mdash; Setup</div><h2>A community MVP, and a question about what comes next</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>I joined as the sole Sr. Product Designer in September 2025, after the Clubhouse MVP had launched feature-flagged to roughly 200 memberships &mdash; the Seabourn Once-in-a-Lifetime Journey cohort. The MVP was small by design: a landing page, a profile wizard, a member directory, a single discussion forum specific to the Seabourn cruise, a trip review tool, and a curated photo gallery from the journey. It was a controlled rollout meant to answer questions about whether members would complete profiles, use a directory, talk to each other on a board, and write reviews.</p>
+          <p>The next phase planned destination-specific discussion forums, but they wouldn&rsquo;t live inside the Clubhouse. They&rsquo;d live on Destination Pages out in the broader member portal, gated behind Clubhouse signup so members had to opt into the community before they could access the conversation. The gate was meant to drive Clubhouse signup. The forums were meant to drive value on Destination Pages.</p>
+        </div>
+      </div>
+
+      <div class="img-block wide">
+        <span class="ph">[ Clubhouse homepage &middot; The Latest, or MVP landing screenshot ]</span>
+      </div>
+
+      <div class="body">
+        <div class="prose">
+          <p>But the Seabourn forum was going away. It was tied to a specific cohort and a specific cruise &mdash; once the next phase launched, it would be retired. That left a question. If the new forums get gated behind Clubhouse signup and the only existing forum inside Clubhouse is being removed, what does the Clubhouse itself become once members get there?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 02 &mdash; The plan</div><h2>End-to-end feature analysis, and why Phase 2 needed Passion + My Feed</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>I went end-to-end. Full information architecture across what the platform needed to become, a feature analysis across two phases of growth &mdash; what would eventually be Phase 2 and Phase 3 &mdash; and a MoSCoW prioritization to figure out what shipped when. The analysis wasn&rsquo;t about Phase 2. It was about the trajectory: where Clubhouse needed to land, what had to exist to get there, what could wait, what couldn&rsquo;t.</p>
+          <p>What the analysis surfaced about Phase 2, specifically, was straightforward. The planned scope &mdash; gated destination forums on Destination Pages, plus the retirement of the Seabourn forum &mdash; left the Clubhouse itself with marketing content, a profile wizard, and a directory. No reason for members to come back once they&rsquo;d signed up to unlock the forums. The gate worked against the loop. Members would enter Clubhouse to access conversation that lived somewhere else, and then have nothing inside Clubhouse to return for.</p>
+        </div>
+      </div>
+
+      <div class="img-block">
+        <span class="ph">[ MoSCoW prioritization or feature analysis artifact ]<!-- TODO ANNA: REMOVE THIS IMG-BLOCK IF MOSCOW ARTIFACT IS NOT RECOVERABLE --></span>
+      </div>
+
+      <div class="body">
+        <div class="prose">
+          <p>I pushed for Passion + My Feed to be added to Phase 2 alongside the gated forums. A Passion page placeholder/teaser &mdash; not the full Passion experience that would ship later, but enough to signal to members that real interest-based community was coming. A My Feed inside Clubhouse that aggregated the most recent posts from across the destination forums, so members had a reason to open Clubhouse itself, not just the forums they&rsquo;d signed up to reach. Phase 2 couldn&rsquo;t be a phase 2 with nothing new in the actual Clubhouse interface. The argument was accepted. Passion teaser and My Feed are on the Phase 2 roadmap because of it.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 03 &mdash; The build</div><h2>From a flat MVP to a four-pillar platform</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>The MVP had a single Seabourn forum living on a landing page. The architecture had to hold not just for Phase 2 but for what was already designed for Phase 3 and beyond. The work in this section is the design that flowed out of the strategic plan from Section 02 &mdash; the four-pillar IA that gave the Clubhouse a shape, the Passion pages that anchored the Phase 2 teaser, the Destination Pages recommendation that gave the new forums somewhere to live, and the Phase 3 Circles system designed in advance of build.</p>
+          <p><b>The four-pillar IA.</b> I restructured the Clubhouse into four pillars: <em>The Latest</em> (the homepage, surfacing recent member activity, suggested connections, content highlights), <em>Passions</em> (interest-based community pages with their own forums and member tabs), <em>Circles</em> (private groups, designed for Phase 3), and <em>The Editorial</em> (curated member stories and editorial content). Each pillar had its own scope and content types, but they cross-referenced each other through contextual entry points &mdash; a Circle tied to a Passion surfaced on that Passion&rsquo;s page, a post in My Feed routed back to its origin forum or Circle, content in The Editorial linked into the Passion or Destination it described. The original Seabourn discussion board, which had lived as a flat element on the MVP landing page, got moved out of Clubhouse and onto the Seabourn Destination Page where it belonged. The forum UI itself was redesigned to support multiple forum contexts &mdash; destination, passion, Circle &mdash; rather than the single-cohort treatment it had at MVP.</p>
+        </div>
+      </div>
+
+      <div class="img-block wide">
+        <span class="ph">[ Four-pillar Clubhouse IA diagram ]</span>
+      </div>
+
+      <div class="body">
+        <div class="prose">
+          <p><b>My Feed, staged for personalization.</b> My Feed sits inside The Latest as the homepage stream &mdash; but the design wasn&rsquo;t a mega-feed. Leadership had been clear that posting from a single all-content thread wasn&rsquo;t a direction the platform wanted to go. The challenge was building toward personalization without giving members a flat aggregated stream, and without making them wait for full personalization to ship before anything useful appeared. I designed My Feed in three stages so that each phase delivered something concrete on its own while building toward an ideal state. <em>Launch stage:</em> My Feed surfaces posts happening across destination forums (tying the new gated forums into Clubhouse itself) plus notifications for engagement on the member&rsquo;s own posts &mdash; destination-aware content and an engagement loop, but not personalization yet. <em>Intermediate stage:</em> as Passion pages roll out, My Feed adds posts from Passions the member follows; members start to opt into more interests, more groups, more Circles. <em>Ideal state:</em> a fully curated stream pulling from destinations the member has traveled to or favorited, Passions they follow, and Circles they belong to. Designed once and scoped so the launch stage could ship without the personalization infrastructure that wouldn&rsquo;t exist for another two phases.</p>
+        </div>
+      </div>
+
+      <div class="img-block wide">
+        <span class="ph">[ My Feed &middot; launch stage, or three-stage personalization composite ]</span>
+      </div>
+
+      <div class="body">
+        <div class="prose">
+          <p><b>Passion pages, with Golf as the Phase 1 anchor.</b> Golf was the first full Passion page &mdash; the model that future Passions (Wine, Wellness, Family Travel) would follow. Each Passion page carries a Discussion forum, a Members tab, and a conditional Circle tab that only appears when a member belongs to a Circle tied to that Passion. The Golf page included editorial content (golf-specific articles, a member interest list, exploration of a unique angle where members could flag willingness to host other members at their home country clubs), the discussion forum, and the conditional logic that would surface the eventual Phase 3 Golf Club Circles only to members who belonged to them. The Passion architecture was designed once to hold across every future Passion: same structure, different content.</p>
+        </div>
+      </div>
+
+      <div class="img-block wide">
+        <span class="ph">[ Golf Passion page &middot; full member-facing view ]</span>
+      </div>
+
+      <div class="body">
+        <div class="prose">
+          <p><b>The Destination Pages tab restructure recommendation.</b> Destination Pages lived outside Clubhouse, inside the broader member portal. The existing destination pages used anchor-link navigation and were flooded with marketing content. Know Before You Go &mdash; the genuinely useful trip-planning information members actually needed &mdash; was buried as an accordion at the bottom of the page. When the team planned to add destination-specific forums to these pages, bolting them onto the bottom of a marketing-heavy anchor-link layout would have buried them too. I recommended restructuring the destination pages from anchor-link nav to a tabbed UI (Overview, Residences &amp; Calendar, Trip Planning, Know Before You Go, Member Insights). Tabbed gave the forum its own dedicated home in the Member Insights tab. Tabbed gave Know Before You Go its own full tab where members could actually find and use it. And tabbed deprioritized the marketing content for an audience that&rsquo;s already members &mdash; they&rsquo;re deciding where to travel, not being sold on the brand. The recommendation was adopted. Costa Rica is the pilot.</p>
+        </div>
+      </div>
+
+      <div class="ba">
+        <div class="img-block"><span class="lbl">Before</span><span class="ph">[ Anchor-link, marketing-heavy ]</span></div>
+        <div class="img-block"><span class="lbl">After</span><span class="ph">[ Tabbed UI &middot; Costa Rica pilot ]</span></div>
+      </div>
+
+      <div class="body">
+        <div class="prose">
+          <p><b>The Circles system.</b> Circles was Phase 3 work, designed in advance of build because the architecture wouldn&rsquo;t hold without it. The trigger was a stakeholder request in early April 2026: a private, invite-only Golf chapter, the Denver Chapter. Ongoing, no end date, passion-linked, club-controlled membership. As more use cases stacked up &mdash; once-in-a-lifetime curated group trips with their own coordination thread, real-time in-destination meetups, eventually member-hosted groups like book clubs &mdash; it was clear that the originally-planned Events model couldn&rsquo;t hold any of it. Events were rigid. The use cases needed flexibility across lifecycle (ongoing vs. time-bounded vs. ephemeral), governance (club-controlled vs. member-initiated), and linkage (passion vs. property vs. date).</p>
+          <p>The design abstraction was that all Circle types share the same structural DNA &mdash; a header with context, a tab bar, and a content area &mdash; and each type configures those elements differently based on its lifecycle and purpose. Five types from one shared system: Club Circles (ongoing, passion-linked), Trip Circles (time-bounded, auto-closes when the trip ends), Event Circles (single moment, RSVP, designed to nest inside Club Circles later), Destination/&ldquo;I&rsquo;m Here&rdquo; Circles (real-time, opt-in, ephemeral, privacy-first), and Member-hosted Circles (future flex). The system couldn&rsquo;t be solved in static mocks. State changes, conditional tabs, type-specific configurations, multi-entry-point discovery, the empty state that most members would see before they were ever in a Circle &mdash; none of it would have read in flat Figma. I built interactive HTML prototypes (with AI-assisted scaffolding) to work through the navigation logic, the type variations, and the invite-to-acceptance flow. Because Circles are invite-only, the empty state had to educate without feeling exclusionary &mdash; type-preview cards with informational tone, &ldquo;membership comes to you&rdquo; framing, no fake gating.</p>
+        </div>
+      </div>
+
+      <div class="img-block wide">
+        <span class="ph">[ Circles system &middot; 5-type comparison or IA diagram ]</span>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 04 &mdash; In flight</div><h2>What&rsquo;s in pilot, what&rsquo;s in build, what&rsquo;s ahead</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>The Destination Pages tab restructure is in Costa Rica pilot. The rest of Phase 2 &mdash; the Passion teaser, My Feed, the Golf Passion page, the gated destination forums, the Know Before You Go redesign, the new maps &mdash; was in active development when I transitioned off. Phase 3 work, including the Circles system, was designed and waiting.</p>
+          <p>The company works slowly on phases. Phase 2 in the strategic doc is closer to Phase 1.5 in execution &mdash; the team is short-staffed and ships in deliberate chunks. None of Phase 2 shipped during my time on the project.</p>
+          <p>What landed was structural. The architecture is set &mdash; four pillars, defined Passion logic, conditional Circle integration, a forum UI that supports multiple contexts. The priorities are set &mdash; MoSCoW prioritization across two phases of growth, with the Phase 2 push that changed what got bundled with what. The recommendations changed the roadmap &mdash; Passion and My Feed added to Phase 2, the Destination Pages tab restructure adopted and piloting. And the next phase has design work ready to go &mdash; the Circles system with prototypes that demonstrate the navigation logic the team would otherwise have had to figure out from scratch.</p>
+          <p>None of Phase 2 shipped while I was on the project. The architecture, the prioritization, and the Phase 3 design work did.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
 <template id="tpl-locked">
   <div class="case-content">
     <div class="case-hero">
@@ -2360,9 +2521,10 @@
     'healthfirst':      { num: '04', title: 'Healthfirst Member Portal', tpl: 'tpl-healthfirst', locked: false, password: null },
     'ulta':             { num: '05', title: 'Ulta Heuristics',       tpl: 'tpl-ulta',       locked: false, password: null },
     'country-financial':{ num: '06', title: 'Country Financial',     tpl: 'tpl-country-financial', locked: false, password: null },
-    'destination-lottery':{ num: '07', title: 'Exclusive Resorts RAS', tpl: 'tpl-destination-lottery', locked: false, password: null }
+    'destination-lottery':{ num: '07', title: 'Exclusive Resorts RAS', tpl: 'tpl-destination-lottery', locked: false, password: null },
+    'clubhouse':        { num: '08', title: 'The Clubhouse',         tpl: 'tpl-clubhouse',  locked: false, password: null }
   };
-  const ORDER = ['us-foods', 'syngenta-cx', 'syngenta-it', 'healthfirst', 'ulta', 'country-financial', 'destination-lottery'];
+  const ORDER = ['us-foods', 'syngenta-cx', 'syngenta-it', 'healthfirst', 'ulta', 'country-financial', 'destination-lottery', 'clubhouse'];
 
   const view = document.getElementById('case-view');
   const body = document.getElementById('case-body');
