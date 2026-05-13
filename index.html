@@ -1127,6 +1127,13 @@
   }
   .img-block.tall { aspect-ratio: 4 / 5; }
   .img-block.wide { aspect-ratio: 21 / 9; }
+  .case-section .embed-wide {
+    width: 100%; aspect-ratio: 16 / 9;
+    border: var(--bw) solid var(--ink);
+    background: var(--paper-2); overflow: hidden;
+    margin: 24px 0 8px;
+  }
+  .case-section .embed-wide iframe { width: 100%; height: 100%; display: block; border: 0; }
   .img-block .ph {
     font-family: var(--mono); font-size: 11px; font-weight: 700;
     letter-spacing: .12em; text-transform: uppercase;
@@ -1403,20 +1410,20 @@
       <span class="enter">Open case study →</span>
     </button>
 
-    <button class="work-card reveal" data-case="syngenta-cx" aria-label="Open case study: Syngenta CX Blueprint (password protected)">
-      <div class="num">02<span class="tag">3 MO</span></div>
-      <h3>Syngenta<br>CX Blueprint</h3>
-      <div class="cap">// Cross-team swimlane</div>
-      <div class="visual" aria-label="Swimlane blueprint mapping sales, marketing, ops handoffs">
+    <button class="work-card reveal" data-case="cx-blueprint" aria-label="Open case study: CX Blueprint">
+      <div class="num">02<span class="tag">2024</span></div>
+      <h3>CX<br>Blueprint</h3>
+      <div class="cap">// End-to-end blueprint</div>
+      <div class="visual" aria-label="Swimlane blueprint mapping seller, farmer, internal stakeholder flows">
         <div class="v-lanes" aria-hidden="true">
           <div class="ln"><b>Sales</b><div class="stops"><em></em><em></em><em class="gap"></em><em></em><em></em><em></em><em></em></div></div>
           <div class="ln"><b>Mktg</b><div class="stops"><em></em><em class="gap"></em><em></em><em></em><em></em><em class="gap"></em><em></em></div></div>
           <div class="ln"><b>Ops</b><div class="stops"><em></em><em></em><em></em><em></em><em class="gap"></em><em></em><em></em></div></div>
         </div>
       </div>
-      <div class="meta-line"><span>CX Strategy</span><span>Co-lead</span><span class="lock">Password</span></div>
-      <p>Co-led an effort to map Syngenta's end-to-end customer experience across sales and marketing. Surfaced gaps in data, process, and team alignment.</p>
-      <span class="enter">Request access →</span>
+      <div class="meta-line"><span>CX Strategy</span><span>UX Strategist</span><span>2024</span></div>
+      <p>Mapped an end-to-end lead management experience nobody had seen as a single system &mdash; through multi-population research and a stakeholder-validated opportunity framework.</p>
+      <span class="enter">Open case study →</span>
     </button>
 
     <button class="work-card reveal" data-case="syngenta-it" aria-label="Open case study: Syngenta IT Simplify (password protected)">
@@ -2366,6 +2373,107 @@
   </div>
 </template>
 
+<template id="tpl-cx-blueprint">
+  <div class="case-content">
+    <div class="case-hero">
+      <div class="num">Case 02 · 2024 · Global agricultural products company</div>
+      <h1 id="case-title">CX <span class="red">Blueprint</span></h1>
+      <p class="lede">A UX strategist engagement that mapped a lead management experience nobody had ever seen end-to-end &mdash; through multi-population research and a stakeholder-validated opportunity framework.</p>
+    </div>
+    <div class="case-meta">
+      <div class="cell"><div class="k">Role</div><div class="v">UX Strategist, Agency engagement</div></div>
+      <div class="cell"><div class="k">Surface</div><div class="v">CX Strategy &mdash; Research + Blueprint</div></div>
+      <div class="cell"><div class="k">Duration</div><div class="v">2024</div></div>
+      <div class="cell"><div class="k">Status</div><div class="v">Delivered &mdash; handed off for implementation</div></div>
+    </div>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 01 &mdash; The artifact</div><h2>An end-to-end lead experience, mapped for the first time</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>At a global agricultural products company, the end-to-end lead management experience spanned two product business units (<em>GHX</em> and <em>Enogen</em>), two distinct external populations (sellers in the field, farmers as end customers), and at least four internal teams. The flow had pieces owned by different parts of the organization, but nobody had ever mapped it as a single connected system. As UX strategist on the agency engagement, I led the research and synthesis that produced the blueprint.</p>
+        </div>
+      </div>
+
+      <div class="embed-wide">
+        <iframe
+          src="https://miro.com/app/live-embed/uXjVNj8ZNOg=/?embedMode=view_only_without_ui&amp;moveToViewport=50645,36511,20592,10914&amp;embedId=445128706574"
+          loading="lazy"
+          title="End-to-end lead experience blueprint"
+          allow="fullscreen; clipboard-read; clipboard-write"
+          allowfullscreen
+          scrolling="no"
+          frameborder="0"></iframe>
+      </div>
+      <div class="caption">The actual blueprint, embedded live. Pan and zoom to explore the full structure.</div>
+
+      <div class="body">
+        <div class="prose">
+          <p>Before this, the lead experience had only ever existed in pieces. The blueprint is what made it a system.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 02 &mdash; The research</div><h2>Interviews across both sides of the lead flow</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>Most CX engagements scope research to the customer side. This one didn&rsquo;t. Sellers are the field-facing role responsible for managing lead-to-sale conversion at the agricultural client; farmers are the end customers buying the products. Treating either population as &ldquo;the customer&rdquo; would have left out half the lead flow. So the research scoped both, plus stakeholder interviews across the four internal teams that owned different pieces of the flow: Strategy &amp; Change Insights, Marketing &amp; Communications, Sales Insights &amp; Strategy, and Data Technology &amp; Analytics.</p>
+          <p>Seven seller interviews. Five farmer interviews. Multiple stakeholder conversations to map the organizational structure that sat underneath the customer-facing flow. The synthesis was less about finding individual pain points and more about reconciling four internal views of the same lead flow against what sellers and farmers actually experienced.</p>
+        </div>
+      </div>
+
+      <div class="img-block wide">
+        <span class="ph">[ Research populations &middot; sellers + farmers + internal stakeholders feeding into synthesis ]</span>
+      </div>
+
+      <div class="body">
+        <div class="prose">
+          <p>This is where the GHX/Enogen alignment opportunity surfaced. The two product business units ran in parallel through what should have been a shared lead flow architecture &mdash; but the touchpoints, terminology, and handoff patterns diverged in ways neither team had visibility into. Mapping them as parallel tracks in the blueprint made the alignment opportunities visible for the first time. Without the multi-population scope, the alignment work would have stayed invisible.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 03 &mdash; The framework</div><h2>Opportunity categories, stakeholder-validated</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>A blueprint is a diagram until something tells the team what to do with it. The framework layer on top of the visualization is what turned this from a diagnostic artifact into an actionable handoff &mdash; through a categorization system, a validation step, and an embedded measurement layer.</p>
+          <p><b>The opportunity categorization framework.</b> Every opportunity surfaced in the synthesis was sorted into one of four categories. <em>New</em> &mdash; opportunities the lead-to-conversion journey didn&rsquo;t yet include and should. <em>Simplify</em> &mdash; current actions that could be reduced or streamlined. <em>Enhance</em> &mdash; actions already happening but with room to improve. <em>Align</em> &mdash; opportunities specifically for GHX and Enogen process alignment, the parallel-track findings from the research. The four categories gave the team a vocabulary for prioritization that didn&rsquo;t yet exist, and the categorization is reusable for future CX work after the engagement closed.</p>
+        </div>
+      </div>
+
+      <div class="img-block wide">
+        <span class="ph">[ Opportunity legend &middot; four categories (New / Simplify / Enhance / Align) + Filled Opportunity validation ]</span>
+      </div>
+
+      <div class="body">
+        <div class="prose">
+          <p><b>The &ldquo;Filled Opportunity&rdquo; validation step.</b> A raw recommendation list is easy to produce and hard to act on. The blueprint distinguished priority opportunities &mdash; specifically validated with the client&rsquo;s core stakeholders &mdash; from the broader set. Walking the team through the categorized opportunities and getting their endorsement on which ones rose to priority built downstream alignment into the artifact itself. By the time the blueprint was delivered, the priority opportunities had buy-in from the people who would have to act on them.</p>
+          <p><b>The KPI infrastructure baked into the blueprint.</b> Each touchpoint in the lead flow carried a linked measurement layer &mdash; user engagement metrics on tactical CTAs, form visits and form abandonment rates on conversion points, lead source comparison and demographic capture on event-driven touchpoints. Each metric block included a &ldquo;Return to Blueprint Location&rdquo; link, so a reader following the measurement thread could navigate back to where the metric mattered in the flow. The blueprint was instrumented for measurement, not just diagnostic &mdash; a layer most CX artifacts skip.</p>
+        </div>
+      </div>
+
+      <div class="img-block wide">
+        <span class="ph">[ KPI infrastructure &middot; per-touchpoint metrics with Return-to-Blueprint backlinks ]</span>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <div class="heading"><div class="k">// 04 &mdash; What landed</div><h2>Delivered, validated, handed off for implementation</h2></div>
+      <div class="body">
+        <div class="prose">
+          <p>The engagement closed at the blueprint. Implementation was the client&rsquo;s next phase &mdash; typical for consulting work that hands off strategic deliverables for in-house execution. What I can claim with confidence is what was delivered, validated, and handed off &mdash; not what got built afterward.</p>
+          <p><em>Delivered:</em> the blueprint itself, in Miro, as the working file the team could keep using; a readout deck packaged for leadership consumption; the four-category opportunity vocabulary as the framework the team would carry forward.</p>
+          <p><em>Validated:</em> the priority opportunities, walked through and endorsed with the client&rsquo;s core stakeholders before final delivery. The alignment between the recommendations and the people who would have to act on them was built into the artifact, not appended to it after.</p>
+          <p>My working belief is that the opportunities were pursued. I don&rsquo;t have implementation outcomes to claim; I have a handoff at the right altitude.</p>
+          <p>The engagement closed. The framework didn&rsquo;t.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
 <template id="tpl-locked">
   <div class="case-content">
     <div class="case-hero">
@@ -2657,8 +2765,7 @@
   // ---- Case view system ----
   const CASES = {
     'us-foods':         { num: '01', title: 'US Foods MOXē',         tpl: 'tpl-us-foods',   locked: false, password: null },
-    'syngenta-cx':      { num: '02', title: 'Syngenta CX Blueprint', tpl: 'tpl-locked',     locked: true,  password: 'syngenta-cx-2024',
-                          unlockTpl: null, lockedCopy: 'Co-led an end-to-end CX blueprint across sales and marketing. Outputs are under NDA.' },
+    'cx-blueprint':     { num: '02', title: 'CX Blueprint',          tpl: 'tpl-cx-blueprint', locked: false, password: null },
     'syngenta-it':      { num: '03', title: 'Syngenta IT Simplify',  tpl: 'tpl-locked',     locked: true,  password: 'syngenta-it-2024',
                           unlockTpl: null, lockedCopy: '35+ interviews, 370 insights, 4 drivers. Workshops, blueprints, and recommendations are under NDA.' },
     'healthfirst':      { num: '04', title: 'Healthfirst Member Portal', tpl: 'tpl-healthfirst', locked: false, password: null },
@@ -2668,7 +2775,7 @@
     'clubhouse':        { num: '08', title: 'The Clubhouse',         tpl: 'tpl-clubhouse',  locked: false, password: null },
     'mobile-strategy':  { num: '09', title: 'Mobile Strategy',        tpl: 'tpl-mobile-strategy', locked: false, password: null }
   };
-  const ORDER = ['us-foods', 'syngenta-cx', 'syngenta-it', 'healthfirst', 'ulta', 'country-financial', 'destination-lottery', 'clubhouse', 'mobile-strategy'];
+  const ORDER = ['us-foods', 'cx-blueprint', 'syngenta-it', 'healthfirst', 'ulta', 'country-financial', 'destination-lottery', 'clubhouse', 'mobile-strategy'];
 
   const view = document.getElementById('case-view');
   const body = document.getElementById('case-body');
