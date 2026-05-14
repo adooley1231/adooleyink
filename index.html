@@ -1128,12 +1128,30 @@
   .img-block.tall { aspect-ratio: 4 / 5; }
   .img-block.wide { aspect-ratio: 21 / 9; }
   .case-section .embed-wide {
-    width: 100%; aspect-ratio: 16 / 9;
+    position: relative;
+    width: 100%; max-width: 960px;
+    aspect-ratio: 16 / 9;
     border: var(--bw) solid var(--ink);
     background: var(--paper-2); overflow: hidden;
-    margin: 24px 0 8px;
+    margin: 24px auto 8px;
   }
-  .case-section .embed-wide iframe { width: 100%; height: 100%; display: block; border: 0; }
+  .case-section .embed-wide iframe {
+    width: 100%; height: 100%; display: block; border: 0;
+    pointer-events: none;
+  }
+  .case-section .embed-wide.live iframe { pointer-events: auto; }
+  .case-section .embed-wide::after {
+    content: '↕ Click to pan and zoom';
+    position: absolute; bottom: 14px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink); color: var(--paper);
+    padding: 7px 12px;
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    pointer-events: none;
+    transition: opacity .2s ease;
+  }
+  .case-section .embed-wide.live::after { opacity: 0; }
   .img-block .ph {
     font-family: var(--mono); font-size: 11px; font-weight: 700;
     letter-spacing: .12em; text-transform: uppercase;
@@ -2807,6 +2825,10 @@
     const node = tpl.content.cloneNode(true);
     if (def.locked) populateLocked(node, def);
     target.appendChild(node);
+    target.querySelectorAll('.embed-wide').forEach(wrap => {
+      wrap.addEventListener('click', () => wrap.classList.add('live'));
+      wrap.addEventListener('mouseleave', () => wrap.classList.remove('live'));
+    });
     return def;
   }
 
