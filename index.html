@@ -1127,6 +1127,10 @@
   }
   .img-block.tall { aspect-ratio: 4 / 5; }
   .img-block.wide { aspect-ratio: 21 / 9; }
+  .img-block img, .img-block video {
+    width: 100%; height: 100%; display: block;
+    object-fit: contain; background: var(--paper-2);
+  }
   .case-section .embed-wide {
     position: relative;
     width: 100%; max-width: 960px;
@@ -2011,8 +2015,8 @@
       <div class="heading"><div class="k">// 01 &mdash; Setup</div><h2>Context &amp; my role</h2></div>
       <div class="body">
         <div class="prose">
-          <p>Exclusive Resorts is a private members-only luxury travel club. For years, members got access to vacation inventory through a system called &ldquo;roll-in&rdquo; &mdash; a fastest-finger race where everyone competed to book the moment dates dropped. The fix was a quarterly weighted lottery called the Reservation Allocation System (RAS): members submit a wishlist of destinations, rank them, allocate flat per-tier points to signal preference intensity, and a backend draw decides who gets what.</p>
-          <p>I led design across two surfaces: the member experience (a 3-step wishlist submission flow) and an ambassador dashboard concept that would plug into Compass v2, the existing internal operations platform, during quarterly RAS cycles. I worked with engineering directly on the algorithm itself &mdash; five multiplicative factors, fairness boosts for repeat losers, penalties for repeat winners &mdash; and built a working React prototype with AI as my dev collaborator that became the alignment artifact for stakeholder reviews, including a presentation to the member advisory board (MAC).</p>
+          <p>Exclusive Resorts is a private members-only luxury travel club. For years, members got access to high-demand and newly released vacation inventory through a system called &ldquo;roll-in&rdquo; &mdash; a fastest-finger race where everyone competed to book the moment dates dropped. The fix was a quarterly weighted lottery called the Reservation Allocation System (RAS): members submit a wishlist of destinations, rank them, allocate flat per-tier points to signal preference intensity, and a backend draw decides who gets what.</p>
+          <p>I led design across two surfaces: the member experience (a 3-step wishlist submission flow) and an ambassador dashboard concept that would plug into Compass v2, the existing internal operations platform, during quarterly RAS cycles. I worked the algorithm out on my own &mdash; five multiplicative factors, fairness boosts for repeat losers, penalties for repeat winners &mdash; synthesizing it from the stakeholder meetings and conversations shaping the solution, and built a working React prototype with AI as my dev collaborator that became the alignment artifact for stakeholder reviews, including a presentation to the member advisory board (MAC).</p>
         </div>
       </div>
     </section>
@@ -2024,14 +2028,17 @@
           <p>The members who won most consistently in the previous system &mdash; &ldquo;roll-in,&rdquo; a fastest-finger booking race &mdash; weren&rsquo;t the ones who wanted the trip most. They were the ones with the most flexible schedules. The redesign couldn&rsquo;t just be fairer; it had to give members real influence over the outcome, even though most of the actual fairness work would happen in a backend they&rsquo;d never see.</p>
           <p>That backend was a five-factor multiplicative weight &mdash; rank &times; points &times; tier multiplier &times; loss multiplier &times; recently-vacationed penalty &mdash; each with its own rules and edge cases. Plenty of moving parts. Stakeholders (product, the new president, eventually the MAC board) needed to commit to a direction before engineering could scope the build, and the conventional move would&rsquo;ve been a Figma click-through with state mocked frame by frame. But you can&rsquo;t really evaluate a system this dependent on live behavior &mdash; drag-to-rank, points reallocation, on-behalf flows, results acceptance &mdash; by clicking through static screens. The mock would&rsquo;ve lied about what the experience actually felt like.</p>
           <p>So I built it. React, Vite, Tailwind, dnd-kit, no router. AI was my dev collaborator &mdash; Claude Code for the architecture and component build, with me directing through detailed prompts and component specs. One designer&rsquo;s pace ended up matching the team&rsquo;s pace, because I wasn&rsquo;t waiting on a separate engineer.</p>
-          <p>The prototype&rsquo;s architecture quietly tells you it was the meeting. Three Browse layouts (classic, planning rail, studio-first) selectable through a header toggle and persisted in localStorage, so a design review could switch lenses mid-discussion without losing state. A &ldquo;Prototype&rdquo; pill in the header, in case anyone forgot. A mode segmented control between Member, Ambassador, and How it works, so a single review could move between three audiences without me cracking open three different files.</p>
+          <p>The prototype was built to be the meeting itself, and the architecture shows it. Three Browse layouts (classic, planning rail, studio-first) selectable through a header toggle and persisted in localStorage, so a design review could switch lenses mid-discussion without losing state. A &ldquo;Prototype&rdquo; pill in the header, in case anyone forgot. A mode segmented control between Member, Ambassador, and How it works, so a single review could move between three audiences without me cracking open three different files.</p>
           <p>A working prototype built fast can still feel rudimentary in a stakeholder review if the visual layer isn&rsquo;t there. I ran iterative AI-driven design critiques against the live prototype to pull brand fidelity up &mdash; square editorial markers replacing the checkout-funnel progress circles, an asymmetric featured hero in place of two equal-weight cards, a dark navy break in the destination grid. The brand work was secondary to the user flow, but it mattered for one specific reason: when stakeholders looked at the prototype, it had to feel like an Exclusive Resorts product, not a wireframe in costume.</p>
         </div>
       </div>
 
       <div class="img-block wide">
         <span class="lbl">Video</span>
-        <span class="ph">[ Prototype walkthrough &middot; mode-switching: Member / Ambassador / How it works ]</span>
+        <video controls preload="metadata" playsinline poster="">
+          <source src="assets/destination-lottery-walkthrough.mp4" type="video/mp4">
+          Your browser doesn&rsquo;t support embedded video. <a href="assets/destination-lottery-walkthrough.mp4">Download the walkthrough</a> instead.
+        </video>
       </div>
 
       <div class="body">
