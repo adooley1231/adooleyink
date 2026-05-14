@@ -2825,11 +2825,15 @@
     const node = tpl.content.cloneNode(true);
     if (def.locked) populateLocked(node, def);
     target.appendChild(node);
-    target.querySelectorAll('.embed-wide').forEach(wrap => {
+    initEmbeds(target);
+    return def;
+  }
+
+  function initEmbeds(container) {
+    container.querySelectorAll('.embed-wide').forEach(wrap => {
       wrap.addEventListener('click', () => wrap.classList.add('live'));
       wrap.addEventListener('mouseleave', () => wrap.classList.remove('live'));
     });
-    return def;
   }
 
   function populateLocked(node, def) {
@@ -2891,6 +2895,7 @@
 
     if (def.locked) populateLocked(node, def);
     body.appendChild(node);
+    initEmbeds(body);
     crumb.textContent = `${def.num} · ${def.title}`;
     currentSlug = slug;
     updateActionBar(slug);
