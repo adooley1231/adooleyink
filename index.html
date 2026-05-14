@@ -2035,7 +2035,7 @@
 
       <div class="img-block wide">
         <span class="lbl">Video</span>
-        <video controls preload="metadata" playsinline poster="">
+        <video class="autoplay-on-scroll" muted loop playsinline preload="metadata" controls>
           <source src="assets/destination-lottery-walkthrough.mp4" type="video/mp4">
           Your browser doesn&rsquo;t support embedded video. <a href="assets/destination-lottery-walkthrough.mp4">Download the walkthrough</a> instead.
         </video>
@@ -2078,7 +2078,7 @@
         <div class="prose">
           <p>Two architectural calls landed after I left. Both are invisible at the screen layer, and both are the work that survived past my exit.</p>
           <p><b>The variable points architecture.</b> Points are the explicit signal of preference intensity &mdash; members allocate them across ranked requests to say <em>&ldquo;this one matters more.&rdquo;</em> The business hadn&rsquo;t actually decided the final points distribution model when I started, and there were a few competing proposals on the table. So I designed the architecture to be agnostic to specific values. The interface holds whatever the business decides &mdash; flat per tier, scaled to vacation days, scaled to membership type &mdash; without a redesign. The design didn&rsquo;t have to wait on a business decision that wasn&rsquo;t ready to be made.</p>
-          <p><b>The algorithm simplification.</b> Working with engineering on the algorithm itself produced one simplification that landed in the next spec revision: reclassifying property demand from algorithm input to analytics-only. The math showed that demand applied uniformly to every competitor for the same slot was neutral &mdash; it inflated all the weights equally and had zero effect on relative win probability. Removing it simplified the formula without changing any outcomes.</p>
+          <p><b>The algorithm simplification.</b> Working through the algorithm myself produced one simplification that landed in the next engineering spec revision: reclassifying property demand from algorithm input to analytics-only. The math showed that demand applied uniformly to every competitor for the same slot was neutral &mdash; it inflated all the weights equally and had zero effect on relative win probability. Removing it simplified the formula without changing any outcomes.</p>
         </div>
       </div>
 
@@ -2772,6 +2772,27 @@
       wrap.addEventListener('click', () => wrap.classList.add('live'));
       wrap.addEventListener('mouseleave', () => wrap.classList.remove('live'));
     });
+    initVideos(container);
+  }
+
+  function initVideos(container) {
+    if (!('IntersectionObserver' in window)) return;
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const videos = container.querySelectorAll('video.autoplay-on-scroll');
+    if (!videos.length) return;
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const v = entry.target;
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+          if (reduceMotion) return;
+          const p = v.play();
+          if (p && typeof p.catch === 'function') p.catch(() => {});
+        } else {
+          v.pause();
+        }
+      });
+    }, { threshold: [0, 0.5, 1] });
+    videos.forEach(v => io.observe(v));
   }
 
   function populateLocked(node, def) {
