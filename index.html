@@ -1127,10 +1127,12 @@
   }
   .img-block.tall { aspect-ratio: 4 / 5; }
   .img-block.wide { aspect-ratio: 21 / 9; }
+  .img-block.fluid { aspect-ratio: auto; }
   .img-block img, .img-block video {
     width: 100%; height: 100%; display: block;
     object-fit: contain; background: var(--paper-2);
   }
+  .img-block.fluid img { height: auto; }
   .case-section .embed-wide {
     position: relative;
     width: 100%; max-width: 960px;
@@ -2109,8 +2111,11 @@
         </div>
       </div>
 
-      <div class="img-block wide">
-        <span class="ph">[ Diagram or annotated screen &middot; variable points architecture: how the same UI holds different point models ]</span>
+      <div class="img-block fluid">
+        <picture>
+          <source media="(max-width: 720px)" srcset="assets/dl-architecture-mobile.png">
+          <img src="assets/dl-architecture-desktop.png" alt="Algorithm structure diagram — Final Weight = Rank x Points x Tier x Loss x TRVR. The first two factors are what the member touches (1x to 10x range each); the last three are what the system runs (Tier 1.0x to 1.25x, Loss 1.0x to 5.0x, TRVR 0.5x to 1.0x). Two scenarios show the loss multiplier in action: a fresh Ultra member scoring 125 vs a regular member after two top-3 losses scoring 175 — a regular member with consecutive losses can outpace a fresh Ultra. Caption: the loss multiplier is a fairness curve, not a tier-killer.">
+        </picture>
       </div>
     </section>
 
