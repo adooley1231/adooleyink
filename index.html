@@ -1128,11 +1128,16 @@
   .img-block.tall { aspect-ratio: 4 / 5; }
   .img-block.wide { aspect-ratio: 21 / 9; }
   .img-block.fluid { aspect-ratio: auto; max-width: 1100px; margin: 24px auto; }
+  .img-block.scroll {
+    aspect-ratio: auto; max-width: 1100px; max-height: 720px;
+    margin: 24px auto; overflow-y: auto;
+  }
   .img-block img, .img-block video {
     width: 100%; height: 100%; display: block;
     object-fit: contain; background: var(--paper-2);
   }
   .img-block.fluid img { height: auto; }
+  .img-block.scroll img { height: auto; }
   .case-section .embed-wide {
     position: relative;
     width: 100%; max-width: 960px;
@@ -1141,6 +1146,7 @@
     background: var(--paper-2); overflow: hidden;
     margin: 24px auto 8px;
   }
+  .case-section .embed-wide.tall { aspect-ratio: 4 / 3; max-width: 1100px; }
   .case-section .embed-wide iframe {
     width: 100%; height: 100%; display: block; border: 0;
     pointer-events: none;
@@ -2180,8 +2186,9 @@
         </div>
       </div>
 
-      <div class="img-block wide">
-        <span class="ph">[ Clubhouse homepage &middot; The Latest, or MVP landing screenshot ]</span>
+      <div class="img-block">
+        <span class="lbl">MVP landing</span>
+        <img src="assets/cl-mvp-landing.png" alt="Clubhouse MVP landing screen — small-by-design feature-flagged release for the Seabourn cohort with a profile wizard, member directory, single discussion forum, trip review tool, and curated photo gallery">
       </div>
 
       <div class="body">
@@ -2212,8 +2219,9 @@
         </div>
       </div>
 
-      <div class="img-block wide">
-        <span class="ph">[ Four-pillar Clubhouse IA diagram ]</span>
+      <div class="img-block fluid">
+        <span class="lbl">Four-pillar IA</span>
+        <img src="assets/cl-ia-four-pillars.png" alt="Updated Clubhouse information architecture diagram — four pillars (The Latest, Passions, Circles, The Editorial) with their content types, cross-references between pillars, and entry points from My Feed, forum routing, and editorial content back to source destinations and Passions">
       </div>
 
       <div class="body">
@@ -2222,8 +2230,9 @@
         </div>
       </div>
 
-      <div class="img-block wide">
-        <span class="ph">[ My Feed &middot; launch stage, or three-stage personalization composite ]</span>
+      <div class="img-block">
+        <span class="lbl">My Feed &middot; launch stage</span>
+        <img src="assets/cl-my-feed.png" alt="My Feed launch-stage design inside The Latest — recent posts surfaced across destination forums plus engagement notifications on the member's own posts, designed to tie the gated forums back into Clubhouse without requiring full personalization infrastructure">
       </div>
 
       <div class="body">
@@ -2232,8 +2241,9 @@
         </div>
       </div>
 
-      <div class="img-block wide">
-        <span class="ph">[ Golf Passion page &middot; full member-facing view ]</span>
+      <div class="img-block">
+        <span class="lbl">Golf Passion</span>
+        <img src="assets/cl-golf-passion.png" alt="Golf Passion page — the Phase 1 anchor for the Passion architecture, with editorial content, a Discussion forum, a Members tab, the host-at-your-home-club affordance, and the conditional Circle tab that only surfaces for members who belong to a Golf Club Circle">
       </div>
 
       <div class="body">
@@ -2242,10 +2252,11 @@
         </div>
       </div>
 
-      <div class="ba">
-        <div class="img-block"><span class="lbl">Before</span><span class="ph">[ Anchor-link, marketing-heavy ]</span></div>
-        <div class="img-block"><span class="lbl">After</span><span class="ph">[ Tabbed UI &middot; Costa Rica pilot ]</span></div>
+      <div class="img-block scroll">
+        <span class="lbl">Destination Pages &middot; tabbed restructure</span>
+        <img src="assets/cl-destination-tabnav.png" alt="Destination Pages restructured from anchor-link nav to a tabbed UI — Overview, Residences and Calendar, Trip Planning, Know Before You Go, and Member Insights as discrete tabs, with Know Before You Go promoted out of an accordion at the bottom and Member Insights giving the gated destination forum a dedicated home">
       </div>
+      <p class="caption">Scroll within the frame to see the full page &mdash; Costa Rica is the pilot.</p>
 
       <div class="body">
         <div class="prose">
@@ -2254,9 +2265,10 @@
         </div>
       </div>
 
-      <div class="img-block wide">
-        <span class="ph">[ Circles system &middot; 5-type comparison or IA diagram ]</span>
+      <div class="embed-wide tall">
+        <iframe src="assets/circles-prototype.html" title="Live Circles prototype — interactive HTML built in Claude Code, demonstrating the 5-type system, navigation logic, conditional tabs, and invite-to-acceptance flow" loading="lazy"></iframe>
       </div>
+      <p class="caption">Live prototype &mdash; click to interact. Built in Claude Code to work through navigation logic, conditional tabs, type-specific configurations, and the invite-only empty state.</p>
     </section>
 
     <section class="case-section">

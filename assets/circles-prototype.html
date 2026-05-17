@@ -1,0 +1,3469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Circles Prototype — Exclusive Resorts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── RESET ─────────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--ff-sans); background: var(--er-stone-50); color: var(--er-text-primary); font-size: 13px; line-height: 1.5; min-height: 100vh; }
+    button { cursor: pointer; font-family: inherit; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ─── DESIGN TOKENS ─────────────────────────────────────────────────────── */
+    :root {
+      /* Forest */
+      --er-forest-900: #0f1f18;
+      --er-forest-800: #1D3D30;
+      --er-forest-700: #245040;
+      --er-forest-500: #2a5a45;
+      --er-forest-300: #4a8a6e;
+      --er-forest-100: #d4ede4;
+      --er-forest-50:  #eef7f3;
+      --er-forest-border: #b8d4c4;
+
+      /* Amber */
+      --er-amber-800: #6b4510;
+      --er-amber-500: #b87520;
+      --er-amber-100: #f5dba8;
+      --er-amber-50:  #fdf4e6;
+      --er-amber-border: #e8c87a;
+
+      /* Destination */
+      --er-dest-900: #0f1a2e;
+      --er-dest-800: #1a2b4a;
+      --er-dest-500: #4a6a9a;
+      --er-dest-50:  #eef2f8;
+      --er-dest-border: #c4c8e0;
+
+      /* Slate */
+      --er-slate-800: #1a2b38;
+      --er-slate-600: #2e4555;
+      --er-slate-400: #637887;
+      --er-slate-200: #a8bac4;
+
+      /* Stone */
+      --er-stone-200: #e8e4de;
+      --er-stone-100: #f4f2ef;
+      --er-stone-50:  #faf9f7;
+
+      /* Text */
+      --er-text-primary:   #1a2226;
+      --er-text-secondary: #4a5a62;
+      --er-text-tertiary:  #7a909a;
+
+      /* Borders */
+      --er-border:     #e0e6e8;
+      --er-border-mid: #c8d4d8;
+      --er-white: #ffffff;
+
+      /* Typography */
+      --ff-serif: 'Playfair Display', Georgia, serif;
+      --ff-sans:  'DM Sans', system-ui, sans-serif;
+
+      /* Spacing */
+      --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+      --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
+    }
+
+    /* ─── BUTTONS ────────────────────────────────────────────────────────────── */
+    .btn-primary {
+      font-family: var(--ff-sans);
+      font-size: 9px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--er-forest-800); color: var(--er-white);
+      border: none; padding: 6px 14px; border-radius: 2px; cursor: pointer;
+      display: inline-block; white-space: nowrap;
+    }
+    .btn-primary:hover { background: var(--er-forest-700); }
+    .btn-ghost {
+      font-family: var(--ff-sans);
+      font-size: 9px; font-weight: 400;
+      letter-spacing: 0.09em; text-transform: uppercase;
+      background: transparent; color: var(--er-text-secondary);
+      border: 0.5px solid var(--er-border-mid); padding: 5px 12px; border-radius: 2px; cursor: pointer;
+      display: inline-block; white-space: nowrap;
+    }
+    .btn-ghost:hover { border-color: var(--er-slate-400); color: var(--er-text-primary); }
+    .btn-dest {
+      font-family: var(--ff-sans);
+      font-size: 9px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--er-dest-800); color: var(--er-white);
+      border: none; padding: 6px 14px; border-radius: 2px; cursor: pointer;
+      display: inline-block; white-space: nowrap;
+    }
+    .btn-dest:hover { background: var(--er-dest-900); }
+
+    /* ─── TAB BAR ────────────────────────────────────────────────────────────── */
+    .tab-bar {
+      display: flex;
+      border-bottom: 1px solid var(--er-border);
+      padding: 0 var(--sp-5);
+      background: var(--er-white);
+      overflow-x: auto;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab {
+      font-family: var(--ff-sans);
+      font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--er-text-tertiary);
+      padding: 9px 12px 8px;
+      border-bottom: 1.5px solid transparent;
+      cursor: pointer; white-space: nowrap;
+      background: none; border-top: none; border-left: none; border-right: none;
+      margin-bottom: -1px;
+    }
+    .tab.active { color: var(--er-text-primary); border-bottom-color: var(--er-forest-800); }
+    .tab:hover:not(.active) { color: var(--er-text-secondary); }
+
+    /* ─── BADGES ─────────────────────────────────────────────────────────────── */
+    .badge {
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 500;
+      letter-spacing: 0.09em; text-transform: uppercase;
+      padding: 2px 7px; border-radius: 2px; display: inline-block; white-space: nowrap;
+    }
+    .badge-club     { background: var(--er-forest-50);  color: var(--er-forest-800); }
+    .badge-trip     { background: var(--er-amber-50);   color: var(--er-amber-800); }
+    .badge-event    { background: #fdf0e6;              color: var(--er-amber-800); }
+    .badge-dest     { background: var(--er-dest-50);    color: var(--er-dest-800); }
+    .badge-archived { background: var(--er-stone-100);  color: var(--er-text-tertiary); }
+
+    /* ─── PORTAL NAV (44px) ──────────────────────────────────────────────────── */
+    .portal-nav {
+      position: sticky; top: 0; z-index: 100;
+      height: 44px;
+      background: var(--er-white);
+      border-bottom: 1px solid var(--er-border);
+      display: flex; align-items: center;
+      padding: 0 var(--sp-5);
+      gap: var(--sp-6);
+    }
+    .portal-nav-brand {
+      display: flex; align-items: center; gap: var(--sp-2);
+      flex-shrink: 0;
+    }
+    .portal-nav-wordmark {
+      font-family: var(--ff-sans);
+      font-size: 9px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--er-slate-600);
+      white-space: nowrap;
+    }
+    .portal-nav-links {
+      display: flex; align-items: center; gap: var(--sp-1);
+      flex: 1;
+    }
+    .portal-nav-link {
+      font-family: var(--ff-sans);
+      font-size: 10px; font-weight: 400; letter-spacing: 0.07em; text-transform: uppercase;
+      color: var(--er-text-tertiary);
+      padding: 4px 10px;
+      cursor: pointer; white-space: nowrap;
+      background: none; border: none;
+      position: relative;
+    }
+    .portal-nav-link.active {
+      color: var(--er-text-primary);
+    }
+    .portal-nav-link.active::after {
+      content: '';
+      position: absolute; bottom: -12px; left: 10px; right: 10px;
+      height: 1.5px; background: var(--er-forest-800);
+    }
+    .portal-nav-link:hover:not(.active) { color: var(--er-text-secondary); }
+    .portal-nav-right {
+      display: flex; align-items: center; gap: var(--sp-3);
+      flex-shrink: 0;
+    }
+    .nav-bell {
+      width: 18px; height: 18px; cursor: pointer; color: var(--er-text-tertiary);
+    }
+    .nav-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--er-forest-800);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.04em; color: var(--er-white);
+      flex-shrink: 0; cursor: pointer;
+    }
+
+    /* ─── CLUBHOUSE NAV (40px) ───────────────────────────────────────────────── */
+    .clubhouse-nav {
+      position: sticky; top: 44px; z-index: 99;
+      height: 40px;
+      background: var(--er-white);
+      border-bottom: 1px solid var(--er-border);
+      display: flex; align-items: center;
+      padding: 0 var(--sp-5);
+      gap: var(--sp-4);
+    }
+    .clubhouse-nav-rolodex {
+      display: flex; align-items: center; gap: var(--sp-2);
+      font-family: var(--ff-sans); font-size: 10px; letter-spacing: 0.04em;
+      color: var(--er-text-tertiary); cursor: pointer; white-space: nowrap;
+      padding-right: var(--sp-4);
+      border-right: 1px solid var(--er-border);
+    }
+    .clubhouse-nav-rolodex:hover { color: var(--er-text-secondary); }
+    .clubhouse-nav-tabs {
+      display: flex; align-items: center; gap: 0;
+      flex: 1;
+      height: 100%;
+    }
+    .clubhouse-tab {
+      font-family: var(--ff-sans);
+      font-size: 10px; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--er-text-tertiary);
+      padding: 0 12px;
+      height: 100%; display: flex; align-items: center;
+      cursor: pointer; white-space: nowrap;
+      border-bottom: 1.5px solid transparent;
+      background: none; border-top: none; border-left: none; border-right: none;
+    }
+    .clubhouse-tab.active { color: var(--er-text-primary); border-bottom-color: var(--er-forest-800); }
+    .clubhouse-tab:hover:not(.active) { color: var(--er-text-secondary); }
+
+    /* ─── SCREEN CONTAINER ───────────────────────────────────────────────────── */
+    .screen { display: none; min-height: calc(100vh - 122px); }
+    .screen.active { display: block; }
+
+    /* ─── FOR YOU LAYOUT ─────────────────────────────────────────────────────── */
+    .for-you-layout {
+      display: flex;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: var(--sp-6) var(--sp-5);
+      gap: var(--sp-6);
+      align-items: flex-start;
+    }
+
+    /* ─── LEFT SIDEBAR ───────────────────────────────────────────────────────── */
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 130px;
+    }
+    .sidebar-profile-card {
+      background: var(--er-white);
+      border: 1px solid var(--er-border);
+      border-radius: 4px;
+      padding: var(--sp-4);
+      margin-bottom: var(--sp-4);
+    }
+    .sidebar-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--er-slate-600);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-sans); font-size: 13px; font-weight: 500;
+      letter-spacing: 0.04em; color: var(--er-white);
+      margin-bottom: var(--sp-3);
+    }
+    .sidebar-name {
+      font-family: var(--ff-sans); font-size: 14px; font-weight: 500;
+      color: var(--er-text-primary); margin-bottom: var(--sp-1);
+    }
+    .sidebar-connections {
+      font-family: var(--ff-sans); font-size: 11px;
+      color: var(--er-text-tertiary); margin-bottom: var(--sp-2);
+    }
+    .sidebar-bio {
+      font-family: var(--ff-sans); font-size: 11px;
+      color: var(--er-text-secondary); line-height: 1.55;
+      margin-bottom: var(--sp-3);
+    }
+    .sidebar-links {
+      display: flex; gap: var(--sp-4);
+    }
+    .sidebar-link {
+      font-family: var(--ff-sans); font-size: 10px;
+      color: var(--er-forest-500);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .sidebar-link:hover { color: var(--er-forest-800); }
+
+    .sidebar-filters {
+      background: var(--er-white);
+      border: 1px solid var(--er-border);
+      border-radius: 4px;
+      padding: var(--sp-4);
+    }
+    .filter-label {
+      font-family: var(--ff-sans); font-size: 10px; font-weight: 400;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--er-text-tertiary);
+      margin-bottom: var(--sp-2);
+    }
+    .filter-group { margin-bottom: var(--sp-4); }
+    .filter-group:last-child { margin-bottom: 0; }
+    .filter-group-label {
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--er-text-tertiary);
+      margin-bottom: var(--sp-2);
+    }
+    .pill-row { display: flex; flex-wrap: wrap; gap: var(--sp-1); }
+    .pill {
+      font-family: var(--ff-sans); font-size: 10px;
+      color: var(--er-text-secondary);
+      background: var(--er-stone-100);
+      border: 1px solid var(--er-border);
+      border-radius: 20px; padding: 4px 10px;
+      cursor: pointer; white-space: nowrap;
+    }
+    .pill:hover { background: var(--er-stone-200); border-color: var(--er-border-mid); }
+    .pill.active { background: var(--er-forest-50); border-color: var(--er-forest-border); color: var(--er-forest-800); }
+
+    /* ─── MAIN FEED ──────────────────────────────────────────────────────────── */
+    .feed { flex: 1; min-width: 0; }
+
+    /* ─── RECENT ACTIVITY ────────────────────────────────────────────────────── */
+    .recent-activity {
+      background: var(--er-white);
+      border: 1px solid var(--er-border);
+      border-radius: 4px;
+      margin-bottom: var(--sp-4);
+      overflow: hidden;
+    }
+    .activity-header {
+      display: flex; align-items: center; gap: var(--sp-2);
+      padding: var(--sp-3) var(--sp-4);
+      border-bottom: 1px solid var(--er-border);
+      background: var(--er-stone-50);
+    }
+    .activity-title {
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--er-text-secondary); flex: 1;
+    }
+    .activity-new-count {
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 500;
+      letter-spacing: 0.06em;
+      background: var(--er-forest-800); color: var(--er-white);
+      border-radius: 10px; padding: 2px 6px;
+    }
+    .activity-collapse {
+      font-family: var(--ff-sans); font-size: 8px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--er-forest-500); cursor: pointer;
+      background: none; border: none;
+    }
+    .activity-collapse:hover { color: var(--er-forest-800); }
+    .activity-body { padding: var(--sp-2) var(--sp-4); }
+    .activity-item {
+      display: flex; align-items: flex-start; gap: var(--sp-2);
+      padding: var(--sp-2) 0;
+      border-bottom: 1px solid var(--er-border);
+      font-family: var(--ff-sans); font-size: 11px;
+      color: var(--er-text-secondary); line-height: 1.45;
+    }
+    .activity-item:last-of-type { border-bottom: none; }
+    .activity-avatar {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--er-slate-200);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-sans); font-size: 7px; font-weight: 600;
+      color: var(--er-slate-600); flex-shrink: 0; margin-top: 1px;
+    }
+    .activity-text { flex: 1; }
+    .activity-time {
+      font-family: var(--ff-sans); font-size: 10px;
+      color: var(--er-text-tertiary); white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .activity-footer {
+      padding: var(--sp-2) var(--sp-4) var(--sp-3);
+    }
+    .activity-view-all {
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--er-forest-500); cursor: pointer;
+      background: none; border: none;
+    }
+    .activity-view-all:hover { color: var(--er-forest-800); }
+
+    /* ─── INVITE CARD ────────────────────────────────────────────────────────── */
+    .invite-card {
+      background: var(--er-white);
+      border: 0.5px solid var(--er-forest-border);
+      border-left: 3px solid var(--er-forest-800);
+      border-radius: 0 6px 6px 0;
+      margin-bottom: var(--sp-4);
+      overflow: hidden;
+      max-height: 300px;
+    }
+    .invite-card-header {
+      background: var(--er-forest-50);
+      border-bottom: 0.5px solid var(--er-forest-border);
+      padding: var(--sp-2) var(--sp-4);
+      display: flex; align-items: center; gap: var(--sp-2);
+    }
+    .invite-pulse {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--er-forest-500);
+      animation: pulse 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+    .invite-header-text {
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--er-forest-500); flex: 1;
+    }
+    .invite-dismiss {
+      font-family: var(--ff-sans); font-size: 11px;
+      color: var(--er-text-tertiary); cursor: pointer;
+      background: none; border: none; padding: 0 2px;
+    }
+    .invite-dismiss:hover { color: var(--er-text-primary); }
+    .invite-card-body { padding: var(--sp-3) var(--sp-4) var(--sp-4); }
+    .invite-chapter-label {
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--er-text-tertiary); margin-bottom: var(--sp-1);
+    }
+    .invite-circle-name {
+      font-family: var(--ff-serif); font-style: italic; font-weight: 300;
+      font-size: 18px; color: var(--er-text-primary);
+      margin-bottom: var(--sp-1); line-height: 1.3;
+    }
+    .invite-meta {
+      font-family: var(--ff-sans); font-size: 10px;
+      color: var(--er-text-secondary); margin-bottom: var(--sp-4);
+    }
+    .invite-actions {
+      display: flex; align-items: center; gap: var(--sp-2);
+    }
+    .avatar-stack {
+      margin-left: auto; display: flex; align-items: center;
+    }
+    .avatar-stack-item {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--er-slate-400);
+      border: 1.5px solid var(--er-white);
+      margin-left: -6px; font-family: var(--ff-sans); font-size: 7px;
+      font-weight: 600; color: var(--er-white);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .avatar-stack-item:first-child { margin-left: 0; }
+    .avatar-stack-more {
+      background: var(--er-stone-200); color: var(--er-text-tertiary);
+    }
+
+    /* ─── I'M HERE CARD ──────────────────────────────────────────────────────── */
+    .imhere-card {
+      background: var(--er-white);
+      border: 0.5px solid var(--er-dest-border);
+      border-left: 3px solid var(--er-dest-500);
+      border-radius: 0 6px 6px 0;
+      margin-bottom: var(--sp-4);
+      overflow: hidden;
+    }
+    .imhere-card-header {
+      background: var(--er-dest-50);
+      border-bottom: 0.5px solid var(--er-dest-border);
+      padding: var(--sp-2) var(--sp-4);
+      display: flex; align-items: center; gap: var(--sp-2);
+    }
+    .imhere-header-text {
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--er-dest-500); flex: 1;
+    }
+    .imhere-card-body { padding: var(--sp-3) var(--sp-4) var(--sp-4); }
+    .imhere-dest-name {
+      font-family: var(--ff-serif); font-style: italic; font-weight: 300;
+      font-size: 18px; color: var(--er-text-primary);
+      margin-bottom: var(--sp-2); line-height: 1.3;
+    }
+    .imhere-desc {
+      font-family: var(--ff-sans); font-size: 10px;
+      color: var(--er-text-secondary); margin-bottom: var(--sp-4);
+      line-height: 1.55;
+    }
+    .imhere-actions { display: flex; align-items: center; gap: var(--sp-2); }
+    .imhere-confirmed {
+      font-family: var(--ff-sans); font-size: 11px;
+      color: var(--er-forest-500);
+      display: none;
+    }
+
+    /* ─── POST CARD ──────────────────────────────────────────────────────────── */
+    .post-card {
+      background: var(--er-white);
+      border: 1px solid var(--er-border);
+      border-radius: 4px;
+      padding: var(--sp-4);
+      margin-bottom: var(--sp-3);
+    }
+    .post-header {
+      display: flex; align-items: flex-start; gap: var(--sp-3);
+      margin-bottom: var(--sp-3);
+    }
+    .post-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--er-slate-400);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-sans); font-size: 10px; font-weight: 600;
+      color: var(--er-white); flex-shrink: 0;
+    }
+    .post-author-info { flex: 1; }
+    .post-author-name {
+      font-family: var(--ff-sans); font-size: 12px; font-weight: 500;
+      color: var(--er-text-primary); margin-bottom: 1px;
+    }
+    .post-author-since {
+      font-family: var(--ff-sans); font-size: 10px;
+      color: var(--er-text-tertiary);
+    }
+    .post-badge-date {
+      display: flex; align-items: center; gap: var(--sp-2);
+      flex-shrink: 0;
+    }
+    .post-date {
+      font-family: var(--ff-sans); font-size: 10px;
+      color: var(--er-text-tertiary); white-space: nowrap;
+    }
+    .post-body {
+      font-family: var(--ff-sans); font-size: 12px;
+      color: var(--er-text-primary); line-height: 1.6;
+      margin-bottom: var(--sp-3);
+    }
+    .post-footer {
+      display: flex; align-items: center; gap: var(--sp-4);
+      border-top: 1px solid var(--er-border);
+      padding-top: var(--sp-3);
+    }
+    .post-stat {
+      font-family: var(--ff-sans); font-size: 10px;
+      color: var(--er-text-tertiary); display: flex; align-items: center; gap: var(--sp-1);
+    }
+    .post-link {
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--er-forest-500); cursor: pointer;
+      background: none; border: none;
+      margin-left: auto;
+    }
+    .post-link:hover { color: var(--er-forest-800); }
+
+    /* ─── CIRCLES — FULL WIDTH LAYOUT ────────────────────────────────────────── */
+    .circles-layout {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: var(--sp-8) var(--sp-5) var(--sp-10);
+    }
+
+    /* ─── CIRCLES EMPTY ──────────────────────────────────────────────────────── */
+    .circles-page-title {
+      font-family: var(--ff-serif); font-style: italic; font-weight: 300;
+      font-size: 36px; text-align: center;
+      color: var(--er-text-primary); margin-bottom: var(--sp-3);
+      line-height: 1.2;
+    }
+    .circles-subtitle {
+      font-family: var(--ff-sans); font-size: 13px;
+      color: var(--er-text-secondary); text-align: center;
+      margin-bottom: var(--sp-8);
+    }
+    .circles-empty-icon {
+      display: flex; justify-content: center;
+      margin-bottom: var(--sp-5);
+    }
+    .circles-empty-copy {
+      font-family: var(--ff-sans); font-size: 11px;
+      color: var(--er-text-secondary); text-align: center;
+      max-width: 400px; margin: 0 auto var(--sp-10);
+      line-height: 1.65;
+    }
+    .circles-types-label {
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--er-text-tertiary);
+      margin-bottom: var(--sp-3); text-align: center;
+    }
+    .circles-type-row {
+      display: flex; gap: var(--sp-2);
+      overflow-x: auto;
+      padding-bottom: var(--sp-2);
+    }
+    .circles-type-row::-webkit-scrollbar { display: none; }
+    .circle-type-card {
+      background: var(--er-white);
+      border: 1px solid var(--er-border);
+      border-radius: 6px;
+      padding: var(--sp-3);
+      min-width: 120px; flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .circle-type-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .circle-type-card.type-club::before  { background: var(--er-forest-800); }
+    .circle-type-card.type-trip::before  { background: var(--er-amber-500); }
+    .circle-type-card.type-event::before { background: var(--er-amber-800); }
+    .circle-type-card.type-dest::before  { background: var(--er-dest-500); }
+    .circle-type-card.type-combined::before { background: var(--er-slate-400); }
+    .circle-type-name {
+      font-family: var(--ff-sans); font-size: 11px; font-weight: 500;
+      color: var(--er-text-primary); margin: var(--sp-2) 0 var(--sp-1);
+    }
+    .circle-type-desc {
+      font-family: var(--ff-sans); font-size: 10px;
+      color: var(--er-text-secondary); line-height: 1.45;
+    }
+
+    /* ─── CIRCLES ACTIVE ─────────────────────────────────────────────────────── */
+    .circles-active-header {
+      margin-bottom: var(--sp-5);
+    }
+    .circles-active-title {
+      font-family: var(--ff-serif); font-style: italic; font-weight: 300;
+      font-size: 32px; color: var(--er-text-primary);
+      margin-bottom: var(--sp-1); line-height: 1.2;
+    }
+    .circles-active-count {
+      font-family: var(--ff-sans); font-size: 11px;
+      color: var(--er-text-tertiary);
+    }
+    .circles-section-label {
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--er-text-tertiary);
+      padding-bottom: var(--sp-2);
+      border-bottom: 1px solid var(--er-border);
+      margin-bottom: var(--sp-3);
+      margin-top: var(--sp-6);
+    }
+    .circles-section-label:first-of-type { margin-top: 0; }
+
+    .circle-list-item {
+      background: var(--er-white);
+      border: 1px solid var(--er-border);
+      border-radius: 6px;
+      padding: 14px 16px;
+      margin-bottom: var(--sp-2);
+      display: flex; align-items: center; gap: var(--sp-3);
+      cursor: pointer;
+      transition: border-color 150ms ease;
+    }
+    .circle-list-item:hover { border-color: var(--er-border-mid); }
+    .circle-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .dot-club { background: var(--er-forest-500); }
+    .dot-dest { background: var(--er-dest-500); }
+    .dot-trip { background: var(--er-amber-500); }
+    .dot-archived { background: var(--er-slate-200); }
+
+    .circle-item-content { flex: 1; min-width: 0; }
+    .circle-item-name {
+      font-family: var(--ff-sans); font-size: 13px; font-weight: 500;
+      color: var(--er-text-primary); margin-bottom: 2px;
+    }
+    .circle-item-meta {
+      font-family: var(--ff-sans); font-size: 10px;
+      color: var(--er-text-tertiary); margin-bottom: 2px;
+    }
+    .circle-item-status {
+      font-family: var(--ff-sans); font-size: 9px;
+      color: var(--er-forest-500);
+    }
+    .circle-item-right {
+      display: flex; align-items: center; gap: var(--sp-2); flex-shrink: 0;
+    }
+    .circle-arrow {
+      font-family: var(--ff-sans); font-size: 14px;
+      color: var(--er-text-tertiary);
+    }
+    .circle-list-item.archived { opacity: 0.5; cursor: default; }
+    .circle-list-item.archived:hover { border-color: var(--er-border); }
+
+    /* ─── CONFIRMATION BAR ───────────────────────────────────────────────────── */
+    .confirmation-bar {
+      background: var(--er-forest-50);
+      border: 1px solid var(--er-forest-border);
+      border-radius: 4px;
+      padding: var(--sp-3) var(--sp-4);
+      margin-bottom: var(--sp-4);
+      display: none;
+      font-family: var(--ff-sans); font-size: 11px;
+      color: var(--er-forest-800);
+      align-items: center; gap: var(--sp-2);
+    }
+    .confirmation-bar.visible { display: flex; }
+
+    /* ─── WELCOME MODAL ──────────────────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      align-items: center; justify-content: center;
+      padding: var(--sp-5);
+    }
+    .modal-overlay.visible { display: flex; }
+    .modal-card {
+      background: var(--er-white);
+      border-radius: 10px;
+      max-width: 440px; width: 100%;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+    }
+    .modal-header {
+      background: var(--er-forest-800);
+      padding: var(--sp-5) var(--sp-6);
+    }
+    .modal-eyebrow {
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 400;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: var(--sp-2);
+    }
+    .modal-title {
+      font-family: var(--ff-serif); font-style: italic; font-weight: 300;
+      font-size: 22px; color: var(--er-white);
+      line-height: 1.25; margin-bottom: var(--sp-1);
+    }
+    .modal-chapter-label {
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+    }
+    .modal-body {
+      padding: var(--sp-5) var(--sp-6);
+    }
+    .modal-desc {
+      font-family: var(--ff-sans); font-size: 12px;
+      color: var(--er-text-secondary); line-height: 1.6;
+      margin-bottom: var(--sp-4);
+    }
+    .modal-meta-row {
+      display: flex; gap: var(--sp-4);
+      margin-bottom: var(--sp-5);
+    }
+    .modal-meta-item {
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .modal-meta-label {
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--er-text-tertiary);
+    }
+    .modal-meta-value {
+      font-family: var(--ff-sans); font-size: 12px; font-weight: 500;
+      color: var(--er-text-primary);
+    }
+    .modal-actions { display: flex; flex-direction: column; gap: var(--sp-2); align-items: center; }
+    .btn-primary-full {
+      font-family: var(--ff-sans);
+      font-size: 9px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--er-forest-800); color: var(--er-white);
+      border: none; padding: 9px 14px; border-radius: 2px; cursor: pointer;
+      width: 100%;
+    }
+    .btn-primary-full:hover { background: var(--er-forest-700); }
+    .btn-not-now {
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 400;
+      letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--er-text-tertiary);
+      background: none; border: none; cursor: pointer;
+      padding: var(--sp-1);
+    }
+    .btn-not-now:hover { color: var(--er-text-secondary); }
+
+    /* ─── GOLF HERO ──────────────────────────────────────────────────────────── */
+    .golf-hero {
+      height: 110px; position: relative;
+      background:
+        linear-gradient(to bottom, rgba(10,25,18,0.2) 0%, rgba(10,25,18,0.75) 100%),
+        repeating-linear-gradient(108deg, rgba(42,90,55,.2) 0, rgba(22,55,32,.16) 32px, rgba(48,95,60,.18) 64px),
+        repeating-linear-gradient(18deg, rgba(18,48,26,.22) 0, rgba(35,75,44,.14) 28px),
+        var(--er-forest-900);
+      display: flex; align-items: flex-end; justify-content: space-between;
+      padding: 0 var(--sp-5) 12px;
+    }
+    .golf-hero-left {}
+    .golf-hero-kicker {
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 400;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(255,255,255,0.42); margin-bottom: 3px;
+    }
+    .golf-hero-title {
+      font-family: var(--ff-serif); font-style: italic; font-weight: 300;
+      font-size: 24px; color: var(--er-white); line-height: 1.2; margin-bottom: 4px;
+    }
+    .golf-hero-count {
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 400;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+    }
+    .golf-hero-following {
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 400;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--er-white); border: 1px solid rgba(255,255,255,0.38);
+      background: transparent; border-radius: 2px; padding: 4px 10px;
+      align-self: flex-end;
+    }
+    .golf-hero-following:hover { background: rgba(255,255,255,0.08); }
+    .golf-hero.compressed { height: 70px; }
+
+    /* ─── PASSION TAB BAR ────────────────────────────────────────────────────── */
+    .passion-tab-bar {
+      background: var(--er-white);
+      border-bottom: 1px solid var(--er-border);
+      display: flex; padding: 0 var(--sp-5);
+    }
+    .passion-tab {
+      font-family: var(--ff-sans); font-size: 10px; font-weight: 400;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--er-text-tertiary);
+      padding: 9px 12px 8px;
+      border-bottom: 1.5px solid transparent;
+      cursor: pointer; white-space: nowrap;
+      background: none; border-top: none; border-left: none; border-right: none;
+      margin-bottom: -1px;
+    }
+    .passion-tab.active { color: var(--er-text-primary); border-bottom-color: var(--er-forest-800); }
+    .passion-tab.circle-active { color: var(--er-forest-500); border-bottom-color: var(--er-forest-500); }
+    .passion-tab:hover:not(.active):not(.circle-active) { color: var(--er-text-secondary); }
+    .passion-tab.hidden { display: none; }
+
+    /* ─── GOLF BODY LAYOUT ───────────────────────────────────────────────────── */
+    .golf-body {
+      display: flex;
+      max-width: 1060px; margin: 0 auto;
+      padding: var(--sp-4) var(--sp-5);
+      gap: var(--sp-5);
+      align-items: flex-start;
+    }
+    .golf-sidebar { width: 220px; flex-shrink: 0; position: sticky; top: 130px; }
+    .golf-feed { flex: 1; min-width: 0; }
+
+    /* ─── DISCUSSION POST (passion page variant) ─────────────────────────────── */
+    .disc-post {
+      background: var(--er-white);
+      border: 1px solid var(--er-border);
+      border-radius: 6px; padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+    .disc-post-header {
+      display: flex; align-items: center; gap: var(--sp-2);
+      margin-bottom: var(--sp-2);
+    }
+    .disc-avatar {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--er-slate-400);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-sans); font-size: 7px; font-weight: 600;
+      color: var(--er-white); flex-shrink: 0;
+    }
+    .disc-author { font-family: var(--ff-sans); font-size: 10px; font-weight: 500; color: var(--er-text-primary); flex: 1; }
+    .disc-date   { font-family: var(--ff-sans); font-size: 9px; color: var(--er-text-tertiary); white-space: nowrap; }
+    .disc-body   { font-family: var(--ff-sans); font-size: 11px; color: var(--er-text-secondary); line-height: 1.55; margin-bottom: var(--sp-2); }
+    .disc-tags   { display: flex; gap: var(--sp-1); margin-bottom: var(--sp-2); flex-wrap: wrap; }
+    .disc-tag    { font-family: var(--ff-sans); font-size: 9px; color: var(--er-text-tertiary); background: var(--er-stone-100); border: 1px solid var(--er-border); border-radius: 20px; padding: 2px 8px; }
+    .disc-actions { display: flex; align-items: center; gap: var(--sp-4); padding-top: var(--sp-2); border-top: 1px solid var(--er-border); }
+    .disc-stat { font-family: var(--ff-sans); font-size: 9px; color: var(--er-text-tertiary); display: flex; align-items: center; gap: 4px; }
+    .disc-link { font-family: var(--ff-sans); font-size: 9px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--er-forest-500); background: none; border: none; cursor: pointer; margin-left: auto; }
+    .disc-link:hover { color: var(--er-forest-800); }
+
+    /* "Replied to you" indicator */
+    .replied-indicator {
+      display: flex; align-items: center; gap: var(--sp-2);
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--er-forest-500); margin-bottom: var(--sp-2);
+    }
+
+    /* Nested replies */
+    .disc-replies { margin-top: var(--sp-2); display: flex; flex-direction: column; gap: 6px; }
+    .disc-reply {
+      background: var(--er-stone-50);
+      border-left: 2px solid var(--er-border);
+      border-radius: 0 4px 4px 0;
+      padding: 7px 10px;
+      margin-left: 14px;
+      display: flex; align-items: flex-start; gap: var(--sp-2);
+    }
+    .disc-reply-text { font-family: var(--ff-sans); font-size: 10px; color: var(--er-text-secondary); line-height: 1.5; }
+
+    /* ─── CLUB CIRCLE HEADER ─────────────────────────────────────────────────── */
+    .club-header {
+      background: var(--er-forest-900);
+      padding: 16px 20px;
+      position: relative;
+    }
+    .club-header-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 4px; }
+    .club-breadcrumb {
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 400;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35); cursor: pointer;
+    }
+    .club-breadcrumb:hover { color: rgba(255,255,255,0.6); }
+    .club-monogram {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 500;
+      color: rgba(255,255,255,0.45);
+    }
+    .club-collective-label {
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 400;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(255,255,255,0.38); margin-bottom: 3px;
+    }
+    .club-chapter-name {
+      font-family: var(--ff-serif); font-style: italic; font-weight: 300;
+      font-size: 24px; color: var(--er-white); line-height: 1.2; margin-bottom: 8px;
+    }
+    .club-meta-bar {
+      display: flex; align-items: center; gap: 14px;
+      font-family: var(--ff-sans); font-size: 8px;
+      color: rgba(255,255,255,0.42);
+    }
+    .club-meta-sep { color: rgba(255,255,255,0.2); }
+    .club-meta-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--er-forest-300); flex-shrink: 0;
+    }
+    .club-header-badge {
+      position: absolute; bottom: 14px; right: 20px;
+      font-family: var(--ff-sans); font-size: 7px; font-weight: 400;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border: 0.5px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.5); border-radius: 2px; padding: 2px 8px;
+    }
+
+    /* ─── CLUB SUB-TAB BAR ───────────────────────────────────────────────────── */
+    .club-tab-bar {
+      background: var(--er-white);
+      border-bottom: 1px solid var(--er-border);
+      display: flex; padding: 0 var(--sp-5);
+    }
+    .club-tab {
+      font-family: var(--ff-sans); font-size: 10px; font-weight: 400;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--er-text-tertiary);
+      padding: 9px 12px 8px;
+      border-bottom: 1.5px solid transparent;
+      cursor: pointer; white-space: nowrap;
+      background: none; border-top: none; border-left: none; border-right: none;
+      margin-bottom: -1px;
+    }
+    .club-tab.active { color: var(--er-text-primary); border-bottom-color: var(--er-forest-800); }
+    .club-tab.soon { font-style: italic; opacity: 0.4; cursor: default; }
+    .club-tab.soon.active { color: var(--er-forest-500); border-bottom-color: var(--er-forest-500); opacity: 1; }
+    .club-tab:hover:not(.active):not(.soon) { color: var(--er-text-secondary); }
+
+    /* ─── CIRCLE INTERIOR BODY ───────────────────────────────────────────────── */
+    .circle-body { background: var(--er-white); padding: 16px 20px; max-width: 760px; margin: 0 auto; }
+
+    /* Post composer */
+    .composer {
+      background: var(--er-stone-50);
+      border: 0.5px solid var(--er-border);
+      border-radius: 4px; padding: 9px 12px;
+      margin-bottom: 12px; display: flex; align-items: flex-start; gap: var(--sp-2);
+      cursor: text;
+    }
+    .composer-avatar {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--er-forest-500);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-sans); font-size: 7px; font-weight: 600;
+      color: var(--er-white); flex-shrink: 0; margin-top: 1px;
+    }
+    .composer-placeholder { font-family: var(--ff-sans); font-size: 10px; color: var(--er-text-tertiary); flex: 1; padding-top: 2px; }
+    .composer-textarea {
+      display: none; width: 100%; border: none; background: transparent; resize: none;
+      font-family: var(--ff-sans); font-size: 11px; color: var(--er-text-primary);
+      outline: none; height: 80px; padding-top: 2px;
+    }
+    .composer.expanded .composer-placeholder { display: none; }
+    .composer.expanded .composer-textarea { display: block; }
+
+    /* Club discussion posts */
+    .club-post {
+      border-bottom: 1px solid var(--er-border);
+      padding: 14px 0; margin-bottom: 0;
+    }
+    .club-post:last-child { border-bottom: none; }
+    .club-post-header { display: flex; align-items: center; gap: var(--sp-2); margin-bottom: var(--sp-2); }
+    .club-post-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 600;
+      color: var(--er-white); flex-shrink: 0;
+    }
+    .club-post-info { flex: 1; }
+    .club-post-name { font-family: var(--ff-sans); font-size: 11px; font-weight: 500; color: var(--er-text-primary); }
+    .club-post-since { font-family: var(--ff-sans); font-size: 9px; color: var(--er-text-tertiary); }
+    .club-post-date { font-family: var(--ff-sans); font-size: 9px; color: var(--er-text-tertiary); white-space: nowrap; }
+    .club-post-body { font-family: var(--ff-sans); font-size: 11px; color: var(--er-text-secondary); line-height: 1.6; margin-bottom: var(--sp-2); padding-left: 36px; }
+    .club-post-reply {
+      background: var(--er-stone-50);
+      border-left: 2px solid var(--er-border);
+      border-radius: 0 4px 4px 0;
+      padding: 7px 10px; margin-left: 36px; margin-bottom: var(--sp-2);
+      display: flex; gap: var(--sp-2); align-items: flex-start;
+    }
+    .club-post-reply-avatar {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--er-slate-400);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-sans); font-size: 6px; font-weight: 600;
+      color: var(--er-white); flex-shrink: 0;
+    }
+    .club-post-reply-body { font-family: var(--ff-sans); font-size: 10px; color: var(--er-text-secondary); line-height: 1.5; }
+    .club-post-actions {
+      display: flex; align-items: center; gap: var(--sp-3);
+      padding-left: 36px;
+    }
+    .club-post-action {
+      font-family: var(--ff-sans); font-size: 9px;
+      color: var(--er-text-tertiary); background: none; border: none;
+      cursor: pointer; display: flex; align-items: center; gap: 4px;
+    }
+    .club-post-action:hover { color: var(--er-text-secondary); }
+
+    /* Skeleton post */
+    .skeleton-bar { background: var(--er-stone-100); border-radius: 2px; height: 7px; margin-bottom: 4px; }
+
+    /* ─── MEMBER GRID ────────────────────────────────────────────────────────── */
+    .members-section-label {
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--er-text-tertiary);
+      padding-bottom: var(--sp-2); border-bottom: 1px solid var(--er-border);
+      margin-bottom: 14px;
+    }
+    .member-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .member-card {
+      background: var(--er-white);
+      border: 1px solid var(--er-border);
+      border-radius: 6px; padding: 11px 13px;
+      display: flex; align-items: center; gap: var(--sp-2);
+    }
+    .member-card.stub { opacity: 0.6; }
+    .member-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 600;
+      color: var(--er-white); flex-shrink: 0;
+    }
+    .member-info { flex: 1; min-width: 0; }
+    .member-name { font-family: var(--ff-sans); font-size: 11px; font-weight: 500; color: var(--er-text-primary); }
+    .member-location { font-family: var(--ff-sans); font-size: 10px; color: var(--er-text-tertiary); }
+    .member-mutual { font-family: var(--ff-sans); font-size: 9px; color: var(--er-text-secondary); }
+    .member-stub-line { background: var(--er-stone-200); border-radius: 2px; height: 7px; margin-bottom: 4px; }
+    .badge-connected { background: var(--er-forest-50); color: var(--er-forest-700); font-family: var(--ff-sans); font-size: 8px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; white-space: nowrap; }
+
+    /* ─── EVENTS COMING SOON ─────────────────────────────────────────────────── */
+    .events-empty {
+      max-width: 480px; margin: 0 auto;
+      padding: 48px 20px; text-align: center;
+      background: var(--er-white);
+    }
+    .events-empty-icon { margin-bottom: 24px; display: flex; justify-content: center; }
+    .events-empty-title {
+      font-family: var(--ff-serif); font-style: italic; font-weight: 300;
+      font-size: 20px; color: var(--er-text-primary);
+      margin-bottom: var(--sp-2);
+    }
+    .events-empty-body {
+      font-family: var(--ff-sans); font-size: 11px; color: var(--er-text-secondary);
+      max-width: 340px; margin: 0 auto var(--sp-5); line-height: 1.65;
+    }
+    .events-empty-link {
+      font-family: var(--ff-sans); font-size: 10px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--er-forest-500); background: none; border: none; cursor: pointer;
+    }
+    .events-empty-link:hover { color: var(--er-forest-800); }
+    .events-ghost-card {
+      opacity: 0.25; pointer-events: none;
+      background: var(--er-white); border: 1px solid var(--er-border);
+      border-radius: 6px; padding: 14px 16px;
+      margin-top: 28px; display: flex; align-items: center; gap: var(--sp-3);
+      text-align: left;
+    }
+    .events-ghost-date {
+      background: var(--er-forest-50); border: 1px solid var(--er-forest-border);
+      border-radius: 4px; padding: 6px 10px; text-align: center; flex-shrink: 0;
+    }
+    .events-ghost-month { font-family: var(--ff-sans); font-size: 7px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--er-forest-800); }
+    .events-ghost-day { font-family: var(--ff-sans); font-size: 18px; font-weight: 500; color: var(--er-forest-800); line-height: 1; }
+    .events-ghost-info { flex: 1; }
+    .events-ghost-name { font-family: var(--ff-sans); font-size: 12px; font-weight: 500; color: var(--er-text-primary); margin-bottom: 2px; }
+    .events-ghost-meta { font-family: var(--ff-sans); font-size: 10px; color: var(--er-text-tertiary); }
+    .events-ghost-attending { font-family: var(--ff-sans); font-size: 9px; color: var(--er-forest-500); margin-top: 2px; }
+
+    /* ─── GOLF CIRCLE BREADCRUMB ─────────────────────────────────────────────── */
+    .golf-circle-breadcrumb {
+      background: var(--er-stone-50);
+      border-bottom: 1px solid var(--er-border);
+      padding: 7px 20px;
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 400;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--er-text-tertiary);
+      display: flex; align-items: center; gap: var(--sp-1);
+    }
+    .golf-circle-breadcrumb button {
+      background: none; border: none; font-family: var(--ff-sans); font-size: 8px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--er-text-tertiary); cursor: pointer; padding: 0;
+    }
+    .golf-circle-breadcrumb button:hover { color: var(--er-forest-500); }
+
+    /* ─── TRIP / EVENT / DEST CIRCLE HEADERS ────────────────────────────────── */
+    .trip-header {
+      padding: 16px 20px; position: relative;
+      background:
+        linear-gradient(135deg, rgba(180,100,20,.12) 0%, rgba(120,60,10,.1) 60%, transparent 100%),
+        linear-gradient(135deg, #2a1a08 0%, #3d2510 100%);
+    }
+    .event-header {
+      padding: 16px 20px; position: relative;
+      background:
+        linear-gradient(to bottom, rgba(20,20,35,0.3) 0%, rgba(20,20,35,0.8) 100%),
+        repeating-linear-gradient(45deg, rgba(180,150,80,.08) 0, rgba(180,150,80,.05) 20px, rgba(130,100,50,.06) 40px),
+        #1a1a2a;
+    }
+    .dest-header {
+      padding: 16px 20px; position: relative;
+      background:
+        linear-gradient(to bottom, rgba(15,26,46,0.4) 0%, rgba(15,26,46,0.9) 100%),
+        repeating-linear-gradient(160deg, rgba(74,106,154,.15) 0, rgba(26,43,74,.12) 40px),
+        var(--er-dest-900);
+    }
+    /* Shared header text elements (reuse .club-* for layout logic) */
+    .header-type-badge-amber {
+      font-family: var(--ff-sans); font-size: 7px; font-weight: 400;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border: 0.5px solid rgba(232,200,122,0.4); color: var(--er-amber-100);
+      border-radius: 2px; padding: 2px 8px; display: inline-block;
+    }
+    .header-type-badge-dest {
+      font-family: var(--ff-sans); font-size: 7px; font-weight: 400;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border: 0.5px solid var(--er-dest-border); color: var(--er-dest-50);
+      border-radius: 2px; padding: 2px 8px; display: inline-block;
+      box-shadow: 0 0 0 1px var(--er-dest-border);
+    }
+    .header-date-pill-amber {
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 500;
+      letter-spacing: 0.06em;
+      background: rgba(245,219,168,0.1); color: var(--er-amber-100);
+      border: 0.5px solid rgba(232,200,122,0.35);
+      border-radius: 2px; padding: 3px 8px; display: inline-block;
+    }
+    .header-optout-link {
+      font-family: var(--ff-sans); font-size: 8px;
+      color: rgba(255,255,255,0.35); text-decoration: underline;
+      cursor: pointer; background: none; border: none;
+      margin-top: 5px; display: block; width: fit-content;
+    }
+    .header-optout-link:hover { color: rgba(255,255,255,0.6); }
+    .header-meta-dot-amber { background: var(--er-amber-500); }
+    .header-meta-dot-dest  { background: var(--er-dest-300, #7a9abf); }
+
+    /* Sub-tab bars */
+    .trip-tab-bar, .event-tab-bar, .dest-tab-bar {
+      background: var(--er-white); border-bottom: 1px solid var(--er-border);
+      display: flex; padding: 0 var(--sp-5);
+    }
+    .trip-tab, .event-tab, .dest-tab {
+      font-family: var(--ff-sans); font-size: 10px; font-weight: 400;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--er-text-tertiary); padding: 9px 12px 8px;
+      border-bottom: 1.5px solid transparent; cursor: pointer; white-space: nowrap;
+      background: none; border-top: none; border-left: none; border-right: none;
+      margin-bottom: -1px;
+    }
+    .trip-tab.active  { color: var(--er-text-primary); border-bottom-color: var(--er-amber-500); }
+    .event-tab.active { color: var(--er-text-primary); border-bottom-color: var(--er-amber-800); }
+    .dest-tab.active  { color: var(--er-dest-500); border-bottom-color: var(--er-dest-500); }
+    .trip-tab:hover:not(.active), .event-tab:hover:not(.active), .dest-tab:hover:not(.active) { color: var(--er-text-secondary); }
+
+    /* ─── TRIP DETAILS CONTENT ────────────────────────────────────────────────── */
+    .trip-context-card {
+      background: var(--er-stone-100); border: 1px solid var(--er-border);
+      border-radius: 6px; padding: 14px 16px; margin-bottom: 16px;
+    }
+    .trip-context-label {
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--er-text-tertiary); margin-bottom: var(--sp-2);
+    }
+    .trip-context-property {
+      font-family: var(--ff-sans); font-size: 13px; font-weight: 500;
+      color: var(--er-text-primary); margin-bottom: 2px;
+    }
+    .trip-context-dates {
+      font-family: var(--ff-sans); font-size: 11px;
+      color: var(--er-text-secondary); margin-bottom: var(--sp-2);
+      display: flex; align-items: center; gap: var(--sp-2);
+    }
+    .pill-confirmed {
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      background: var(--er-forest-500); color: var(--er-white);
+      border-radius: 12px; padding: 2px 9px; display: inline-block;
+    }
+    .trip-context-desc {
+      font-family: var(--ff-sans); font-size: 11px; color: var(--er-text-secondary);
+      line-height: 1.6; margin-top: var(--sp-2);
+      padding-top: var(--sp-2); border-top: 1px solid var(--er-border-mid);
+    }
+    .trip-about {
+      font-family: var(--ff-sans); font-size: 11px; color: var(--er-text-secondary);
+      line-height: 1.65; padding: 14px 0;
+      border-bottom: 1px solid var(--er-border); margin-bottom: 14px;
+    }
+    .trip-quick-actions { display: flex; gap: var(--sp-2); margin-bottom: 16px; }
+    .expiry-notice {
+      background: var(--er-stone-100); border-radius: 5px;
+      padding: 10px 13px; display: flex; align-items: flex-start; gap: var(--sp-2);
+      margin-top: var(--sp-4);
+    }
+    .expiry-notice-text {
+      font-family: var(--ff-sans); font-size: 9px;
+      color: var(--er-text-tertiary); line-height: 1.5;
+    }
+
+    /* ─── ATTENDING TAB ───────────────────────────────────────────────────────── */
+    .attending-filter-bar {
+      display: flex; border-bottom: 1px solid var(--er-border);
+      margin-bottom: 16px; padding: 0;
+    }
+    .attending-filter-tab {
+      font-family: var(--ff-sans); font-size: 10px;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--er-text-tertiary); padding: 7px 14px 6px;
+      border-bottom: 1.5px solid transparent; cursor: pointer;
+      background: none; border-top: none; border-left: none; border-right: none;
+      margin-bottom: -1px;
+    }
+    .attending-filter-tab.active { color: var(--er-text-primary); border-bottom-color: var(--er-forest-800); }
+    .attending-group-label {
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--er-text-tertiary); margin-bottom: var(--sp-2); margin-top: var(--sp-4);
+      display: flex; align-items: center; gap: var(--sp-2);
+    }
+    .attending-group-label:first-of-type { margin-top: 0; }
+    .count-badge {
+      background: var(--er-stone-100); color: var(--er-text-tertiary);
+      border-radius: 10px; padding: 1px 7px; font-size: 9px; font-weight: 400;
+      text-transform: none; letter-spacing: 0;
+    }
+    .attending-card {
+      background: var(--er-white); border: 1px solid var(--er-border);
+      border-radius: 6px; padding: 11px 13px; margin-bottom: 8px;
+      display: flex; align-items: center; gap: var(--sp-3);
+    }
+    .attending-card-right {
+      margin-left: auto; display: flex; align-items: center; gap: var(--sp-2); flex-shrink: 0;
+    }
+    .attending-dates { font-family: var(--ff-sans); font-size: 9px; color: var(--er-text-secondary); margin-top: 1px; }
+    .badge-awaiting {
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 400;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--er-text-tertiary); font-style: italic;
+    }
+
+    /* ─── EVENT RSVP CARD ────────────────────────────────────────────────────── */
+    .rsvp-card {
+      background: var(--er-white); border: 1px solid var(--er-border);
+      border-radius: 8px; overflow: hidden; max-width: 560px; margin: 0 auto 20px;
+    }
+    .rsvp-card-header { padding: 16px 20px; background: #1a1a2a; }
+    .rsvp-card-eyebrow {
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 400;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--er-amber-100); margin-bottom: 6px;
+    }
+    .rsvp-card-title {
+      font-family: var(--ff-serif); font-style: italic; font-weight: 300;
+      font-size: 22px; color: var(--er-white); line-height: 1.2; margin-bottom: 4px;
+    }
+    .rsvp-card-venue { font-family: var(--ff-sans); font-size: 10px; color: rgba(255,255,255,0.55); }
+    .rsvp-card-body { padding: 16px 20px; }
+    .rsvp-info-row {
+      display: flex; gap: var(--sp-6); margin-bottom: 16px;
+      padding-bottom: 16px; border-bottom: 1px solid var(--er-border);
+    }
+    .rsvp-info-label {
+      font-family: var(--ff-sans); font-size: 8px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--er-text-tertiary); margin-bottom: 2px;
+    }
+    .rsvp-info-value { font-family: var(--ff-sans); font-size: 12px; font-weight: 500; color: var(--er-text-primary); }
+    .rsvp-question { font-family: var(--ff-sans); font-size: 12px; font-weight: 500; color: var(--er-text-primary); margin-bottom: 4px; }
+    .rsvp-sub { font-family: var(--ff-sans); font-size: 10px; color: var(--er-text-secondary); margin-bottom: 14px; }
+    .btn-rsvp-yes {
+      font-family: var(--ff-sans); font-size: 12px; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      background: var(--er-amber-800); color: var(--er-white);
+      border: none; padding: 10px 14px; border-radius: 2px; cursor: pointer; width: 100%;
+      transition: background 200ms ease, opacity 200ms ease;
+    }
+    .btn-rsvp-yes:hover { background: var(--er-amber-500); }
+    .btn-rsvp-no {
+      font-family: var(--ff-sans); font-size: 12px; font-weight: 400;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      background: transparent; color: var(--er-text-secondary);
+      border: 0.5px solid var(--er-border-mid); padding: 9px 14px; border-radius: 2px; cursor: pointer; width: 100%;
+      transition: border-color 150ms ease, opacity 200ms ease;
+    }
+    .btn-rsvp-no:hover { border-color: var(--er-slate-400); }
+    .rsvp-note { font-family: var(--ff-sans); font-size: 9px; font-style: italic; color: var(--er-text-tertiary); margin-top: 10px; text-align: center; }
+    .rsvp-confirmed-label {
+      font-family: var(--ff-sans); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--er-text-tertiary); margin-bottom: 10px;
+      max-width: 560px; margin-left: auto; margin-right: auto;
+    }
+    .confirmed-avatars { display: flex; align-items: center; gap: var(--sp-4); max-width: 560px; margin: 0 auto; flex-wrap: wrap; }
+    .confirmed-avatar-item { display: flex; align-items: center; gap: var(--sp-2); }
+    .confirmed-name { font-family: var(--ff-sans); font-size: 10px; color: var(--er-text-secondary); }
+
+    /* ─── DESTINATION MEMBER CARDS ────────────────────────────────────────────── */
+    .dest-intro-copy {
+      font-family: var(--ff-sans); font-size: 11px; color: var(--er-text-secondary);
+      line-height: 1.6; margin-bottom: 16px; border-bottom: 1px solid var(--er-border);
+      padding-bottom: 14px;
+    }
+    .dest-member-card {
+      background: var(--er-white); border: 1px solid var(--er-border);
+      border-radius: 6px; padding: 14px 16px; margin-bottom: 8px;
+      display: flex; align-items: center; gap: var(--sp-3);
+    }
+    .dest-member-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-sans); font-size: 12px; font-weight: 600;
+      color: var(--er-white); flex-shrink: 0;
+    }
+    .dest-member-info { flex: 1; }
+    .dest-member-name { font-family: var(--ff-sans); font-size: 13px; font-weight: 500; color: var(--er-text-primary); margin-bottom: 1px; }
+    .dest-member-location { font-family: var(--ff-sans); font-size: 10px; color: var(--er-text-tertiary); }
+    .dest-member-mutual { font-family: var(--ff-sans); font-size: 9px; color: var(--er-text-secondary); margin-top: 1px; }
+    .dest-member-actions { display: flex; flex-direction: column; align-items: flex-end; gap: var(--sp-1); flex-shrink: 0; }
+    .join-thread-prompt {
+      background: var(--er-stone-50); border: 1px solid var(--er-dest-border);
+      border-radius: 5px; padding: 12px 14px;
+      display: flex; align-items: center; gap: var(--sp-2); margin-top: 16px;
+    }
+    .join-thread-text { font-family: var(--ff-sans); font-size: 10px; color: var(--er-text-secondary); flex: 1; line-height: 1.45; }
+    .join-thread-link { font-family: var(--ff-sans); font-size: 10px; color: var(--er-dest-500); background: none; border: none; cursor: pointer; white-space: nowrap; }
+    .join-thread-link:hover { color: var(--er-dest-800); }
+    .dest-optout-section { margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--er-border); }
+    .dest-optout-note { font-family: var(--ff-sans); font-size: 9px; color: var(--er-text-tertiary); margin-bottom: 8px; line-height: 1.5; }
+    .dest-opted-out-msg {
+      display: none; font-family: var(--ff-sans); font-size: 11px; color: var(--er-forest-500);
+      padding: var(--sp-3) var(--sp-4);
+      background: var(--er-forest-50); border: 1px solid var(--er-forest-border); border-radius: 5px;
+    }
+
+    /* ─── DESTINATION THREAD ──────────────────────────────────────────────────── */
+    .thread-header-note {
+      background: var(--er-dest-50); border: 0.5px solid var(--er-dest-border);
+      border-radius: 5px; padding: 9px 12px; margin-bottom: 12px;
+      font-family: var(--ff-sans); font-size: 9px; color: var(--er-dest-500); line-height: 1.5;
+    }
+    .thread-messages { margin-bottom: 16px; }
+    .thread-msg { display: flex; align-items: flex-start; gap: var(--sp-2); margin-bottom: 12px; }
+    .thread-msg.mine { flex-direction: row-reverse; }
+    .thread-msg-avatar {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-sans); font-size: 7px; font-weight: 600;
+      color: var(--er-white); flex-shrink: 0; margin-top: 2px;
+    }
+    .thread-msg-content { max-width: 72%; }
+    .thread-msg-name { font-family: var(--ff-sans); font-size: 9px; font-weight: 500; color: var(--er-text-tertiary); margin-bottom: 3px; }
+    .thread-msg.mine .thread-msg-name { text-align: right; }
+    .thread-msg-bubble {
+      background: var(--er-stone-100); border-radius: 0 8px 8px 8px;
+      padding: 8px 11px; font-family: var(--ff-sans); font-size: 11px;
+      color: var(--er-text-primary); line-height: 1.5;
+    }
+    .thread-msg.mine .thread-msg-bubble { background: var(--er-dest-50); border-radius: 8px 0 8px 8px; color: var(--er-dest-900); }
+    .thread-msg-time { font-family: var(--ff-sans); font-size: 8px; color: var(--er-text-tertiary); margin-top: 3px; display: block; }
+    .thread-msg.mine .thread-msg-time { text-align: right; }
+    .thread-input-row {
+      display: flex; align-items: center; gap: var(--sp-2);
+      background: var(--er-white); border: 1px solid var(--er-border);
+      border-radius: 20px; padding: 8px 16px;
+    }
+    .thread-input {
+      flex: 1; border: none; background: transparent;
+      font-family: var(--ff-sans); font-size: 11px; color: var(--er-text-primary); outline: none;
+    }
+    .thread-input::placeholder { color: var(--er-text-tertiary); }
+    .thread-send-btn {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--er-dest-500); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .thread-send-btn:hover { background: var(--er-dest-800); }
+
+    /* ─── STUB SCREENS (placeholders for Prompts 2 & 3) ─────────────────────── */
+    .stub-screen {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 400px; padding: var(--sp-10);
+      text-align: center;
+    }
+    .stub-title {
+      font-family: var(--ff-serif); font-style: italic; font-weight: 300;
+      font-size: 28px; color: var(--er-text-primary);
+      margin-bottom: var(--sp-3);
+    }
+    .stub-note {
+      font-family: var(--ff-sans); font-size: 12px;
+      color: var(--er-text-tertiary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── PORTAL NAV ──────────────────────────────────────────────────────────── -->
+  <nav class="portal-nav">
+    <div class="portal-nav-brand">
+      <!-- ER bird logo SVG -->
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Exclusive Resorts">
+        <circle cx="12" cy="12" r="11" stroke="var(--er-forest-800)" stroke-width="1"/>
+        <!-- Abstract bird: simple wing arc + body -->
+        <path d="M7 13.5 C8.5 10 11 9.5 13.5 10.5 C15.5 11.3 17 10 17.5 8.5" stroke="var(--er-forest-800)" stroke-width="1" fill="none" stroke-linecap="round"/>
+        <path d="M11 10.5 C11 12.5 10 14 8.5 15" stroke="var(--er-forest-800)" stroke-width="1" fill="none" stroke-linecap="round"/>
+        <path d="M13.5 10.5 C14 13 13 15 11.5 16" stroke="var(--er-forest-800)" stroke-width="0.75" fill="none" stroke-linecap="round"/>
+      </svg>
+      <span class="portal-nav-wordmark">Exclusive Resorts</span>
+    </div>
+
+    <div class="portal-nav-links">
+      <button class="portal-nav-link" onclick="navigate('for-you')">Search &amp; Book</button>
+      <button class="portal-nav-link" onclick="navigate('for-you')">Exclusive Collection</button>
+      <button class="portal-nav-link" onclick="navigate('for-you')">My Trips</button>
+      <button class="portal-nav-link active" id="portal-link-clubhouse" onclick="navigate('for-you')">The Clubhouse</button>
+    </div>
+
+    <div class="portal-nav-right">
+      <!-- Bell icon -->
+      <svg class="nav-bell" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Notifications">
+        <path d="M9 2C9 2 5.5 3 5.5 8V12L4 13.5H14L12.5 12V8C12.5 3 9 2 9 2Z" stroke="currentColor" stroke-width="1" fill="none"/>
+        <path d="M7.5 13.5C7.5 14.3 8.17 15 9 15C9.83 15 10.5 14.3 10.5 13.5" stroke="currentColor" stroke-width="1" fill="none"/>
+        <circle cx="13" cy="4" r="2.5" fill="var(--er-amber-500)"/>
+      </svg>
+      <div class="nav-avatar" title="François Villeneuve">FV</div>
+    </div>
+  </nav>
+
+  <!-- ─── CLUBHOUSE NAV ────────────────────────────────────────────────────────── -->
+  <div class="clubhouse-nav">
+    <div class="clubhouse-nav-rolodex">
+      <svg width="13" height="10" viewBox="0 0 13 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect y="0" width="13" height="1.2" rx="0.6" fill="currentColor"/>
+        <rect y="4" width="13" height="1.2" rx="0.6" fill="currentColor"/>
+        <rect y="8" width="8" height="1.2" rx="0.6" fill="currentColor"/>
+      </svg>
+      Member Rolodex
+    </div>
+    <div class="clubhouse-nav-tabs">
+      <button class="clubhouse-tab" onclick="navigate('for-you')">The Latest</button>
+      <button class="clubhouse-tab active" id="tab-for-you" onclick="navigate('for-you')">For You</button>
+      <button class="clubhouse-tab" onclick="navigate('for-you')">Member Interests</button>
+      <button class="clubhouse-tab" id="tab-circles" onclick="navigateToCircles()">Circles</button>
+      <button class="clubhouse-tab" onclick="navigate('for-you')">Persons of Interest</button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN: FOR YOU
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen active" id="for-you">
+    <div class="for-you-layout">
+
+      <!-- Left Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-profile-card">
+          <div class="sidebar-avatar">FB</div>
+          <div class="sidebar-name">François Bernard</div>
+          <div class="sidebar-connections">321 connections</div>
+          <div class="sidebar-bio">Sommelier extraordinaire. Avid traveler. Aspiring writer. Mother of 4.</div>
+          <div class="sidebar-links">
+            <span class="sidebar-link">View My Profile</span>
+            <span class="sidebar-link">Check In</span>
+          </div>
+        </div>
+
+        <div class="sidebar-filters">
+          <div class="filter-label">Filter posts by</div>
+
+          <div class="filter-group">
+            <div class="filter-group-label">Post Type</div>
+            <div class="pill-row">
+              <span class="pill">Question</span>
+              <span class="pill">Member Tip</span>
+              <span class="pill">Recommendation</span>
+              <span class="pill">Meetup</span>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-group-label">Passions</div>
+            <div class="pill-row">
+              <span class="pill active">Golf</span>
+              <span class="pill">North America</span>
+              <span class="pill">Europe</span>
+              <span class="pill">South America</span>
+              <span class="pill">Asia</span>
+              <span class="pill">Australia</span>
+              <span class="pill">Africa</span>
+              <span class="pill">ALL</span>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <div class="filter-group-label">Experiences</div>
+            <div class="pill-row">
+              <span class="pill">Seabourn Cruise</span>
+              <span class="pill">Antarctica Expedition</span>
+              <span class="pill">Around the World by Private Jet</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Feed -->
+      <main class="feed">
+
+        <!-- Recent Activity -->
+        <div class="recent-activity" id="recent-activity">
+          <div class="activity-header">
+            <span class="activity-title">Recent Activity</span>
+            <span class="activity-new-count">3 new</span>
+            <button class="activity-collapse" onclick="toggleActivity()">COLLAPSE ↑</button>
+          </div>
+          <div class="activity-body" id="activity-body">
+            <div class="activity-item">
+              <div class="activity-avatar">SL</div>
+              <span class="activity-text">
+                <strong>Sophia Laurent</strong> replied to your thread in Amalfi Coast: Best time to visit Positano?
+              </span>
+              <span class="activity-time">2h ago</span>
+            </div>
+            <div class="activity-item">
+              <div class="activity-avatar">ER</div>
+              <span class="activity-text">
+                <strong>Emma Richardson</strong> accepted your connection request
+              </span>
+              <span class="activity-time">6h ago</span>
+            </div>
+            <div class="activity-item">
+              <div class="activity-avatar">RH</div>
+              <span class="activity-text">
+                <strong>Robert Harrison</strong> posted in Wine: Bordeaux 2021 vintage recommendations
+              </span>
+              <span class="activity-time">Yesterday</span>
+            </div>
+          </div>
+          <div class="activity-footer">
+            <button class="activity-view-all">View All Activity →</button>
+          </div>
+        </div>
+
+        <!-- Confirmation Bar (shown after invite accepted) -->
+        <div class="confirmation-bar" id="confirmation-bar">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="6.5" stroke="var(--er-forest-500)" stroke-width="1"/>
+            <path d="M4 7L6 9L10 5" stroke="var(--er-forest-500)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          You've joined Denver Chapter · The Links Collective.
+          <button onclick="navigate('club-discussion')" style="background:none;border:none;font-family:var(--ff-sans);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--er-forest-500);cursor:pointer;margin-left:auto;padding:0;">Go to Circle →</button>
+        </div>
+
+        <!-- Circle Invite Card -->
+        <div class="invite-card" id="invite-card-for-you">
+          <div class="invite-card-header">
+            <div class="invite-pulse"></div>
+            <span class="invite-header-text">You've been invited to a chapter</span>
+            <button class="invite-dismiss" onclick="dismissInvite()" aria-label="Dismiss">×</button>
+          </div>
+          <div class="invite-card-body">
+            <div class="invite-chapter-label">The Links Collective</div>
+            <div class="invite-circle-name">Denver Chapter</div>
+            <div class="invite-meta">Golf · 10 members · Ongoing</div>
+            <div class="invite-actions">
+              <button class="btn-primary" onclick="acceptInvite('club')">Accept invite</button>
+              <button class="btn-ghost" onclick="navigate('club-discussion')">View details</button>
+              <div class="avatar-stack">
+                <div class="avatar-stack-item" style="background:var(--er-slate-500)">JH</div>
+                <div class="avatar-stack-item" style="background:var(--er-slate-400)">ML</div>
+                <div class="avatar-stack-item" style="background:var(--er-slate-600)">AR</div>
+                <div class="avatar-stack-item avatar-stack-more">+7</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- I'm Here Card -->
+        <div class="imhere-card" id="imhere-card">
+          <div class="imhere-card-header">
+            <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 0C3.07 0 1.5 1.57 1.5 3.5C1.5 6.13 5 11 5 11C5 11 8.5 6.13 8.5 3.5C8.5 1.57 6.93 0 5 0ZM5 4.75C4.31 4.75 3.75 4.19 3.75 3.5C3.75 2.81 4.31 2.25 5 2.25C5.69 2.25 6.25 2.81 6.25 3.5C6.25 4.19 5.69 4.75 5 4.75Z" fill="var(--er-dest-500)"/>
+            </svg>
+            <span class="imhere-header-text">You're heading to Real del Mar</span>
+            <button class="invite-dismiss" onclick="dismissImHere()" aria-label="Dismiss">×</button>
+          </div>
+          <div class="imhere-card-body">
+            <div class="imhere-dest-name">Real del Mar</div>
+            <div class="imhere-desc" id="imhere-desc">3 members are currently there and have opted in. Let them know you're coming?</div>
+            <div class="imhere-actions" id="imhere-actions">
+              <button class="btn-dest" id="im-here-btn" onclick="optInImHere()">I'm Here</button>
+              <button class="btn-ghost" onclick="dismissImHere()">Maybe later</button>
+            </div>
+            <div class="imhere-confirmed" id="imhere-confirmed">
+              You've joined the Real del Mar circle.
+              <button onclick="navigate('dest-whos-here')" style="background:none;border:none;font-family:var(--ff-sans);font-size:10px;color:var(--er-dest-500);cursor:pointer;padding:0;margin-left:4px;text-decoration:underline;">See who's there →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post 1 -->
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar" style="background:var(--er-slate-600)">MV</div>
+            <div class="post-author-info">
+              <div class="post-author-name">Marcus Vidal</div>
+              <div class="post-author-since">Member since 2018</div>
+            </div>
+            <div class="post-badge-date">
+              <span class="badge badge-club">Question</span>
+              <span class="post-date">2 days ago</span>
+            </div>
+          </div>
+          <div class="post-body">
+            Has anyone played Monte Rei recently? Planning a late April trip to the Algarve and trying to decide between Monte Rei and Quinta do Lago. The handicap difference between our group is substantial — wondering which course is more forgiving for mixed skill levels.
+          </div>
+          <div class="post-footer">
+            <span class="post-stat">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10V4.5L6 2L10 4.5V10H7.5V7.5H4.5V10H2Z" stroke="currentColor" stroke-width="0.8" fill="none"/></svg>
+              14 replies
+            </span>
+            <span class="post-stat">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2L7.12 4.62L10 4.86L7.9 6.69L8.56 9.5L6 7.96L3.44 9.5L4.1 6.69L2 4.86L4.88 4.62L6 2Z" stroke="currentColor" stroke-width="0.8" fill="none"/></svg>
+              8 likes
+            </span>
+            <button class="post-link">On Golf →</button>
+          </div>
+        </div>
+
+        <!-- Post 2 -->
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar" style="background:#8a6a4e">PC</div>
+            <div class="post-author-info">
+              <div class="post-author-name">Priya Chakraborty</div>
+              <div class="post-author-since">Member since 2021</div>
+            </div>
+            <div class="post-badge-date">
+              <span class="badge badge-event" style="background:var(--er-forest-50);color:var(--er-forest-700)">Member Tip</span>
+              <span class="post-date">3 days ago</span>
+            </div>
+          </div>
+          <div class="post-body">
+            For anyone doing the Amalfi Coast in summer — book your water taxis a full week ahead. The docking situation at Positano is chaotic after 10am and the private services fill up fast. We had the AquaStar team and they were exceptional. Worth the premium.
+          </div>
+          <div class="post-footer">
+            <span class="post-stat">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10V4.5L6 2L10 4.5V10H7.5V7.5H4.5V10H2Z" stroke="currentColor" stroke-width="0.8" fill="none"/></svg>
+              6 replies
+            </span>
+            <span class="post-stat">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2L7.12 4.62L10 4.86L7.9 6.69L8.56 9.5L6 7.96L3.44 9.5L4.1 6.69L2 4.86L4.88 4.62L6 2Z" stroke="currentColor" stroke-width="0.8" fill="none"/></svg>
+              21 likes
+            </span>
+            <button class="post-link">On Europe →</button>
+          </div>
+        </div>
+
+        <!-- Post 3 -->
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar" style="background:var(--er-dest-700,#2a3a5a)">TW</div>
+            <div class="post-author-info">
+              <div class="post-author-name">Thomas Whitmore</div>
+              <div class="post-author-since">Member since 2015</div>
+            </div>
+            <div class="post-badge-date">
+              <span class="badge" style="background:var(--er-amber-50);color:var(--er-amber-800)">Recommendation</span>
+              <span class="post-date">4 days ago</span>
+            </div>
+          </div>
+          <div class="post-body">
+            Just returned from the Antarctica Expedition — genuinely one of the most transformative experiences of my 22 years as a member. The Zodiac landings at Deception Island were extraordinary. Happy to answer any questions for anyone considering it.
+          </div>
+          <div class="post-footer">
+            <span class="post-stat">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10V4.5L6 2L10 4.5V10H7.5V7.5H4.5V10H2Z" stroke="currentColor" stroke-width="0.8" fill="none"/></svg>
+              23 replies
+            </span>
+            <span class="post-stat">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2L7.12 4.62L10 4.86L7.9 6.69L8.56 9.5L6 7.96L3.44 9.5L4.1 6.69L2 4.86L4.88 4.62L6 2Z" stroke="currentColor" stroke-width="0.8" fill="none"/></svg>
+              41 likes
+            </span>
+            <button class="post-link">On Antarctica Expedition →</button>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN: CIRCLES — EMPTY
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="circles-empty">
+    <div class="circles-layout">
+
+      <h1 class="circles-page-title">Circles</h1>
+      <p class="circles-subtitle">Private spaces for members who share something in common.</p>
+
+      <!-- Empty state icon: three circles connected by lines -->
+      <div class="circles-empty-icon">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="24" cy="10" r="5.5" stroke="var(--er-border-mid)" stroke-width="1"/>
+          <circle cx="10" cy="34" r="5.5" stroke="var(--er-border-mid)" stroke-width="1"/>
+          <circle cx="38" cy="34" r="5.5" stroke="var(--er-border-mid)" stroke-width="1"/>
+          <line x1="20.5" y1="14.5" x2="13" y2="29.5" stroke="var(--er-border-mid)" stroke-width="1"/>
+          <line x1="27.5" y1="14.5" x2="35" y2="29.5" stroke="var(--er-border-mid)" stroke-width="1"/>
+          <line x1="15.5" y1="34" x2="32.5" y2="34" stroke="var(--er-border-mid)" stroke-width="1"/>
+        </svg>
+      </div>
+
+      <p class="circles-empty-copy">
+        Circles are invite-only private spaces — curated by Exclusive Resorts for small groups of members with something in common. When you're added to a Circle, it will appear here.
+      </p>
+
+      <!-- Circle type cards -->
+      <div class="circles-types-label">What Circles look like</div>
+      <div class="circles-type-row">
+
+        <div class="circle-type-card type-club">
+          <span class="badge badge-club">Club</span>
+          <div class="circle-type-name">Club Circle</div>
+          <div class="circle-type-desc">Ongoing private club — golf, book club, social</div>
+        </div>
+
+        <div class="circle-type-card type-trip">
+          <span class="badge badge-trip">Trip</span>
+          <div class="circle-type-name">Trip Circle</div>
+          <div class="circle-type-desc">Time-bounded travel cohort</div>
+        </div>
+
+        <div class="circle-type-card type-event">
+          <span class="badge badge-event">Event</span>
+          <div class="circle-type-name">Event Circle</div>
+          <div class="circle-type-desc">Private group around a specific event</div>
+        </div>
+
+        <div class="circle-type-card type-dest">
+          <span class="badge badge-dest">I'm Here</span>
+          <div class="circle-type-name">Destination Circle</div>
+          <div class="circle-type-desc">Who else is at your destination</div>
+        </div>
+
+        <div class="circle-type-card type-combined">
+          <span class="badge" style="background:var(--er-stone-100);color:var(--er-slate-600)">Club + Events</span>
+          <div class="circle-type-name">Club + Events</div>
+          <div class="circle-type-desc">Club with nested event moments (Phase 2)</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN: CIRCLES — ACTIVE
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="circles-active">
+    <div class="circles-layout">
+
+      <div class="circles-active-header">
+        <h1 class="circles-active-title">My Circles</h1>
+        <div class="circles-active-count">3 active · 1 past</div>
+      </div>
+
+      <!-- Active section -->
+      <div class="circles-section-label">Active</div>
+
+      <!-- Club Circle -->
+      <div class="circle-list-item" onclick="navigate('club-discussion')">
+        <div class="circle-dot dot-club"></div>
+        <div class="circle-item-content">
+          <div class="circle-item-name">Denver Chapter · The Links Collective</div>
+          <div class="circle-item-meta">Golf · 10 members · Ongoing</div>
+          <div class="circle-item-meta">Last activity: James Harley posted 2 days ago</div>
+        </div>
+        <div class="circle-item-right">
+          <span class="badge badge-club">Club</span>
+          <span class="circle-arrow">›</span>
+        </div>
+      </div>
+
+      <!-- Destination Circle -->
+      <div class="circle-list-item" onclick="navigate('dest-whos-here')">
+        <div class="circle-dot dot-dest"></div>
+        <div class="circle-item-content">
+          <div class="circle-item-name">Real del Mar — Now</div>
+          <div class="circle-item-meta">3 members currently opted in · Destination</div>
+          <div class="circle-item-status">You're checked in</div>
+        </div>
+        <div class="circle-item-right">
+          <span class="badge badge-dest">I'm Here</span>
+          <span class="circle-arrow">›</span>
+        </div>
+      </div>
+
+      <!-- Trip Circle -->
+      <div class="circle-list-item" onclick="navigate('trip-details')">
+        <div class="circle-dot dot-trip"></div>
+        <div class="circle-item-content">
+          <div class="circle-item-name">Costa Rica Cohort · March 2025</div>
+          <div class="circle-item-meta">Group travel · 8 members · Closes Mar 21</div>
+        </div>
+        <div class="circle-item-right">
+          <span class="badge badge-trip">Trip</span>
+          <span class="circle-arrow">›</span>
+        </div>
+      </div>
+
+      <!-- Past section -->
+      <div class="circles-section-label" style="margin-top:var(--sp-8)">Past</div>
+
+      <div class="circle-list-item archived">
+        <div class="circle-dot dot-archived"></div>
+        <div class="circle-item-content">
+          <div class="circle-item-name">Vail Winter · January 2025</div>
+          <div class="circle-item-meta">Trip · 6 members · Ended Jan 14</div>
+        </div>
+        <div class="circle-item-right">
+          <span class="badge badge-archived">Archived</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       STUB SCREENS — Prompts 2 & 3 will replace these
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN 4 — GOLF PASSION PAGE (Discussion tab, invite pending)
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="golf-discussion">
+    <!-- Hero -->
+    <div class="golf-hero">
+      <div class="golf-hero-left">
+        <div class="golf-hero-kicker">Passion</div>
+        <div class="golf-hero-title"><em>Discover</em> Golf</div>
+        <div class="golf-hero-count">2,321 members</div>
+      </div>
+      <button class="golf-hero-following">Following</button>
+    </div>
+
+    <!-- Passion tab bar (no Circle tab yet) -->
+    <div class="passion-tab-bar" id="golf-passion-tabs">
+      <button class="passion-tab active" data-tab="discussion" onclick="switchGolfTab('discussion','golf-discussion')">Discussion</button>
+      <button class="passion-tab" data-tab="members" onclick="switchGolfTab('members','golf-discussion')">Members</button>
+      <button class="passion-tab hidden" id="golf-circle-tab" data-tab="circle" onclick="navigate('golf-circle')">Chapter</button>
+    </div>
+
+    <!-- Body -->
+    <div class="golf-body">
+      <!-- Sidebar -->
+      <aside class="golf-sidebar">
+        <div class="sidebar-filters">
+          <div class="filter-label">Filter posts by</div>
+          <div class="filter-group">
+            <div class="filter-group-label">Post Type</div>
+            <div class="pill-row">
+              <span class="pill">Question</span>
+              <span class="pill">Member Tip</span>
+              <span class="pill">Recommendation</span>
+              <span class="pill">Meetup</span>
+            </div>
+          </div>
+          <div class="filter-group">
+            <div class="filter-group-label">Passions</div>
+            <div class="pill-row">
+              <span class="pill active">Golf</span>
+              <span class="pill">North America</span>
+              <span class="pill">Europe</span>
+              <span class="pill">Asia</span>
+            </div>
+          </div>
+          <div class="filter-group">
+            <div class="filter-group-label">Experiences</div>
+            <div class="pill-row">
+              <span class="pill">Seabourn Cruise</span>
+              <span class="pill">Around the World by Private Jet</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Feed -->
+      <main class="golf-feed">
+        <!-- Invite card (golf page) -->
+        <div class="invite-card" id="invite-card-golf" style="max-height:300px;">
+          <div class="invite-card-header">
+            <div class="invite-pulse"></div>
+            <span class="invite-header-text">You've been invited to a chapter</span>
+            <button class="invite-dismiss" onclick="dismissGolfInvite()" aria-label="Dismiss">×</button>
+          </div>
+          <div class="invite-card-body">
+            <div class="invite-chapter-label">The Links Collective</div>
+            <div class="invite-circle-name">Denver Chapter</div>
+            <div class="invite-meta">Golf · 10 members · Ongoing</div>
+            <div class="invite-actions">
+              <button class="btn-primary" onclick="acceptInvite('club')">Accept invite</button>
+              <button class="btn-ghost" onclick="navigate('club-discussion')">View details</button>
+              <div class="avatar-stack">
+                <div class="avatar-stack-item" style="background:var(--er-slate-500)">JH</div>
+                <div class="avatar-stack-item" style="background:var(--er-slate-400)">ML</div>
+                <div class="avatar-stack-item" style="background:var(--er-slate-600)">AR</div>
+                <div class="avatar-stack-item avatar-stack-more">+7</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post 1 -->
+        <div class="disc-post">
+          <div class="disc-post-header">
+            <div class="disc-avatar" style="background:var(--er-slate-500)">JP</div>
+            <span class="disc-author">John Peterson · Member since 2009</span>
+            <span class="disc-date">January 9, 2022</span>
+            <span class="badge badge-club" style="background:var(--er-stone-100);color:var(--er-text-tertiary)">Question</span>
+          </div>
+          <div class="disc-body">What are some of the best food tours offered in Tokyo? I'm particularly interested in sushi and street food.</div>
+          <div class="disc-actions">
+            <span class="disc-stat">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1.5 9V2.5h8V7H4L1.5 9Z" stroke="currentColor" stroke-width="0.9" fill="none" stroke-linejoin="round"/></svg>
+              8
+            </span>
+            <span class="disc-stat">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 9.5C5.5 9.5 1.5 7 1.5 4.5a2 2 0 0 1 4-0C5.5 4.5 5.5 4.5 5.5 4.5a2 2 0 0 1 4 0C9.5 7 5.5 9.5 5.5 9.5Z" stroke="currentColor" stroke-width="0.9" fill="none"/></svg>
+              3
+            </span>
+            <button class="disc-link">On Abaco Discussion →</button>
+          </div>
+        </div>
+
+        <!-- Post 2 — replied to you -->
+        <div class="disc-post">
+          <div class="replied-indicator">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 7V3L4 1L7 3V7H5.5V5H2.5V7H1Z" stroke="var(--er-forest-500)" stroke-width="0.8" fill="none"/></svg>
+            Replied to you
+          </div>
+          <div class="disc-post-header">
+            <div class="disc-avatar" style="background:var(--er-slate-500)">JP</div>
+            <span class="disc-author">John Peterson · Member since 2009</span>
+            <span class="disc-date">January 9, 2022</span>
+            <span class="badge badge-club" style="background:var(--er-stone-100);color:var(--er-text-tertiary)">Question</span>
+          </div>
+          <div class="disc-body">What are some of the best food tours offered in Tokyo? I'm particularly interested in sushi and street food.</div>
+          <div class="disc-replies">
+            <div class="disc-reply">
+              <div class="disc-avatar" style="width:16px;height:16px;font-size:6px;background:var(--er-slate-400);flex-shrink:0">JP</div>
+              <span class="disc-reply-text">We did a Tsukiji outer market walk at dawn — highly recommend going before 7am before the crowds hit.</span>
+            </div>
+            <div class="disc-reply">
+              <div class="disc-avatar" style="width:16px;height:16px;font-size:6px;background:var(--er-slate-600);flex-shrink:0">JP</div>
+              <span class="disc-reply-text">Ichiran Ramen in Shinjuku is also worth a solo stop — the booth format is an experience in itself.</span>
+            </div>
+          </div>
+          <div class="disc-actions" style="margin-top:var(--sp-2)">
+            <span class="disc-stat">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1.5 9V2.5h8V7H4L1.5 9Z" stroke="currentColor" stroke-width="0.9" fill="none" stroke-linejoin="round"/></svg>
+              8
+            </span>
+            <span class="disc-stat">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 9.5C5.5 9.5 1.5 7 1.5 4.5a2 2 0 0 1 4-0C5.5 4.5 5.5 4.5 5.5 4.5a2 2 0 0 1 4 0C9.5 7 5.5 9.5 5.5 9.5Z" stroke="currentColor" stroke-width="0.9" fill="none"/></svg>
+              3
+            </span>
+            <button class="disc-link">View on Real del Mar Discussion →</button>
+          </div>
+        </div>
+
+        <!-- Post 3 -->
+        <div class="disc-post">
+          <div class="disc-post-header">
+            <div class="disc-avatar" style="background:var(--er-slate-500)">JP</div>
+            <span class="disc-author">John Peterson · Member since 2009</span>
+            <span class="disc-date">January 9, 2022</span>
+            <span class="badge badge-club" style="background:var(--er-stone-100);color:var(--er-text-tertiary)">Question</span>
+          </div>
+          <div class="disc-body">What are some of the best food tours offered in Tokyo? I'm particularly interested in sushi and street food.</div>
+          <div class="disc-tags">
+            <span class="disc-tag">Golf</span>
+            <span class="disc-tag">Summer</span>
+          </div>
+          <div class="disc-actions">
+            <span class="disc-stat">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1.5 9V2.5h8V7H4L1.5 9Z" stroke="currentColor" stroke-width="0.9" fill="none" stroke-linejoin="round"/></svg>
+              8
+            </span>
+            <span class="disc-stat">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 9.5C5.5 9.5 1.5 7 1.5 4.5a2 2 0 0 1 4-0C5.5 4.5 5.5 4.5 5.5 4.5a2 2 0 0 1 4 0C9.5 7 5.5 9.5 5.5 9.5Z" stroke="currentColor" stroke-width="0.9" fill="none"/></svg>
+              3
+            </span>
+            <button class="disc-link">On Golf Discussion →</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN 5 — GOLF PASSION PAGE (Circle tab revealed)
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="golf-circle">
+    <!-- Compressed hero -->
+    <div class="golf-hero compressed">
+      <div class="golf-hero-left">
+        <div class="golf-hero-kicker">Passion</div>
+        <div class="golf-hero-title"><em>Discover</em> Golf</div>
+        <div class="golf-hero-count">2,321 members</div>
+      </div>
+      <button class="golf-hero-following">Following</button>
+    </div>
+
+    <!-- Passion tab bar — Chapter tab active -->
+    <div class="passion-tab-bar">
+      <button class="passion-tab" onclick="navigate('golf-discussion')">Discussion</button>
+      <button class="passion-tab" onclick="navigate('golf-discussion')">Members</button>
+      <button class="passion-tab circle-active" data-tab="circle">Chapter</button>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="golf-circle-breadcrumb">
+      <button onclick="navigate('golf-discussion')">Golf</button>
+      <span>›</span>
+      <span>Chapter</span>
+    </div>
+
+    <!-- Club header (embedded) -->
+    <div class="club-header">
+      <div class="club-header-top">
+        <div>
+          <div class="club-breadcrumb" onclick="navigate('circles-active')">Golf · Circles</div>
+        </div>
+        <div class="club-monogram">LC</div>
+      </div>
+      <div class="club-collective-label">The Links Collective</div>
+      <div class="club-chapter-name">Denver Chapter</div>
+      <div class="club-meta-bar">
+        <div class="club-meta-dot"></div>
+        <span>10 members</span>
+        <span class="club-meta-sep">·</span>
+        <span>Denver, CO</span>
+        <span class="club-meta-sep">·</span>
+        <span>Golf</span>
+        <span class="club-meta-sep">·</span>
+        <span>Private</span>
+      </div>
+      <div class="club-header-badge">Chapter</div>
+    </div>
+
+    <!-- Club sub-tab bar -->
+    <div class="club-tab-bar" id="golf-circle-subtabs">
+      <button class="club-tab active" data-tab="discussion" onclick="switchClubTab('discussion','golf-circle')">Discussion</button>
+      <button class="club-tab" data-tab="members" onclick="switchClubTab('members','golf-circle')">Members</button>
+      <button class="club-tab soon" data-tab="events" onclick="switchClubTab('events','golf-circle')">Events</button>
+    </div>
+
+    <!-- Tab panels -->
+    <div id="golf-circle-panel-discussion" class="golf-circle-panel">
+      <div class="circle-body">
+        <!-- Composer -->
+        <div class="composer" id="gc-composer" onclick="expandComposer('gc-composer')">
+          <div class="composer-avatar">FB</div>
+          <span class="composer-placeholder">Share something with the chapter…</span>
+          <textarea class="composer-textarea" placeholder="Share something with the chapter…"></textarea>
+        </div>
+        <!-- Posts -->
+        <div class="club-post">
+          <div class="club-post-header">
+            <div class="club-post-avatar" style="background:var(--er-forest-900)">JH</div>
+            <div class="club-post-info">
+              <div class="club-post-name">James Harley</div>
+              <div class="club-post-since">Member since 2018</div>
+            </div>
+            <div class="club-post-date">2 days ago</div>
+          </div>
+          <div class="club-post-body">Anyone played Sanctuary Golf Club recently? Planning a round next week — tips on the back nine, specifically holes 14–17.</div>
+          <div class="club-post-reply">
+            <div class="club-post-reply-avatar" style="background:var(--er-forest-700)">MC</div>
+            <span class="club-post-reply-body">Yes! The 16th is deceptive — club up at least one from what you think.</span>
+          </div>
+          <div class="club-post-actions">
+            <button class="club-post-action">Reply</button>
+            <button class="club-post-action">2 replies</button>
+          </div>
+        </div>
+        <div class="club-post">
+          <div class="club-post-header">
+            <div class="club-post-avatar" style="background:var(--er-forest-700)">RF</div>
+            <div class="club-post-info">
+              <div class="club-post-name">Robert Finch</div>
+              <div class="club-post-since">Member since 2021</div>
+            </div>
+            <div class="club-post-date">5 days ago</div>
+          </div>
+          <div class="club-post-body">Thinking of organizing a group round at Castle Pines in August — who's in?</div>
+          <div class="club-post-actions">
+            <button class="club-post-action">Reply</button>
+            <button class="club-post-action">5 replies</button>
+          </div>
+        </div>
+        <div class="club-post" style="padding-top:14px">
+          <div class="skeleton-bar" style="width:88%"></div>
+          <div class="skeleton-bar" style="width:60%"></div>
+          <div class="skeleton-bar" style="width:40%"></div>
+        </div>
+      </div>
+    </div>
+    <div id="golf-circle-panel-members" class="golf-circle-panel" style="display:none">
+      <div class="circle-body">
+        <div class="members-section-label">10 members</div>
+        <div class="member-grid">
+          <div class="member-card">
+            <div class="member-avatar" style="background:var(--er-forest-900)">JH</div>
+            <div class="member-info">
+              <div class="member-name">James Harley</div>
+              <div class="member-location">Denver, CO</div>
+              <div class="member-mutual">12 mutual connections</div>
+            </div>
+            <span class="badge-connected">Connected</span>
+          </div>
+          <div class="member-card">
+            <div class="member-avatar" style="background:var(--er-forest-700)">MC</div>
+            <div class="member-info">
+              <div class="member-name">Margaret Crane</div>
+              <div class="member-location">Boulder, CO</div>
+              <div class="member-mutual">5 mutual connections</div>
+            </div>
+            <button class="btn-ghost" style="font-size:8px;padding:4px 10px">Connect</button>
+          </div>
+          <div class="member-card">
+            <div class="member-avatar" style="background:var(--er-forest-500)">RF</div>
+            <div class="member-info">
+              <div class="member-name">Robert Finch</div>
+              <div class="member-location">Denver, CO</div>
+              <div class="member-mutual">8 mutual connections</div>
+            </div>
+            <button class="btn-ghost" style="font-size:8px;padding:4px 10px">Connect</button>
+          </div>
+          <div class="member-card">
+            <div class="member-avatar" style="background:var(--er-slate-600)">SL</div>
+            <div class="member-info">
+              <div class="member-name">Sarah Lane</div>
+              <div class="member-location">Denver, CO</div>
+              <div class="member-mutual">3 mutual connections</div>
+            </div>
+            <button class="btn-ghost" style="font-size:8px;padding:4px 10px">Connect</button>
+          </div>
+          <div class="member-card stub">
+            <div class="member-avatar" style="background:var(--er-stone-200)"></div>
+            <div class="member-info">
+              <div class="member-stub-line" style="width:70%"></div>
+              <div class="member-stub-line" style="width:50%"></div>
+              <div class="member-stub-line" style="width:55%"></div>
+            </div>
+          </div>
+          <div class="member-card stub">
+            <div class="member-avatar" style="background:var(--er-stone-200)"></div>
+            <div class="member-info">
+              <div class="member-stub-line" style="width:65%"></div>
+              <div class="member-stub-line" style="width:45%"></div>
+              <div class="member-stub-line" style="width:60%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="golf-circle-panel-events" class="golf-circle-panel" style="display:none">
+      <div class="events-empty">
+        <div class="events-empty-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="6" width="30" height="27" rx="3" stroke="var(--er-border-mid)" stroke-width="1.2" fill="none"/>
+            <line x1="11" y1="3" x2="11" y2="9" stroke="var(--er-border-mid)" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="25" y1="3" x2="25" y2="9" stroke="var(--er-border-mid)" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="3" y1="14" x2="33" y2="14" stroke="var(--er-border-mid)" stroke-width="1.2"/>
+            <circle cx="11" cy="21" r="1.5" fill="var(--er-border-mid)"/>
+            <circle cx="18" cy="21" r="1.5" fill="var(--er-border-mid)"/>
+            <circle cx="25" cy="21" r="1.5" fill="var(--er-border-mid)"/>
+            <circle cx="11" cy="27" r="1.5" fill="var(--er-border-mid)"/>
+            <circle cx="18" cy="27" r="1.5" fill="var(--er-border-mid)"/>
+          </svg>
+        </div>
+        <div class="events-empty-title">Chapter events are coming</div>
+        <div class="events-empty-body">Soon you'll be able to organize private rounds and gatherings here — with RSVP, coordination threads, and a private space for your chapter to plan.</div>
+        <button class="events-empty-link" onclick="switchClubTab('discussion','golf-circle')">Start a Discussion →</button>
+        <div class="events-ghost-card">
+          <div class="events-ghost-date">
+            <div class="events-ghost-month">Aug</div>
+            <div class="events-ghost-day">14</div>
+          </div>
+          <div class="events-ghost-info">
+            <div class="events-ghost-name">Castle Pines Group Round</div>
+            <div class="events-ghost-meta">Castle Pines Golf Club · Denver, CO</div>
+            <div class="events-ghost-attending">4 attending</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN 6 — CLUB CIRCLE INTERIOR (Discussion tab)
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="club-discussion">
+    <div class="club-header">
+      <div class="club-header-top">
+        <div>
+          <div class="club-breadcrumb" onclick="navigate('circles-active')">Golf · Circles</div>
+        </div>
+        <div class="club-monogram">LC</div>
+      </div>
+      <div class="club-collective-label">The Links Collective</div>
+      <div class="club-chapter-name">Denver Chapter</div>
+      <div class="club-meta-bar">
+        <div class="club-meta-dot"></div>
+        <span>10 members</span>
+        <span class="club-meta-sep">·</span>
+        <span>Denver, CO</span>
+        <span class="club-meta-sep">·</span>
+        <span>Golf</span>
+        <span class="club-meta-sep">·</span>
+        <span>Private</span>
+      </div>
+      <div class="club-header-badge">Chapter</div>
+    </div>
+
+    <div class="club-tab-bar">
+      <button class="club-tab active" data-tab="discussion" onclick="navigateClubTab('discussion')">Discussion</button>
+      <button class="club-tab" data-tab="members" onclick="navigateClubTab('members')">Members</button>
+      <button class="club-tab soon" data-tab="events" onclick="navigateClubTab('events')">Events</button>
+    </div>
+
+    <div class="circle-body">
+      <div class="composer" id="club-composer" onclick="expandComposer('club-composer')">
+        <div class="composer-avatar">FB</div>
+        <span class="composer-placeholder">Share something with the chapter…</span>
+        <textarea class="composer-textarea" placeholder="Share something with the chapter…"></textarea>
+      </div>
+      <div class="club-post">
+        <div class="club-post-header">
+          <div class="club-post-avatar" style="background:var(--er-forest-900)">JH</div>
+          <div class="club-post-info">
+            <div class="club-post-name">James Harley</div>
+            <div class="club-post-since">Member since 2018</div>
+          </div>
+          <div class="club-post-date">2 days ago</div>
+        </div>
+        <div class="club-post-body">Anyone played Sanctuary Golf Club recently? Planning a round next week — tips on the back nine, specifically holes 14–17.</div>
+        <div class="club-post-reply">
+          <div class="club-post-reply-avatar" style="background:var(--er-forest-700)">MC</div>
+          <span class="club-post-reply-body">Yes! The 16th is deceptive — club up at least one from what you think.</span>
+        </div>
+        <div class="club-post-actions">
+          <button class="club-post-action">Reply</button>
+          <button class="club-post-action">2 replies</button>
+        </div>
+      </div>
+      <div class="club-post">
+        <div class="club-post-header">
+          <div class="club-post-avatar" style="background:var(--er-forest-700)">RF</div>
+          <div class="club-post-info">
+            <div class="club-post-name">Robert Finch</div>
+            <div class="club-post-since">Member since 2021</div>
+          </div>
+          <div class="club-post-date">5 days ago</div>
+        </div>
+        <div class="club-post-body">Thinking of organizing a group round at Castle Pines in August — who's in?</div>
+        <div class="club-post-actions">
+          <button class="club-post-action">Reply</button>
+          <button class="club-post-action">5 replies</button>
+        </div>
+      </div>
+      <div class="club-post" style="padding-top:14px">
+        <div class="skeleton-bar" style="width:88%"></div>
+        <div class="skeleton-bar" style="width:60%"></div>
+        <div class="skeleton-bar" style="width:40%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN 7 — CLUB CIRCLE INTERIOR (Members tab)
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="club-members">
+    <div class="club-header">
+      <div class="club-header-top">
+        <div>
+          <div class="club-breadcrumb" onclick="navigate('circles-active')">Golf · Circles</div>
+        </div>
+        <div class="club-monogram">LC</div>
+      </div>
+      <div class="club-collective-label">The Links Collective</div>
+      <div class="club-chapter-name">Denver Chapter</div>
+      <div class="club-meta-bar">
+        <div class="club-meta-dot"></div>
+        <span>10 members</span>
+        <span class="club-meta-sep">·</span>
+        <span>Denver, CO</span>
+        <span class="club-meta-sep">·</span>
+        <span>Golf</span>
+        <span class="club-meta-sep">·</span>
+        <span>Private</span>
+      </div>
+      <div class="club-header-badge">Chapter</div>
+    </div>
+
+    <div class="club-tab-bar">
+      <button class="club-tab" data-tab="discussion" onclick="navigateClubTab('discussion')">Discussion</button>
+      <button class="club-tab active" data-tab="members" onclick="navigateClubTab('members')">Members</button>
+      <button class="club-tab soon" data-tab="events" onclick="navigateClubTab('events')">Events</button>
+    </div>
+
+    <div class="circle-body">
+      <div class="members-section-label">10 members</div>
+      <div class="member-grid">
+        <div class="member-card">
+          <div class="member-avatar" style="background:var(--er-forest-900)">JH</div>
+          <div class="member-info">
+            <div class="member-name">James Harley</div>
+            <div class="member-location">Denver, CO</div>
+            <div class="member-mutual">12 mutual connections</div>
+          </div>
+          <span class="badge-connected">Connected</span>
+        </div>
+        <div class="member-card">
+          <div class="member-avatar" style="background:var(--er-forest-700)">MC</div>
+          <div class="member-info">
+            <div class="member-name">Margaret Crane</div>
+            <div class="member-location">Boulder, CO</div>
+            <div class="member-mutual">5 mutual connections</div>
+          </div>
+          <button class="btn-ghost" style="font-size:8px;padding:4px 10px">Connect</button>
+        </div>
+        <div class="member-card">
+          <div class="member-avatar" style="background:var(--er-forest-500)">RF</div>
+          <div class="member-info">
+            <div class="member-name">Robert Finch</div>
+            <div class="member-location">Denver, CO</div>
+            <div class="member-mutual">8 mutual connections</div>
+          </div>
+          <button class="btn-ghost" style="font-size:8px;padding:4px 10px">Connect</button>
+        </div>
+        <div class="member-card">
+          <div class="member-avatar" style="background:var(--er-slate-600)">SL</div>
+          <div class="member-info">
+            <div class="member-name">Sarah Lane</div>
+            <div class="member-location">Denver, CO</div>
+            <div class="member-mutual">3 mutual connections</div>
+          </div>
+          <button class="btn-ghost" style="font-size:8px;padding:4px 10px">Connect</button>
+        </div>
+        <div class="member-card stub">
+          <div class="member-avatar" style="background:var(--er-stone-200)"></div>
+          <div class="member-info">
+            <div class="member-stub-line" style="width:70%"></div>
+            <div class="member-stub-line" style="width:50%"></div>
+            <div class="member-stub-line" style="width:55%"></div>
+          </div>
+        </div>
+        <div class="member-card stub">
+          <div class="member-avatar" style="background:var(--er-stone-200)"></div>
+          <div class="member-info">
+            <div class="member-stub-line" style="width:65%"></div>
+            <div class="member-stub-line" style="width:45%"></div>
+            <div class="member-stub-line" style="width:60%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN 8 — CLUB CIRCLE INTERIOR (Events tab — coming soon)
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="club-events">
+    <div class="club-header">
+      <div class="club-header-top">
+        <div>
+          <div class="club-breadcrumb" onclick="navigate('circles-active')">Golf · Circles</div>
+        </div>
+        <div class="club-monogram">LC</div>
+      </div>
+      <div class="club-collective-label">The Links Collective</div>
+      <div class="club-chapter-name">Denver Chapter</div>
+      <div class="club-meta-bar">
+        <div class="club-meta-dot"></div>
+        <span>10 members</span>
+        <span class="club-meta-sep">·</span>
+        <span>Denver, CO</span>
+        <span class="club-meta-sep">·</span>
+        <span>Golf</span>
+        <span class="club-meta-sep">·</span>
+        <span>Private</span>
+      </div>
+      <div class="club-header-badge">Chapter</div>
+    </div>
+
+    <div class="club-tab-bar">
+      <button class="club-tab" data-tab="discussion" onclick="navigateClubTab('discussion')">Discussion</button>
+      <button class="club-tab" data-tab="members" onclick="navigateClubTab('members')">Members</button>
+      <button class="club-tab soon active" data-tab="events" onclick="navigateClubTab('events')">Events</button>
+    </div>
+
+    <div class="events-empty">
+      <div class="events-empty-icon">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="6" width="30" height="27" rx="3" stroke="var(--er-border-mid)" stroke-width="1.2" fill="none"/>
+          <line x1="11" y1="3" x2="11" y2="9" stroke="var(--er-border-mid)" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="25" y1="3" x2="25" y2="9" stroke="var(--er-border-mid)" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="3" y1="14" x2="33" y2="14" stroke="var(--er-border-mid)" stroke-width="1.2"/>
+          <circle cx="11" cy="21" r="1.5" fill="var(--er-border-mid)"/>
+          <circle cx="18" cy="21" r="1.5" fill="var(--er-border-mid)"/>
+          <circle cx="25" cy="21" r="1.5" fill="var(--er-border-mid)"/>
+          <circle cx="11" cy="27" r="1.5" fill="var(--er-border-mid)"/>
+          <circle cx="18" cy="27" r="1.5" fill="var(--er-border-mid)"/>
+        </svg>
+      </div>
+      <div class="events-empty-title">Chapter events are coming</div>
+      <div class="events-empty-body">Soon you'll be able to organize private rounds and gatherings here — with RSVP, coordination threads, and a private space for your chapter to plan.</div>
+      <button class="events-empty-link" onclick="navigate('club-discussion')">Start a Discussion →</button>
+      <div class="events-ghost-card">
+        <div class="events-ghost-date">
+          <div class="events-ghost-month">Aug</div>
+          <div class="events-ghost-day">14</div>
+        </div>
+        <div class="events-ghost-info">
+          <div class="events-ghost-name">Castle Pines Group Round</div>
+          <div class="events-ghost-meta">Castle Pines Golf Club · Denver, CO</div>
+          <div class="events-ghost-attending">4 attending</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN 9 — TRIP CIRCLE: Details tab
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="trip-details">
+    <div class="trip-header">
+      <div class="club-header-top">
+        <div>
+          <div class="club-breadcrumb" onclick="navigate('circles-active')">My Trips · Circles</div>
+          <div class="club-collective-label" style="margin-top:4px">Costa Rica Cohort</div>
+          <div class="club-chapter-name">March 2025</div>
+          <div class="club-meta-bar">
+            <div class="club-meta-dot header-meta-dot-amber"></div>
+            <span>8 members</span>
+            <span class="club-meta-sep">·</span>
+            <span>Closes Mar 21, 2025</span>
+            <span class="club-meta-sep">·</span>
+            <span>Group travel</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <span class="header-type-badge-amber">Trip Circle</span>
+          <span class="header-date-pill-amber">Mar 14–21</span>
+        </div>
+      </div>
+    </div>
+    <div class="trip-tab-bar">
+      <button class="trip-tab active" data-tab="details" onclick="navigateTripTab('details')">Details</button>
+      <button class="trip-tab" data-tab="discussion" onclick="navigateTripTab('discussion')">Discussion</button>
+      <button class="trip-tab" data-tab="attending" onclick="navigateTripTab('attending')">Attending</button>
+    </div>
+    <div class="circle-body" style="background:var(--er-stone-50);max-width:100%">
+      <div style="max-width:680px;margin:0 auto">
+        <div class="trip-context-card">
+          <div class="trip-context-label">Your trip · Costa Rica</div>
+          <div class="trip-context-property">Hacienda AltaGracia</div>
+          <div class="trip-context-dates">
+            Mar 14–21, 2025 · 7 nights
+            <span class="pill-confirmed">Confirmed</span>
+          </div>
+          <div class="trip-context-desc">5 other members are on this trip during your dates. This is a private space to connect before you go.</div>
+        </div>
+        <div class="trip-about">This Circle was created by Exclusive Resorts for members who overlap at Hacienda AltaGracia in March 2025. Connect before you go, share tips, and coordinate once you're there.</div>
+        <div class="trip-quick-actions">
+          <button class="btn-ghost" onclick="navigateTripTab('discussion')">Go to Discussion →</button>
+          <button class="btn-ghost" onclick="navigateTripTab('attending')">See who's going →</button>
+        </div>
+        <div class="expiry-notice">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="flex-shrink:0;margin-top:1px">
+            <circle cx="6" cy="6" r="5.5" stroke="var(--er-text-tertiary)" stroke-width="0.9"/>
+            <path d="M6 3.5V6.5L8 8" stroke="var(--er-text-tertiary)" stroke-width="0.9" stroke-linecap="round"/>
+          </svg>
+          <span class="expiry-notice-text">This Circle closes automatically on March 21 when your trip ends. Thread history is not retained after you exit.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN 10 — TRIP CIRCLE: Discussion tab
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="trip-discussion">
+    <div class="trip-header">
+      <div class="club-header-top">
+        <div>
+          <div class="club-breadcrumb" onclick="navigate('circles-active')">My Trips · Circles</div>
+          <div class="club-collective-label" style="margin-top:4px">Costa Rica Cohort</div>
+          <div class="club-chapter-name">March 2025</div>
+          <div class="club-meta-bar">
+            <div class="club-meta-dot header-meta-dot-amber"></div>
+            <span>8 members</span>
+            <span class="club-meta-sep">·</span>
+            <span>Closes Mar 21, 2025</span>
+            <span class="club-meta-sep">·</span>
+            <span>Group travel</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <span class="header-type-badge-amber">Trip Circle</span>
+          <span class="header-date-pill-amber">Mar 14–21</span>
+        </div>
+      </div>
+    </div>
+    <div class="trip-tab-bar">
+      <button class="trip-tab" data-tab="details" onclick="navigateTripTab('details')">Details</button>
+      <button class="trip-tab active" data-tab="discussion" onclick="navigateTripTab('discussion')">Discussion</button>
+      <button class="trip-tab" data-tab="attending" onclick="navigateTripTab('attending')">Attending</button>
+    </div>
+    <div class="circle-body">
+      <div class="composer" id="trip-composer" onclick="expandComposer('trip-composer')">
+        <div class="composer-avatar" style="background:var(--er-amber-800)">FB</div>
+        <span class="composer-placeholder">Share with the group before you go…</span>
+        <textarea class="composer-textarea" placeholder="Share with the group before you go…"></textarea>
+      </div>
+      <div class="club-post">
+        <div class="club-post-header">
+          <div class="club-post-avatar" style="background:var(--er-amber-800)">AC</div>
+          <div class="club-post-info">
+            <div class="club-post-name">Amanda Collins</div>
+            <div class="club-post-since">Member since 2020</div>
+          </div>
+          <div class="club-post-date">3 days ago</div>
+        </div>
+        <div class="club-post-body">Has anyone done the aerial tram at Hacienda AltaGracia? Worth adding to the first day?</div>
+        <div class="club-post-reply">
+          <div class="club-post-reply-avatar" style="background:var(--er-slate-500)">MW</div>
+          <span class="club-post-reply-body">Yes! Book it early — they limit groups to 8. The morning light is incredible.</span>
+        </div>
+        <div class="club-post-actions">
+          <button class="club-post-action">Reply</button>
+          <button class="club-post-action">3 replies</button>
+        </div>
+      </div>
+      <div class="club-post">
+        <div class="club-post-header">
+          <div class="club-post-avatar" style="background:var(--er-slate-600)">SW</div>
+          <div class="club-post-info">
+            <div class="club-post-name">Sarah Wellhouser</div>
+            <div class="club-post-since">Member since 2017</div>
+          </div>
+          <div class="club-post-date">5 days ago</div>
+        </div>
+        <div class="club-post-body">Any restaurant recommendations in the area? Looking for authentic Costa Rican food, not the resort dining.</div>
+        <div class="club-post-actions">
+          <button class="club-post-action">Reply</button>
+          <button class="club-post-action">2 replies</button>
+        </div>
+      </div>
+      <div class="club-post" style="padding-top:14px">
+        <div class="skeleton-bar" style="width:82%"></div>
+        <div class="skeleton-bar" style="width:58%"></div>
+        <div class="skeleton-bar" style="width:36%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN 11 — TRIP CIRCLE: Attending tab
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="trip-attending">
+    <div class="trip-header">
+      <div class="club-header-top">
+        <div>
+          <div class="club-breadcrumb" onclick="navigate('circles-active')">My Trips · Circles</div>
+          <div class="club-collective-label" style="margin-top:4px">Costa Rica Cohort</div>
+          <div class="club-chapter-name">March 2025</div>
+          <div class="club-meta-bar">
+            <div class="club-meta-dot header-meta-dot-amber"></div>
+            <span>8 members</span>
+            <span class="club-meta-sep">·</span>
+            <span>Closes Mar 21, 2025</span>
+            <span class="club-meta-sep">·</span>
+            <span>Group travel</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <span class="header-type-badge-amber">Trip Circle</span>
+          <span class="header-date-pill-amber">Mar 14–21</span>
+        </div>
+      </div>
+    </div>
+    <div class="trip-tab-bar">
+      <button class="trip-tab" data-tab="details" onclick="navigateTripTab('details')">Details</button>
+      <button class="trip-tab" data-tab="discussion" onclick="navigateTripTab('discussion')">Discussion</button>
+      <button class="trip-tab active" data-tab="attending" onclick="navigateTripTab('attending')">Attending</button>
+    </div>
+    <div class="circle-body">
+      <div class="members-section-label">8 members</div>
+      <div class="attending-filter-bar">
+        <button class="attending-filter-tab active">All</button>
+        <button class="attending-filter-tab">My Connections</button>
+      </div>
+      <div class="attending-group-label">Confirmed <span class="count-badge">5</span></div>
+      <div class="attending-card">
+        <div class="member-avatar" style="background:var(--er-amber-800);width:30px;height:30px;font-size:9px">AC</div>
+        <div class="member-info">
+          <div class="member-name">Amanda Collins</div>
+          <div class="member-location">Miami, FL</div>
+          <div class="attending-dates">Staying Mar 14–21 · 4 mutual connections</div>
+        </div>
+        <div class="attending-card-right">
+          <button class="btn-ghost" style="font-size:8px;padding:4px 10px">Connect</button>
+        </div>
+      </div>
+      <div class="attending-card">
+        <div class="member-avatar" style="background:var(--er-slate-500);width:30px;height:30px;font-size:9px">MW</div>
+        <div class="member-info">
+          <div class="member-name">Mark Williams</div>
+          <div class="member-location">New York, NY</div>
+          <div class="attending-dates">Staying Mar 14–21 · 2 mutual connections</div>
+        </div>
+        <div class="attending-card-right">
+          <button class="btn-ghost" style="font-size:8px;padding:4px 10px">Connect</button>
+        </div>
+      </div>
+      <div class="attending-card">
+        <div class="member-avatar" style="background:var(--er-slate-700,#243344);width:30px;height:30px;font-size:9px">SW</div>
+        <div class="member-info">
+          <div class="member-name">Sarah Wellhouser</div>
+          <div class="member-location">Los Angeles, CA</div>
+          <div class="attending-dates">Staying Mar 16–21 · 6 mutual connections</div>
+        </div>
+        <div class="attending-card-right">
+          <span class="badge-connected">Connected</span>
+        </div>
+      </div>
+      <div class="attending-card" style="opacity:0.55">
+        <div class="member-avatar" style="background:var(--er-stone-200);width:30px;height:30px"></div>
+        <div class="member-info">
+          <div class="member-stub-line" style="width:55%"></div>
+          <div class="member-stub-line" style="width:38%"></div>
+        </div>
+      </div>
+      <div class="attending-card" style="opacity:0.55">
+        <div class="member-avatar" style="background:var(--er-stone-200);width:30px;height:30px"></div>
+        <div class="member-info">
+          <div class="member-stub-line" style="width:48%"></div>
+          <div class="member-stub-line" style="width:34%"></div>
+        </div>
+      </div>
+      <div class="attending-group-label" style="margin-top:var(--sp-5)">Pending <span class="count-badge">3</span></div>
+      <div class="attending-card" style="opacity:0.5">
+        <div class="member-avatar" style="background:var(--er-stone-200);width:30px;height:30px"></div>
+        <div class="member-info">
+          <div class="member-stub-line" style="width:52%"></div>
+          <div class="member-stub-line" style="width:35%"></div>
+        </div>
+        <div class="attending-card-right"><span class="badge-awaiting">Awaiting response</span></div>
+      </div>
+      <div class="attending-card" style="opacity:0.5">
+        <div class="member-avatar" style="background:var(--er-stone-200);width:30px;height:30px"></div>
+        <div class="member-info">
+          <div class="member-stub-line" style="width:45%"></div>
+          <div class="member-stub-line" style="width:32%"></div>
+        </div>
+        <div class="attending-card-right"><span class="badge-awaiting">Awaiting response</span></div>
+      </div>
+      <div class="attending-card" style="opacity:0.5">
+        <div class="member-avatar" style="background:var(--er-stone-200);width:30px;height:30px"></div>
+        <div class="member-info">
+          <div class="member-stub-line" style="width:58%"></div>
+          <div class="member-stub-line" style="width:36%"></div>
+        </div>
+        <div class="attending-card-right"><span class="badge-awaiting">Awaiting response</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN 12 — EVENT CIRCLE: RSVP tab
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="event-rsvp">
+    <div class="event-header">
+      <div class="club-header-top">
+        <div>
+          <div class="club-breadcrumb" onclick="navigate('circles-active')">Golf · Circles</div>
+          <div class="club-collective-label" style="margin-top:4px">Masters Weekend</div>
+          <div class="club-chapter-name">Augusta, Georgia</div>
+          <div class="club-meta-bar">
+            <div class="club-meta-dot header-meta-dot-amber"></div>
+            <span>8 members</span>
+            <span class="club-meta-sep">·</span>
+            <span>Apr 10–13, 2025</span>
+            <span class="club-meta-sep">·</span>
+            <span>Golf</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <span class="header-type-badge-amber">Event Circle</span>
+          <span class="header-date-pill-amber">Apr 10–13</span>
+        </div>
+      </div>
+    </div>
+    <div class="event-tab-bar">
+      <button class="event-tab active" data-tab="rsvp" onclick="navigateEventTab('rsvp')">RSVP</button>
+      <button class="event-tab" data-tab="discussion" onclick="navigateEventTab('discussion')">Discussion</button>
+      <button class="event-tab" data-tab="attending" onclick="navigateEventTab('attending')">Attending</button>
+    </div>
+    <div class="circle-body" style="background:var(--er-stone-50);max-width:100%;padding-top:20px">
+      <div class="rsvp-card">
+        <div class="rsvp-card-header">
+          <div class="rsvp-card-eyebrow">Private Golf Event</div>
+          <div class="rsvp-card-title">Masters Weekend 2025</div>
+          <div class="rsvp-card-venue">Augusta National Golf Club · Augusta, Georgia</div>
+        </div>
+        <div class="rsvp-card-body">
+          <div class="rsvp-info-row">
+            <div>
+              <div class="rsvp-info-label">Date</div>
+              <div class="rsvp-info-value">Apr 10–13, 2025</div>
+            </div>
+            <div>
+              <div class="rsvp-info-label">Members</div>
+              <div class="rsvp-info-value">8 invited</div>
+            </div>
+            <div>
+              <div class="rsvp-info-label">Type</div>
+              <div class="rsvp-info-value">Private circle</div>
+            </div>
+          </div>
+          <div class="rsvp-question">Will you be joining the group?</div>
+          <div class="rsvp-sub">3 of 8 members have confirmed so far.</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn-rsvp-yes" id="rsvp-yes" onclick="rsvpEvent(true)">Yes, I'm attending</button>
+            <button class="btn-rsvp-no" id="rsvp-no" onclick="rsvpEvent(false)">Can't make it</button>
+          </div>
+          <div class="rsvp-note">Responding doesn't affect your reservation. This circle closes Apr 13.</div>
+        </div>
+      </div>
+      <div class="rsvp-confirmed-label">3 confirmed</div>
+      <div class="confirmed-avatars">
+        <div class="confirmed-avatar-item">
+          <div class="member-avatar" style="background:var(--er-forest-900);width:28px;height:28px;font-size:8px">JH</div>
+          <span class="confirmed-name">James Harley</span>
+        </div>
+        <div class="confirmed-avatar-item">
+          <div class="member-avatar" style="background:var(--er-forest-500);width:28px;height:28px;font-size:8px">RF</div>
+          <span class="confirmed-name">Robert Finch</span>
+        </div>
+        <div class="confirmed-avatar-item">
+          <div class="member-avatar" style="background:var(--er-stone-200);width:28px;height:28px;font-size:8px;color:var(--er-text-tertiary)">?</div>
+          <span class="confirmed-name" style="color:var(--er-text-tertiary)">+1 more</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN 13 — EVENT CIRCLE: Discussion tab
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="event-discussion">
+    <div class="event-header">
+      <div class="club-header-top">
+        <div>
+          <div class="club-breadcrumb" onclick="navigate('circles-active')">Golf · Circles</div>
+          <div class="club-collective-label" style="margin-top:4px">Masters Weekend</div>
+          <div class="club-chapter-name">Augusta, Georgia</div>
+          <div class="club-meta-bar">
+            <div class="club-meta-dot header-meta-dot-amber"></div>
+            <span>8 members</span>
+            <span class="club-meta-sep">·</span>
+            <span>Apr 10–13, 2025</span>
+            <span class="club-meta-sep">·</span>
+            <span>Golf</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <span class="header-type-badge-amber">Event Circle</span>
+          <span class="header-date-pill-amber">Apr 10–13</span>
+        </div>
+      </div>
+    </div>
+    <div class="event-tab-bar">
+      <button class="event-tab" data-tab="rsvp" onclick="navigateEventTab('rsvp')">RSVP</button>
+      <button class="event-tab active" data-tab="discussion" onclick="navigateEventTab('discussion')">Discussion</button>
+      <button class="event-tab" data-tab="attending" onclick="navigateEventTab('attending')">Attending</button>
+    </div>
+    <div class="circle-body">
+      <div class="composer" id="event-composer" onclick="expandComposer('event-composer')">
+        <div class="composer-avatar" style="background:var(--er-amber-800)">FB</div>
+        <span class="composer-placeholder">Share with the group…</span>
+        <textarea class="composer-textarea" placeholder="Share with the group…"></textarea>
+      </div>
+      <div class="club-post">
+        <div class="club-post-header">
+          <div class="club-post-avatar" style="background:var(--er-forest-700)">RF</div>
+          <div class="club-post-info">
+            <div class="club-post-name">Robert Finch</div>
+            <div class="club-post-since">Member since 2021</div>
+          </div>
+          <div class="club-post-date">2 days ago</div>
+        </div>
+        <div class="club-post-body">Anyone have restaurant recommendations near Augusta National? Looking for the classic spots, not tourist traps.</div>
+        <div class="club-post-reply">
+          <div class="club-post-reply-avatar" style="background:var(--er-forest-900)">JH</div>
+          <span class="club-post-reply-body">Frog Hollow Tavern is the move. Book now — fills up during Masters week.</span>
+        </div>
+        <div class="club-post-actions">
+          <button class="club-post-action">Reply</button>
+          <button class="club-post-action">4 replies</button>
+        </div>
+      </div>
+      <div class="club-post">
+        <div class="club-post-header">
+          <div class="club-post-avatar" style="background:var(--er-forest-900)">JH</div>
+          <div class="club-post-info">
+            <div class="club-post-name">James Harley</div>
+            <div class="club-post-since">Member since 2018</div>
+          </div>
+          <div class="club-post-date">4 days ago</div>
+        </div>
+        <div class="club-post-body">Has anyone sorted transportation from the hotel to the course? Thinking we coordinate arrival times.</div>
+        <div class="club-post-actions">
+          <button class="club-post-action">Reply</button>
+          <button class="club-post-action">2 replies</button>
+        </div>
+      </div>
+      <div class="club-post" style="padding-top:14px">
+        <div class="skeleton-bar" style="width:78%"></div>
+        <div class="skeleton-bar" style="width:54%"></div>
+        <div class="skeleton-bar" style="width:32%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN 14 — EVENT CIRCLE: Attending tab
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="event-attending">
+    <div class="event-header">
+      <div class="club-header-top">
+        <div>
+          <div class="club-breadcrumb" onclick="navigate('circles-active')">Golf · Circles</div>
+          <div class="club-collective-label" style="margin-top:4px">Masters Weekend</div>
+          <div class="club-chapter-name">Augusta, Georgia</div>
+          <div class="club-meta-bar">
+            <div class="club-meta-dot header-meta-dot-amber"></div>
+            <span>8 members</span>
+            <span class="club-meta-sep">·</span>
+            <span>Apr 10–13, 2025</span>
+            <span class="club-meta-sep">·</span>
+            <span>Golf</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <span class="header-type-badge-amber">Event Circle</span>
+          <span class="header-date-pill-amber">Apr 10–13</span>
+        </div>
+      </div>
+    </div>
+    <div class="event-tab-bar">
+      <button class="event-tab" data-tab="rsvp" onclick="navigateEventTab('rsvp')">RSVP</button>
+      <button class="event-tab" data-tab="discussion" onclick="navigateEventTab('discussion')">Discussion</button>
+      <button class="event-tab active" data-tab="attending" onclick="navigateEventTab('attending')">Attending</button>
+    </div>
+    <div class="circle-body">
+      <div class="members-section-label">8 members</div>
+      <div class="attending-filter-bar">
+        <button class="attending-filter-tab active">All</button>
+        <button class="attending-filter-tab">My Connections</button>
+      </div>
+      <div class="attending-group-label">Confirmed <span class="count-badge">3</span></div>
+      <div class="attending-card">
+        <div class="member-avatar" style="background:var(--er-forest-900);width:30px;height:30px;font-size:9px">JH</div>
+        <div class="member-info">
+          <div class="member-name">James Harley</div>
+          <div class="member-location">Denver, CO</div>
+          <div class="attending-dates">12 mutual connections</div>
+        </div>
+        <div class="attending-card-right"><span class="badge-connected">Connected</span></div>
+      </div>
+      <div class="attending-card">
+        <div class="member-avatar" style="background:var(--er-forest-500);width:30px;height:30px;font-size:9px">RF</div>
+        <div class="member-info">
+          <div class="member-name">Robert Finch</div>
+          <div class="member-location">Denver, CO</div>
+          <div class="attending-dates">8 mutual connections</div>
+        </div>
+        <div class="attending-card-right">
+          <button class="btn-ghost" style="font-size:8px;padding:4px 10px">Connect</button>
+        </div>
+      </div>
+      <div class="attending-card">
+        <div class="member-avatar" style="background:var(--er-forest-700);width:30px;height:30px;font-size:9px">MC</div>
+        <div class="member-info">
+          <div class="member-name">Margaret Crane</div>
+          <div class="member-location">Boulder, CO</div>
+          <div class="attending-dates">5 mutual connections</div>
+        </div>
+        <div class="attending-card-right">
+          <button class="btn-ghost" style="font-size:8px;padding:4px 10px">Connect</button>
+        </div>
+      </div>
+      <div class="attending-group-label" style="margin-top:var(--sp-5)">Pending <span class="count-badge">5</span></div>
+      <div class="attending-card" style="opacity:0.5">
+        <div class="member-avatar" style="background:var(--er-stone-200);width:30px;height:30px"></div>
+        <div class="member-info"><div class="member-stub-line" style="width:50%"></div><div class="member-stub-line" style="width:33%"></div></div>
+        <div class="attending-card-right"><span class="badge-awaiting">Pending</span></div>
+      </div>
+      <div class="attending-card" style="opacity:0.5">
+        <div class="member-avatar" style="background:var(--er-stone-200);width:30px;height:30px"></div>
+        <div class="member-info"><div class="member-stub-line" style="width:44%"></div><div class="member-stub-line" style="width:30%"></div></div>
+        <div class="attending-card-right"><span class="badge-awaiting">Pending</span></div>
+      </div>
+      <div class="attending-card" style="opacity:0.5">
+        <div class="member-avatar" style="background:var(--er-stone-200);width:30px;height:30px"></div>
+        <div class="member-info"><div class="member-stub-line" style="width:56%"></div><div class="member-stub-line" style="width:38%"></div></div>
+        <div class="attending-card-right"><span class="badge-awaiting">Pending</span></div>
+      </div>
+      <div class="attending-card" style="opacity:0.5">
+        <div class="member-avatar" style="background:var(--er-stone-200);width:30px;height:30px"></div>
+        <div class="member-info"><div class="member-stub-line" style="width:48%"></div><div class="member-stub-line" style="width:31%"></div></div>
+        <div class="attending-card-right"><span class="badge-awaiting">Pending</span></div>
+      </div>
+      <div class="attending-card" style="opacity:0.5">
+        <div class="member-avatar" style="background:var(--er-stone-200);width:30px;height:30px"></div>
+        <div class="member-info"><div class="member-stub-line" style="width:53%"></div><div class="member-stub-line" style="width:35%"></div></div>
+        <div class="attending-card-right"><span class="badge-awaiting">Pending</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN 15 — DESTINATION CIRCLE: Who's Here tab
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="dest-whos-here">
+    <div class="dest-header">
+      <div class="club-header-top">
+        <div>
+          <div class="club-breadcrumb" onclick="navigate('circles-active')">My Trips · Circles</div>
+          <div class="club-collective-label" style="margin-top:4px">Destination Circle</div>
+          <div class="club-chapter-name" style="font-size:26px">Real del Mar</div>
+          <div class="club-meta-bar">
+            <div class="club-meta-dot header-meta-dot-dest"></div>
+            <span>3 members opted in</span>
+            <span class="club-meta-sep">·</span>
+            <span>You're checked in</span>
+            <span class="club-meta-sep">·</span>
+            <span>Auto-exits Mar 18</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+          <span class="header-type-badge-dest">I'm Here</span>
+          <button class="header-optout-link" onclick="optOutDestination()">Opt out of I'm Here</button>
+        </div>
+      </div>
+    </div>
+    <div class="dest-tab-bar">
+      <button class="dest-tab active" data-tab="whos-here" onclick="navigateDestTab('whos-here')">Who's Here</button>
+      <button class="dest-tab" data-tab="thread" onclick="navigateDestTab('thread')">Thread</button>
+    </div>
+    <div class="circle-body">
+      <div class="dest-intro-copy">These members have opted in to share their presence at Real del Mar. Connection is always your choice.</div>
+      <div id="dest-members-list">
+        <div class="dest-member-card">
+          <div class="dest-member-avatar" style="background:var(--er-forest-900)">JH</div>
+          <div class="dest-member-info">
+            <div class="dest-member-name">James Harley</div>
+            <div class="dest-member-location">Denver, CO</div>
+            <div class="dest-member-mutual">12 mutual connections</div>
+          </div>
+          <div class="dest-member-actions">
+            <button class="btn-ghost" style="font-size:8px;padding:4px 10px">Send message</button>
+          </div>
+        </div>
+        <div class="dest-member-card">
+          <div class="dest-member-avatar" style="background:var(--er-amber-800)">AC</div>
+          <div class="dest-member-info">
+            <div class="dest-member-name">Amanda Collins</div>
+            <div class="dest-member-location">Miami, FL</div>
+            <div class="dest-member-mutual">4 mutual connections</div>
+          </div>
+          <div class="dest-member-actions">
+            <button class="btn-primary" style="font-size:8px;padding:5px 10px">Connect</button>
+            <button class="btn-ghost" style="font-size:8px;padding:4px 10px">Send message</button>
+          </div>
+        </div>
+        <div class="dest-member-card">
+          <div class="dest-member-avatar" style="background:var(--er-slate-600)">GK</div>
+          <div class="dest-member-info">
+            <div class="dest-member-name">George Kittle</div>
+            <div class="dest-member-location">San Francisco, CA</div>
+            <div class="dest-member-mutual">0 mutual connections</div>
+          </div>
+          <div class="dest-member-actions">
+            <button class="btn-primary" style="font-size:8px;padding:5px 10px">Connect</button>
+          </div>
+        </div>
+        <div class="join-thread-prompt">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0">
+            <path d="M2 10.5V3.5h10V9H5L2 10.5Z" stroke="var(--er-dest-500)" stroke-width="1" fill="none" stroke-linejoin="round"/>
+          </svg>
+          <span class="join-thread-text">Want to coordinate in real time? Join the optional thread.</span>
+          <button class="join-thread-link" onclick="navigate('dest-thread')">Join thread →</button>
+        </div>
+      </div>
+      <div class="dest-opted-out-msg" id="dest-opted-out-msg">
+        You've opted out. You'll no longer appear to other members at Real del Mar.
+      </div>
+      <div class="dest-optout-section">
+        <div class="dest-optout-note">Your presence here is visible to opted-in members only. You can opt out at any time.</div>
+        <button class="btn-ghost" style="font-size:8px" onclick="optOutDestination()">Opt out of I'm Here</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       SCREEN 16 — DESTINATION CIRCLE: Thread tab
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="dest-thread">
+    <div class="dest-header">
+      <div class="club-header-top">
+        <div>
+          <div class="club-breadcrumb" onclick="navigate('circles-active')">My Trips · Circles</div>
+          <div class="club-collective-label" style="margin-top:4px">Destination Circle</div>
+          <div class="club-chapter-name" style="font-size:26px">Real del Mar</div>
+          <div class="club-meta-bar">
+            <div class="club-meta-dot header-meta-dot-dest"></div>
+            <span>3 members opted in</span>
+            <span class="club-meta-sep">·</span>
+            <span>You're checked in</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+          <span class="header-type-badge-dest">I'm Here</span>
+        </div>
+      </div>
+    </div>
+    <div class="dest-tab-bar">
+      <button class="dest-tab" data-tab="whos-here" onclick="navigateDestTab('whos-here')">Who's Here</button>
+      <button class="dest-tab active" data-tab="thread" onclick="navigateDestTab('thread')">Thread</button>
+    </div>
+    <div class="circle-body" style="max-width:640px">
+      <div class="thread-header-note">This is an optional, lightweight thread for coordinating in-destination. It's casual — share ideas, ask questions, make plans.</div>
+      <div class="thread-messages">
+        <div class="thread-msg">
+          <div class="thread-msg-avatar" style="background:var(--er-forest-900)">JH</div>
+          <div class="thread-msg-content">
+            <div class="thread-msg-name">James Harley</div>
+            <div class="thread-msg-bubble">Anyone want to share a catamaran tomorrow? I found one that fits 8 and it's incredible.</div>
+            <span class="thread-msg-time">2h ago</span>
+          </div>
+        </div>
+        <div class="thread-msg">
+          <div class="thread-msg-avatar" style="background:var(--er-amber-800)">AC</div>
+          <div class="thread-msg-content">
+            <div class="thread-msg-name">Amanda Collins</div>
+            <div class="thread-msg-bubble">Yes! How much per person? Send me the details.</div>
+            <span class="thread-msg-time">1h ago</span>
+          </div>
+        </div>
+        <div class="thread-msg">
+          <div class="thread-msg-avatar" style="background:var(--er-forest-900)">JH</div>
+          <div class="thread-msg-content">
+            <div class="thread-msg-name">James Harley</div>
+            <div class="thread-msg-bubble">$85pp — I'll drop the booking link in here.</div>
+            <span class="thread-msg-time">1h ago</span>
+          </div>
+        </div>
+        <div class="thread-msg mine">
+          <div class="thread-msg-avatar" style="background:var(--er-forest-500)">FB</div>
+          <div class="thread-msg-content">
+            <div class="thread-msg-name">You</div>
+            <div class="thread-msg-bubble">Count me in! Send the link when you have it.</div>
+            <span class="thread-msg-time">45m ago</span>
+          </div>
+        </div>
+      </div>
+      <div class="thread-input-row">
+        <input class="thread-input" type="text" placeholder="Say something…">
+        <button class="thread-send-btn" aria-label="Send">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M1 9L9 5L1 1V4.5L6.5 5L1 5.5V9Z" fill="var(--er-white)"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       WELCOME MODAL
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="welcome-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-eyebrow">You've been invited to join</div>
+        <div class="modal-title">Denver Chapter</div>
+        <div class="modal-chapter-label">The Links Collective</div>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">A private golf chapter for 10 members in Denver. Connect, share tips, and coordinate rounds.</p>
+        <div class="modal-meta-row">
+          <div class="modal-meta-item">
+            <span class="modal-meta-label">Members</span>
+            <span class="modal-meta-value">10</span>
+          </div>
+          <div class="modal-meta-item">
+            <span class="modal-meta-label">Location</span>
+            <span class="modal-meta-value">Denver, CO</span>
+          </div>
+          <div class="modal-meta-item">
+            <span class="modal-meta-label">Duration</span>
+            <span class="modal-meta-value">No end date</span>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-primary-full" onclick="joinChapter()">Join the chapter</button>
+          <button class="btn-not-now" onclick="closeModalNotNow()">Not now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════════
+       JAVASCRIPT
+  ════════════════════════════════════════════════════════════════════════════ -->
+  <script>
+    const STATE = {
+      currentScreen: 'for-you',
+      circleInviteStatus: 'pending',
+      imHereOptIn: false,
+      showWelcomeModal: false,
+      modalType: null,
+      golfHasCircleTab: false,
+      golfActiveTab: 'discussion',
+      clubActiveTab: 'discussion',
+      tripActiveTab: 'details',
+      eventActiveTab: 'rsvp',
+      destActiveTab: 'whos-here',
+      eventRsvpStatus: null,
+      destOptedOut: false,
+    };
+
+    function navigate(screenId) {
+      document.querySelectorAll('.screen').forEach(function(s) {
+        s.style.display = 'none';
+        s.classList.remove('active');
+      });
+      var target = document.getElementById(screenId);
+      if (target) {
+        target.style.display = 'block';
+        target.classList.add('active');
+      }
+      STATE.currentScreen = screenId;
+      updateNavActive(screenId);
+    }
+
+    function navigateToCircles() {
+      if (STATE.circleInviteStatus === 'accepted') {
+        navigate('circles-active');
+      } else {
+        navigate('circles-empty');
+      }
+    }
+
+    function acceptInvite(type) {
+      STATE.circleInviteStatus = 'accepted';
+      STATE.modalType = type;
+      STATE.golfHasCircleTab = true;
+
+      // Collapse invite card with animation
+      var card = document.getElementById('invite-card-for-you');
+      if (card) {
+        card.style.transition = 'opacity 200ms ease, max-height 300ms ease, margin 300ms ease';
+        card.style.opacity = '0';
+        card.style.maxHeight = '0';
+        card.style.overflow = 'hidden';
+        card.style.marginBottom = '0';
+      }
+
+      // Reveal Chapter tab on golf passion page
+      var circleTab = document.getElementById('golf-circle-tab');
+      if (circleTab) circleTab.classList.remove('hidden');
+
+      // Show welcome modal after animation
+      setTimeout(function() {
+        STATE.showWelcomeModal = true;
+        var modal = document.getElementById('welcome-modal');
+        if (modal) {
+          modal.style.display = 'flex';
+          modal.classList.add('visible');
+        }
+        updateCirclesNav();
+      }, 320);
+    }
+
+    function dismissInvite() {
+      var card = document.getElementById('invite-card-for-you');
+      if (card) {
+        card.style.transition = 'opacity 200ms ease, max-height 300ms ease, margin 300ms ease';
+        card.style.opacity = '0';
+        card.style.maxHeight = '0';
+        card.style.overflow = 'hidden';
+        card.style.marginBottom = '0';
+      }
+    }
+
+    function dismissImHere() {
+      var card = document.getElementById('imhere-card');
+      if (card) {
+        card.style.transition = 'opacity 200ms ease, max-height 300ms ease, margin 300ms ease';
+        card.style.opacity = '0';
+        card.style.maxHeight = '0';
+        card.style.overflow = 'hidden';
+        card.style.marginBottom = '0';
+      }
+    }
+
+    function optInImHere() {
+      STATE.imHereOptIn = true;
+      var btn = document.getElementById('im-here-btn');
+      if (btn) {
+        btn.textContent = '✓ You\'re here';
+        btn.style.background = 'var(--er-forest-500)';
+      }
+      var actions = document.getElementById('imhere-actions');
+      var confirmed = document.getElementById('imhere-confirmed');
+      var desc = document.getElementById('imhere-desc');
+      if (desc) desc.style.display = 'none';
+      if (actions) actions.style.display = 'none';
+      if (confirmed) confirmed.style.display = 'block';
+    }
+
+    function closeModal() {
+      var modal = document.getElementById('welcome-modal');
+      if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('visible');
+      }
+      navigate('club-discussion');
+    }
+
+    function joinChapter() {
+      closeModal();
+      var bar = document.getElementById('confirmation-bar');
+      if (bar) bar.classList.add('visible');
+    }
+
+    function closeModalNotNow() {
+      var modal = document.getElementById('welcome-modal');
+      if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('visible');
+      }
+    }
+
+    function updateCirclesNav() {
+      // Tab will now navigate to circles-active
+      var circlesTab = document.getElementById('tab-circles');
+      if (circlesTab) {
+        circlesTab.style.color = 'var(--er-forest-500)';
+      }
+    }
+
+    function dismissGolfInvite() {
+      var card = document.getElementById('invite-card-golf');
+      if (card) {
+        card.style.transition = 'opacity 200ms ease, max-height 300ms ease, margin 300ms ease';
+        card.style.opacity = '0';
+        card.style.maxHeight = '0';
+        card.style.overflow = 'hidden';
+        card.style.marginBottom = '0';
+      }
+    }
+
+    function expandComposer(id) {
+      document.getElementById(id).classList.add('expanded');
+      var ta = document.querySelector('#' + id + ' .composer-textarea');
+      if (ta) ta.focus();
+    }
+
+    // Golf passion page tab switcher (in-page panels, not separate screens)
+    function switchGolfTab(tab, screenId) {
+      STATE.golfActiveTab = tab;
+      // For the golf-circle screen, switch sub-panels
+      var panels = document.querySelectorAll('#' + screenId + ' .golf-circle-panel');
+      panels.forEach(function(p) { p.style.display = 'none'; });
+      var target = document.getElementById(screenId.replace('golf-', 'golf-') + '-panel-' + tab);
+      if (target) target.style.display = 'block';
+      // Update tab active state
+      var tabs = document.querySelectorAll('#' + screenId + ' .club-tab-bar .club-tab');
+      tabs.forEach(function(t) {
+        t.classList.remove('active');
+        if (t.getAttribute('data-tab') === tab) t.classList.add('active');
+      });
+    }
+
+    // Club circle tab — navigates to separate screen
+    function navigateClubTab(tab) {
+      STATE.clubActiveTab = tab;
+      var screenMap = { discussion: 'club-discussion', members: 'club-members', events: 'club-events' };
+      navigate(screenMap[tab]);
+    }
+
+    // Club circle embedded tab (used in golf-circle screen)
+    function switchClubTab(tab, containerId) {
+      STATE.clubActiveTab = tab;
+      var container = document.getElementById(containerId);
+      if (!container) return;
+      container.querySelectorAll('.golf-circle-panel').forEach(function(p) { p.style.display = 'none'; });
+      var panel = document.getElementById('golf-circle-panel-' + tab);
+      if (panel) panel.style.display = 'block';
+      container.querySelectorAll('.club-tab').forEach(function(t) {
+        t.classList.remove('active');
+        if (t.getAttribute('data-tab') === tab) t.classList.add('active');
+      });
+    }
+
+    function navigateTripTab(tab) {
+      STATE.tripActiveTab = tab;
+      var map = { details: 'trip-details', discussion: 'trip-discussion', attending: 'trip-attending' };
+      navigate(map[tab]);
+    }
+
+    function navigateEventTab(tab) {
+      STATE.eventActiveTab = tab;
+      var map = { rsvp: 'event-rsvp', discussion: 'event-discussion', attending: 'event-attending' };
+      navigate(map[tab]);
+    }
+
+    function navigateDestTab(tab) {
+      STATE.destActiveTab = tab;
+      var map = { 'whos-here': 'dest-whos-here', thread: 'dest-thread' };
+      navigate(map[tab]);
+    }
+
+    function rsvpEvent(attending) {
+      STATE.eventRsvpStatus = attending ? 'attending' : 'declined';
+      var yesBtn = document.getElementById('rsvp-yes');
+      var noBtn  = document.getElementById('rsvp-no');
+      if (!yesBtn || !noBtn) return;
+      if (attending) {
+        yesBtn.textContent = '✓ You\'re attending';
+        yesBtn.style.background = 'var(--er-forest-500)';
+        noBtn.style.opacity = '0.4';
+      } else {
+        noBtn.textContent = '✓ Marked as can\'t make it';
+        yesBtn.style.opacity = '0.4';
+      }
+    }
+
+    function optOutDestination() {
+      STATE.destOptedOut = true;
+      var list = document.getElementById('dest-members-list');
+      var msg  = document.getElementById('dest-opted-out-msg');
+      if (list) list.style.display = 'none';
+      if (msg)  msg.style.display = 'block';
+    }
+
+    function updateNavActive(screenId) {
+      document.querySelectorAll('.clubhouse-tab').forEach(function(t) {
+        t.classList.remove('active');
+      });
+
+      var tabMap = {
+        'for-you': 'tab-for-you',
+        'circles-empty': 'tab-circles',
+        'circles-active': 'tab-circles',
+        'golf-discussion': null,
+        'golf-circle': null,
+
+        'club-discussion': 'tab-circles',
+        'club-members': 'tab-circles',
+        'club-events': 'tab-circles',
+        'trip-details': 'tab-circles',
+        'trip-discussion': 'tab-circles',
+        'trip-attending': 'tab-circles',
+        'event-rsvp': 'tab-circles',
+        'event-discussion': 'tab-circles',
+        'event-attending': 'tab-circles',
+        'dest-whos-here': 'tab-circles',
+        'dest-thread': 'tab-circles',
+      };
+
+      var activeTabId = tabMap[screenId];
+      if (activeTabId) {
+        var activeTab = document.getElementById(activeTabId);
+        if (activeTab) activeTab.classList.add('active');
+      }
+
+      // Portal nav — Clubhouse always active in this prototype
+      document.querySelectorAll('.portal-nav-link').forEach(function(l) {
+        l.classList.remove('active');
+      });
+      var clubhouseLink = document.getElementById('portal-link-clubhouse');
+      if (clubhouseLink) clubhouseLink.classList.add('active');
+    }
+
+    function toggleActivity() {
+      var body = document.getElementById('activity-body');
+      var btn = document.querySelector('.activity-collapse');
+      if (!body || !btn) return;
+      if (body.style.display === 'none') {
+        body.style.display = 'block';
+        btn.textContent = 'COLLAPSE ↑';
+      } else {
+        body.style.display = 'none';
+        btn.textContent = 'EXPAND ↓';
+      }
+    }
+
+    // Close modal on overlay click
+    document.getElementById('welcome-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModalNotNow();
+    });
+
+    // Initialize
+    navigate('for-you');
+  </script>
+
+</body>
+</html>
