@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Anna Dooley — Résumé</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --paper: #ebe5d6;
+    --paper-2: #e2dccb;
+    --ink: #0a0a0a;
+    --ink-soft: #2a2a2a;
+    --muted: #6a6657;
+    --hi: #d63100;
+    --acc: #0033ff;
+    --rule: #0a0a0a;
+
+    --display: 'Archivo Black', Impact, sans-serif;
+    --body: 'Space Grotesk', system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #c9c3b3; }
+  /* Force background + accent colors to print */
+  .sheet, .sheet * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-adjust: exact;
+  }
+  body {
+    font-family: var(--body);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    line-height: 1.4;
+  }
+
+  /* Outer wrapper to simulate letter paper on screen */
+  .sheet {
+    background: var(--paper);
+    width: 8.5in;
+    min-height: 11in;
+    margin: 24px auto;
+    padding: 0.5in 0.55in;
+    box-shadow: 0 24px 80px rgba(0,0,0,.18);
+    position: relative;
+  }
+
+  /* ===== Header band ===== */
+  .head {
+    border-bottom: 2px solid var(--rule);
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+  }
+  .head .crumb {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .head .crumb .dot { color: var(--hi); margin: 0 6px; }
+  .head .row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 24px;
+  }
+  .head h1 {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: 64px;
+    line-height: .9;
+    letter-spacing: -.025em;
+    margin: 0;
+    text-transform: uppercase;
+  }
+  .head h1 .red { color: var(--hi); }
+  .head .role {
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+  .head .contact {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    text-align: right;
+    line-height: 1.7;
+  }
+  .head .contact a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
+  .head .contact a:hover { border-bottom-color: var(--hi); color: var(--hi); }
+  .head .contact .lbl {
+    color: var(--muted);
+    margin-right: 6px;
+    letter-spacing: .04em;
+  }
+
+  /* ===== Body grid ===== */
+  .body-grid {
+    display: grid;
+    grid-template-columns: 28% 1fr;
+    gap: 28px;
+  }
+  .rail {
+    border-right: 1px solid rgba(10,10,10,.15);
+    padding-right: 22px;
+  }
+
+  /* ===== Section labels ===== */
+  .k {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 10px 0;
+  }
+  .k::before { content: "// "; color: var(--hi); }
+
+  .block + .block { margin-top: 22px; }
+
+  /* ===== Summary ===== */
+  .summary p {
+    font-size: 11.5px;
+    line-height: 1.55;
+    margin: 0 0 8px 0;
+  }
+  .summary p:last-child { margin-bottom: 0; }
+  .summary .blunt {
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* ===== Skills/Tools lists ===== */
+  .skill-group { margin-bottom: 12px; }
+  .skill-group:last-child { margin-bottom: 0; }
+  .skill-group h4 {
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin: 0 0 4px 0;
+  }
+  .skill-group p {
+    font-family: var(--mono);
+    font-size: 10px;
+    line-height: 1.6;
+    margin: 0;
+    color: var(--ink-soft);
+  }
+
+  /* ===== Right column / experience ===== */
+  .role {
+    margin-bottom: 22px;
+    page-break-inside: avoid;
+  }
+  .role:last-child { margin-bottom: 0; }
+  .role-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 4px;
+    page-break-after: avoid;
+  }
+  .role-head .title {
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: 13.5px;
+    letter-spacing: -.005em;
+  }
+  .role-head .title .co {
+    font-family: var(--display);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -.01em;
+    margin-right: 8px;
+  }
+  .role-head .title .sep { color: var(--muted); margin: 0 4px; }
+  .role-head .dates {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .role-head .dates .arrow { color: var(--hi); margin: 0 4px; }
+  .role-meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .04em;
+    margin-bottom: 10px;
+  }
+
+  .initiative {
+    margin: 10px 0 8px 0;
+    padding-left: 10px;
+    border-left: 3px solid var(--hi);
+    page-break-after: avoid;
+  }
+  .initiative .name {
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .02em;
+  }
+  .initiative .blurb {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  .group-head {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 10px 0 4px 0;
+    page-break-after: avoid;
+  }
+  .group-head::before { content: "— "; color: var(--hi); }
+
+  ul.bullets {
+    list-style: none;
+    margin: 0 0 4px 0;
+    padding: 0;
+  }
+  ul.bullets li {
+    font-size: 11px;
+    line-height: 1.5;
+    padding-left: 14px;
+    position: relative;
+    margin-bottom: 4px;
+    page-break-inside: avoid;
+  }
+  ul.bullets li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--hi);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  ul.bullets li b { font-weight: 700; }
+
+  /* ===== Toolbar (screen only) ===== */
+  .toolbar {
+    max-width: 8.5in;
+    margin: 24px auto 0;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .toolbar button {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    padding: 6px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 0;
+  }
+  .toolbar button:hover { background: var(--ink); color: var(--paper); }
+  .toolbar .note { color: #4a4538; }
+
+  /* ===== Plain-text view ===== */
+  .plain {
+    display: none;
+    max-width: 8.5in;
+    margin: 24px auto;
+    background: var(--paper);
+    padding: 0.5in;
+    box-shadow: 0 24px 80px rgba(0,0,0,.18);
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.6;
+  }
+  .plain h2 {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    margin: 24px 0 8px 0;
+    color: var(--hi);
+  }
+  .plain pre {
+    background: var(--paper-2);
+    border: 1px solid rgba(0,0,0,.1);
+    padding: 12px 14px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    margin: 0 0 8px 0;
+    position: relative;
+  }
+  .plain .copy {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: var(--ink);
+    color: var(--paper);
+    border: 0;
+    padding: 4px 8px;
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    cursor: pointer;
+  }
+  .plain .copy:hover { background: var(--hi); }
+
+  body.view-plain .sheet { display: none; }
+  body.view-plain .plain { display: block; }
+  body.view-plain .toolbar button.toggle::before { content: "← Designed view"; }
+  body:not(.view-plain) .toolbar button.toggle::before { content: "Plain-text view →"; }
+
+  /* ===== Print ===== */
+  @page {
+    size: letter;
+    margin: 0.45in;
+  }
+  @media print {
+    html, body { background: var(--paper); }
+    .toolbar, .plain { display: none !important; }
+    .sheet {
+      box-shadow: none;
+      margin: 0;
+      width: auto;
+      min-height: auto;
+      padding: 0;
+    }
+    .head h1 { font-size: 56px; }
+    a { color: var(--ink); text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar" aria-label="View controls">
+  <button class="toggle" onclick="document.body.classList.toggle('view-plain')" aria-label="Toggle plain-text view"></button>
+  <button onclick="window.print()">Print / Save PDF</button>
+  <span class="note">Designed view = recruiter PDF. Plain-text view = copy-paste blocks for Workday/Lever-style apps.</span>
+</div>
+
+<!-- ============ DESIGNED VIEW ============ -->
+<div class="sheet">
+
+  <header class="head">
+    <div class="crumb">// résumé <span class="dot">·</span> 2026 <span class="dot">·</span> Denver, CO</div>
+    <div class="row">
+      <div>
+        <h1>Anna <span class="red">Dooley</span></h1>
+        <div class="role">Sr. UX/UI Designer + Strategist</div>
+      </div>
+      <div class="contact">
+        <div><span class="lbl">tel</span><a href="tel:+15038407141">503·840·7141</a></div>
+        <div><span class="lbl">mail</span><a href="mailto:anna.lisa.dooley@gmail.com">anna.lisa.dooley@gmail.com</a></div>
+        <div><span class="lbl">site</span><a href="https://annadooleyink.com">annadooleyink.com</a></div>
+        <div><span class="lbl">in</span><a href="https://linkedin.com/in/annadooleyink">linkedin.com/in/annadooleyink</a></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="body-grid">
+
+    <!-- ========= LEFT RAIL ========= -->
+    <aside class="rail">
+
+      <section class="block summary">
+        <h3 class="k">Summary</h3>
+        <p>Sr. UX/UI Designer in Denver. Five years in marketing automation, then five in product UX. Code- and terminal-fluent — designer and builder, not designer-then-handoff.</p>
+        <p class="blunt">Designs the boring bits on purpose. Strategic UX, not deck UX.</p>
+        <p>Spring '26 — open to roles.</p>
+      </section>
+
+      <section class="block">
+        <h3 class="k">Skills</h3>
+
+        <div class="skill-group">
+          <h4>Strategy &amp; Research</h4>
+          <p>Heuristic Evaluation (NN/g) · CX Blueprinting · Stakeholder Interviews · IA &amp; Card Sorting · Journey Mapping · Competitive Benchmarking · Proto-Personas</p>
+        </div>
+
+        <div class="skill-group">
+          <h4>Design</h4>
+          <p>Interaction Design · Responsive Design Systems · Design Patterns &amp; Components · Wireframing (lo→hi fi) · Prototyping · Accessibility (WCAG)</p>
+        </div>
+
+        <div class="skill-group">
+          <h4>Code &amp; AI</h4>
+          <p>Production-fidelity HTML / CSS / JS prototypes · React (with AI dev collaborator) · Terminal · Git</p>
+        </div>
+      </section>
+
+      <section class="block">
+        <h3 class="k">Tools</h3>
+        <div class="skill-group">
+          <p>Figma · ProtoPie · Claude Code · Cursor · VS Code</p>
+        </div>
+      </section>
+
+      <section class="block">
+        <h3 class="k">Education</h3>
+
+        <div class="skill-group">
+          <h4>BA, Digital Media Communications</h4>
+          <p>Oregon State University</p>
+        </div>
+
+        <div class="skill-group">
+          <h4>UX/UI Certification</h4>
+          <p>University of Oregon · 2021</p>
+        </div>
+      </section>
+
+    </aside>
+
+    <!-- ========= RIGHT COLUMN ========= -->
+    <main>
+
+      <section class="block">
+        <h3 class="k">Experience</h3>
+
+        <!-- ===== Exclusive Resorts ===== -->
+        <article class="role">
+          <div class="role-head">
+            <div class="title"><span class="co">Exclusive Resorts</span><span class="sep">·</span>Sr. UX/UI Designer</div>
+            <div class="dates">Sept 2025 <span class="arrow">→</span> Apr 2026</div>
+          </div>
+
+          <div class="initiative">
+            <div class="name">Reservation Allocation System (RAS)</div>
+            <div class="blurb">Replaced a fastest-finger booking race with a quarterly weighted lottery.</div>
+          </div>
+          <ul class="bullets">
+            <li>Led design across member and ambassador surfaces for a quarterly weighted lottery replacing a fastest-finger booking race. Presented to the Member Advisory Council; scoped for 2027 release.</li>
+            <li>Built a working React prototype with AI as dev collaborator. The prototype became the stakeholder alignment artifact — not a static click-through.</li>
+            <li>Designed a variable-points architecture and partnered with engineering on the underlying algorithm; both informed the next backend spec revision.</li>
+          </ul>
+
+          <div class="initiative">
+            <div class="name">The Clubhouse</div>
+            <div class="blurb">Private member community — solo Sr. designer across two phases of growth.</div>
+          </div>
+          <ul class="bullets">
+            <li>Sole Sr. designer joining a feature-flagged MVP. Owned end-to-end IA, feature analysis, and MoSCoW prioritization across two phases of growth.</li>
+            <li>Restructured a flat MVP into a four-pillar platform. Two roadmap recommendations adopted: Passion + My Feed added to Phase 2; tabbed Destination Pages restructure piloting in Costa Rica.</li>
+            <li>Designed the Phase 3 Circles system in advance of build — five Circle types from one shared structural pattern, with interactive HTML prototypes demonstrating the navigation logic.</li>
+          </ul>
+
+          <div class="initiative">
+            <div class="name">Mobile Strategy</div>
+            <div class="blurb">Self-initiated audit + roadmap across native and webview. Feb–Apr 2026.</div>
+          </div>
+          <ul class="bullets">
+            <li>Self-initiated a code-level audit of native iOS/Android + responsive webview — surfaced 763 hardcoded values, 23 font sizes, and a webview-awareness gap nobody owned.</li>
+            <li>Built a platform decision framework, mapped 19 features against current vs. recommended ownership, produced a 20-item priority matrix and 4-phase roadmap.</li>
+            <li>First distribution didn't land. Rebuilt as a 6-tab interactive HTML report integrating the 2026 member survey — landed with Head of Product + PMs; portions moved into next-quarter scope.</li>
+          </ul>
+        </article>
+
+        <!-- ===== Kin and Carta ===== -->
+        <article class="role">
+          <div class="role-head">
+            <div class="title"><span class="co">Kin and Carta</span><span class="sep">·</span>UX/UI Designer</div>
+            <div class="dates">Nov 2020 <span class="arrow">→</span> Jun 2025</div>
+          </div>
+
+          <div class="group-head">Strategy</div>
+          <ul class="bullets">
+            <li>Drove an IA + homepage redesign from card-sort and user-survey research — research-backed, not workshop-guessed.</li>
+            <li>Built an interactive business-case spreadsheet that let stakeholders adjust financials and see organizational impact in real time.</li>
+            <li>Mapped an end-to-end CX blueprint for a lead-gen experience — front-stage and back-stage interactions, gap analysis, efficiency recommendations.</li>
+            <li>Ran 35 stakeholder interviews to diagnose enterprise IT challenges; compiled findings into decision-grade artifacts leadership signed off on.</li>
+            <li>Delivered data-backed recommendations and implementation guidance across multiple client engagements.</li>
+          </ul>
+
+          <div class="group-head">Design</div>
+          <ul class="bullets">
+            <li>Designed unified responsive web screens informed by a native-vs-webview analysis; retained the native engagement patterns worth keeping.</li>
+            <li>Led cross-platform alignment so responsive web designs informed mobile implementations — consistency across surfaces, not parallel teams.</li>
+            <li>Designed a product search system (suggested search, recommendations, catalog browsing, multilayered filtering) for a retailer-first selection model on a top-search catalog brand.</li>
+            <li>Sole UX/UI designer for multiple end-to-end web and app flows on the MoXe application. Redesigned product cards for cross-team, cross-device reuse.</li>
+            <li>Built Figma shared components with variables that flexed across platforms and scenarios. Introduced drag-and-drop patterns to modernize legacy flows.</li>
+            <li>Built ProtoPie prototypes with conditional logic, routing, form fields, and micro-interactions — closer to live than Figma click-throughs, used for user testing.</li>
+          </ul>
+        </article>
+
+        <!-- ===== Ideas Collide — Strategist ===== -->
+        <article class="role">
+          <div class="role-head">
+            <div class="title"><span class="co">Ideas Collide</span><span class="sep">·</span>Digital Marketing Strategist</div>
+            <div class="dates">Jun 2019 <span class="arrow">→</span> Oct 2020</div>
+          </div>
+          <ul class="bullets">
+            <li>Built multi-channel marketing automation strategies — triggered comms, landing pages, dynamic content, ecosystem campaigns — to 150% of goal.</li>
+            <li>Designed and tested complex audience segmentation for personalized, targeted campaigns.</li>
+            <li>Presented marketing automation, reporting, and SEO strategy to top-tier clients.</li>
+          </ul>
+        </article>
+
+        <!-- ===== Ideas Collide — Specialist ===== -->
+        <article class="role">
+          <div class="role-head">
+            <div class="title"><span class="co">Ideas Collide</span><span class="sep">·</span>Digital Marketing Specialist</div>
+            <div class="dates">Jul 2017 <span class="arrow">→</span> Jun 2019</div>
+          </div>
+          <ul class="bullets">
+            <li>Marketing automation production, segmentation, and SEO implementation for client campaigns.</li>
+          </ul>
+        </article>
+
+      </section>
+
+    </main>
+
+  </div>
+
+</div>
+
+<!-- ============ PLAIN-TEXT VIEW ============ -->
+<div class="plain" id="plain">
+
+  <h2>Summary</h2>
+  <pre>Sr. UX/UI Designer in Denver. Five years in marketing automation, then five in product UX. Code- and terminal-fluent — designer and builder, not designer-then-handoff. Designs the boring bits on purpose. Strategic UX, not deck UX. Spring '26 — open to roles.<button class="copy" onclick="copyBlock(this)">Copy</button></pre>
+
+  <h2>Exclusive Resorts · Sr. UX/UI Designer · Sept 2025 → Apr 2026</h2>
+  <pre>Reservation Allocation System (RAS) — replaced a fastest-finger booking race with a quarterly weighted lottery.
+• Led design across member and ambassador surfaces for a quarterly weighted lottery replacing a fastest-finger booking race. Presented to the Member Advisory Council; scoped for 2027 release.
+• Built a working React prototype with AI as dev collaborator. The prototype became the stakeholder alignment artifact — not a static click-through.
+• Designed a variable-points architecture and partnered with engineering on the underlying algorithm; both informed the next backend spec revision.
+
+The Clubhouse — private member community, solo Sr. designer across two phases of growth.
+• Sole Sr. designer joining a feature-flagged MVP. Owned end-to-end IA, feature analysis, and MoSCoW prioritization across two phases of growth.
+• Restructured a flat MVP into a four-pillar platform. Two roadmap recommendations adopted: Passion + My Feed added to Phase 2; tabbed Destination Pages restructure piloting in Costa Rica.
+• Designed the Phase 3 Circles system in advance of build — five Circle types from one shared structural pattern, with interactive HTML prototypes demonstrating the navigation logic.
+
+Mobile Strategy — self-initiated audit + roadmap across native and webview. Feb–Apr 2026.
+• Self-initiated a code-level audit of native iOS/Android + responsive webview — surfaced 763 hardcoded values, 23 font sizes, and a webview-awareness gap nobody owned.
+• Built a platform decision framework, mapped 19 features against current vs. recommended ownership, produced a 20-item priority matrix and 4-phase roadmap.
+• First distribution didn't land. Rebuilt as a 6-tab interactive HTML report integrating the 2026 member survey — landed with Head of Product + PMs; portions moved into next-quarter scope.<button class="copy" onclick="copyBlock(this)">Copy</button></pre>
+
+  <h2>Kin and Carta · UX/UI Designer · Nov 2020 → Jun 2025</h2>
+  <pre>Strategy
+• Drove an IA + homepage redesign from card-sort and user-survey research — research-backed, not workshop-guessed.
+• Built an interactive business-case spreadsheet that let stakeholders adjust financials and see organizational impact in real time.
+• Mapped an end-to-end CX blueprint for a lead-gen experience — front-stage and back-stage interactions, gap analysis, efficiency recommendations.
+• Ran 35 stakeholder interviews to diagnose enterprise IT challenges; compiled findings into decision-grade artifacts leadership signed off on.
+• Delivered data-backed recommendations and implementation guidance across multiple client engagements.
+
+Design
+• Designed unified responsive web screens informed by a native-vs-webview analysis; retained the native engagement patterns worth keeping.
+• Led cross-platform alignment so responsive web designs informed mobile implementations — consistency across surfaces, not parallel teams.
+• Designed a product search system (suggested search, recommendations, catalog browsing, multilayered filtering) for a retailer-first selection model on a top-search catalog brand.
+• Sole UX/UI designer for multiple end-to-end web and app flows on the MoXe application. Redesigned product cards for cross-team, cross-device reuse.
+• Built Figma shared components with variables that flexed across platforms and scenarios. Introduced drag-and-drop patterns to modernize legacy flows.
+• Built ProtoPie prototypes with conditional logic, routing, form fields, and micro-interactions — closer to live than Figma click-throughs, used for user testing.<button class="copy" onclick="copyBlock(this)">Copy</button></pre>
+
+  <h2>Ideas Collide · Digital Marketing Strategist · Jun 2019 → Oct 2020</h2>
+  <pre>• Built multi-channel marketing automation strategies — triggered comms, landing pages, dynamic content, ecosystem campaigns — to 150% of goal.
+• Designed and tested complex audience segmentation for personalized, targeted campaigns.
+• Presented marketing automation, reporting, and SEO strategy to top-tier clients.<button class="copy" onclick="copyBlock(this)">Copy</button></pre>
+
+  <h2>Ideas Collide · Digital Marketing Specialist · Jul 2017 → Jun 2019</h2>
+  <pre>• Marketing automation production, segmentation, and SEO implementation for client campaigns.<button class="copy" onclick="copyBlock(this)">Copy</button></pre>
+
+</div>
+
+<script>
+function copyBlock(btn) {
+  const pre = btn.parentElement;
+  const text = pre.innerText.replace(/Copy\s*$/, '').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerText;
+    btn.innerText = 'Copied';
+    setTimeout(() => btn.innerText = orig, 1200);
+  });
+}
+</script>
+
+</body>
+</html>
