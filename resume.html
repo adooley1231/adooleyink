@@ -347,17 +347,22 @@
   /* ===== Print ===== */
   @page {
     size: letter;
-    margin: 0.45in;
+    margin: 0;
   }
   @media print {
-    html, body { background: var(--paper); }
+    html, body {
+      background: var(--paper);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
     .toolbar, .plain { display: none !important; }
     .sheet {
+      background: var(--paper);
       box-shadow: none;
       margin: 0;
-      width: auto;
-      min-height: auto;
-      padding: 0;
+      width: 100%;
+      min-height: 11in;
+      padding: 0.5in 0.55in;
     }
     .head h1 { font-size: 56px; }
     a { color: var(--ink); text-decoration: none; }
