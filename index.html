@@ -1733,27 +1733,27 @@
     </div>
     <div class="case-meta">
       <div class="cell"><div class="k">Role</div><div class="v">Lead UX, Solo</div></div>
-      <div class="cell"><div class="k">Scope</div><div class="v">Web + iOS / Android app</div></div>
-      <div class="cell"><div class="k">Timeline</div><div class="v">18 months</div></div>
+      <div class="cell"><div class="k">Surface</div><div class="v">Web + iOS / Android app</div></div>
+      <div class="cell"><div class="k">Duration</div><div class="v">18 months</div></div>
       <div class="cell"><div class="k">Status</div><div class="v">Shipped, in production</div></div>
     </div>
 
     <section class="case-section">
-      <div class="heading"><div class="k">// 01 — The Project</div><h2>Context &amp; my role</h2></div>
+      <div class="heading"><div class="k">// 01 — Setup</div><h2>Context &amp; my role</h2></div>
       <div class="body">
         <div class="prose">
           <p>Post-COVID, US Foods needed to move a long-tail of foodservice customers from phone-and-fax ordering to a digital-first platform. MOXē became that platform — across web and native apps — for restaurants, hospitals, hotels, schools, and small operators.</p>
-          <p>My role involved leading design across the ordering, inventory, and reporting surfaces. I worked solo on the UX side embedded in a multi-pod engineering team, partnered with a single PM, and reported into the broader product design org.</p>
+          <p>I led design across the ordering, inventory, and reporting surfaces. I worked solo on the UX side embedded in a multi-pod engineering team, partnered with a single PM, and reported into the broader product design org.</p>
           <p>The user base was unusually heterogeneous — a chef counting walk-in inventory on a phone, an accountant pulling end-of-month reports on a desktop, a kitchen manager re-ordering on an iPad in a service window. Designing for all three from one component system was the central technical and conceptual problem.</p>
         </div>
       </div>
     </section>
 
     <section class="case-section">
-      <div class="heading"><div class="k">// 02 — The Challenge</div><h2>What we were really up against</h2></div>
+      <div class="heading"><div class="k">// 02 — The constraints</div><h2>What I was up against</h2></div>
       <div class="body">
         <div class="prose">
-          <p>Three constraints stacked: a customer base that hadn't asked to go digital, an engineering velocity that wanted weekly releases, and a product surface that touched ordering, inventory, reporting, and account management across two platforms. The design system had to absorb that variability without fragmenting.</p>
+          <p>Three constraints stacked: a customer base that hadn't asked to go digital, an engineering velocity that wanted weekly releases, and a product surface that touched ordering, inventory, reporting, and account management across web, iOS, and Android. The design system had to absorb that variability without fragmenting.</p>
           <ul>
             <li>Users with low digital literacy alongside power users running multi-location operations</li>
             <li>Mobile contexts that required one-handed use in noisy kitchens and walk-ins</li>
@@ -1765,17 +1765,17 @@
     </section>
 
     <section class="case-section">
-      <div class="heading"><div class="k">// 03 — The Research</div><h2>What we learned before drawing</h2></div>
+      <div class="heading"><div class="k">// 03 — The research</div><h2>What the research surfaced</h2></div>
       <div class="body">
         <div class="prose">
-          <p>I conducted user interviews with a sample spanning the customer types, ran competitive teardowns of Amazon Business, Instacart, and Walmart B2B, and partnered with category PMs and the data team to ground assumptions in real ordering behavior.</p>
-          <p>The critical needs that surfaced repeatedly: <b>fast re-order from history</b>, <b>flexible product representation</b> (since the same SKU could behave differently across customer types), <b>inventory visibility tied to ordering</b>, and <b>accessibility on the warehouse floor</b> — high contrast, large touch targets, minimal typing.</p>
+          <p>I conducted user interviews across the customer types — chefs in walk-ins, accountants at desktops, kitchen managers on iPads — ran competitive teardowns of Amazon Business, Instacart, and Walmart B2B, and partnered with category PMs and the data team to ground assumptions in real ordering behavior.</p>
+          <p>The critical needs that surfaced repeatedly: fast re-order from history, flexible product representation (since the same SKU could behave differently across customer types), inventory visibility tied to ordering, and accessibility on the warehouse floor — high contrast, large touch targets, minimal typing.</p>
         </div>
       </div>
     </section>
 
     <section class="case-section">
-      <div class="heading"><div class="k">// 04 — The Design Solution</div><h2>What we built, piece by piece</h2></div>
+      <div class="heading"><div class="k">// 04 — The build</div><h2>What I built, piece by piece</h2></div>
       <div class="body">
         <div class="prose">
           <p>Rather than redesigning surface by surface, I started with the most-shared component — the product card — and used its constraints to drive system decisions outward. From there: inventory, count mode, and reporting.</p>
@@ -1798,18 +1798,16 @@
       </div>
 
       <div class="case-subsection">
-        <h3>2 / Inventory — landing, onboarding, count mode</h3>
+        <h3>2 / Inventory — landing + count mode</h3>
         <div class="row">
           <div class="gutter">Flow</div>
           <div class="prose">
             <p>Inventory was the surface most tied to physical context. Most users counted stock on a phone in a walk-in or pantry. I rebuilt the experience mobile-first, with progress trackers, drag-and-drop reordering of count lists, an offline-tolerant draft state, and a simplified <b>count mode</b> that stripped chrome down to the count action and a back button.</p>
-            <p>Onboarding moved into a confirmable sequence rather than a tutorial — first count, first save, first exported report, each celebrated and reversible.</p>
           </div>
         </div>
-        <div class="img-grid three">
-          <div class="img-block tall"><span class="ph">[ Landing ]</span></div>
-          <div class="img-block tall"><span class="ph">[ Onboarding ]</span></div>
-          <div class="img-block tall"><span class="ph">[ Count mode ]</span></div>
+        <div class="img-grid">
+          <div class="img-block"><span class="ph">[ Landing ]</span></div>
+          <div class="img-block"><span class="ph">[ Count mode ]</span></div>
         </div>
       </div>
 
@@ -1818,7 +1816,7 @@
         <div class="row">
           <div class="gutter">Pattern</div>
           <div class="prose">
-            <p>For multi-select edit on count lists, I borrowed the long-press-to-select pattern from Squarespace's editor and the floating action toolbar from LinkedIn's saved posts — both already familiar to a wide swath of users. Accessibility maintained: every gesture had a visible button equivalent, and screen reader announcements were tested with VoiceOver and TalkBack.</p>
+            <p>For multi-select edit on count lists, I borrowed the long-press-to-select pattern from Squarespace's editor and the floating action toolbar from LinkedIn's saved posts — both already familiar to a wide swath of users. Every gesture had a visible button equivalent so the pattern stayed usable for members who couldn't or wouldn't use long-press.</p>
           </div>
         </div>
         <div class="ba">
@@ -1832,7 +1830,7 @@
         <div class="row">
           <div class="gutter">Edge case</div>
           <div class="prose">
-            <p>Customers often tracked items they bought outside US Foods — produce from a local supplier, paper goods from Costco. We let users add these as "non-US Foods items" with a clearly different visual treatment so the data model and the UX both stayed honest about origin.</p>
+            <p>Customers often tracked items they bought outside US Foods — produce from a local supplier, paper goods from Costco. I designed a distinct "non-US Foods" item type<!-- TODO ANNA: name the specific visual move — a different card variant, a tag chip, a contrasting accent, an icon, etc. --> so members could mix supplier sources in one list while the data model and the UX both stayed honest about origin.</p>
           </div>
         </div>
         <div class="img-grid">
@@ -1846,7 +1844,7 @@
         <div class="row">
           <div class="gutter">Iteration</div>
           <div class="prose">
-            <p>End-of-period reports were the surface where stakeholders saw their data. We iterated five times on the overview cards before landing on a layout that read at a glance and printed cleanly to PDF — and updated the PDF template alongside the digital one to keep parity.</p>
+            <p>End-of-period reports were the surface where stakeholders saw their data. I iterated five times on the overview cards before landing on a layout that read at a glance and printed cleanly to PDF — and updated the PDF template alongside the digital one to keep parity.</p>
           </div>
         </div>
         <div class="img-grid iter">
@@ -1873,11 +1871,11 @@
     </section>
 
     <section class="case-section">
-      <div class="heading"><div class="k">// 05 — Impact &amp; Learnings</div><h2>What it changed, what I'd do differently</h2></div>
+      <div class="heading"><div class="k">// 05 — What landed</div><h2>What it changed</h2></div>
       <div class="body">
         <div class="prose">
-          <p>MOXē shipped on schedule across web and both native apps, with the product card system absorbing every new SKU pattern through the toggles rather than design rework. Inventory adoption climbed once count mode landed, and the bi-weekly engineering syncs became a model for the broader design org.</p>
-          <p>Personally, the project taught me that on a regulated, slow-moving customer base, the win isn't the redesign — it's the component decisions that make the next ten redesigns cheap. The single product card with 13 toggles is the artifact I'm proudest of; the process that kept design ahead of dev is the muscle I rely on most now.</p>
+          <p>MOXē shipped on schedule across web and both native apps, with the product card system absorbing every new SKU pattern through the toggles rather than design rework. The team reported inventory engagement climbing once count mode landed, and the bi-weekly engineering syncs became a model for the broader design org.</p>
+          <p>The project taught me that on a regulated, slow-moving customer base, the win isn't the redesign — it's the component decisions that make the next ten redesigns cheap. The single product card with 13 toggles is the artifact I'm proudest of; the process that kept design ahead of dev is the muscle I rely on most now.</p>
         </div>
       </div>
     </section>
