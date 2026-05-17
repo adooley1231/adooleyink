@@ -1791,9 +1791,15 @@
             <p>Engineering implemented one card; product turned the toggles. The leverage was enormous: a new card type became a flag, not a redesign.</p>
           </div>
         </div>
-        <div class="ba">
-          <div class="img-block"><span class="lbl">Before</span><span class="ph">[ Card v0 — flat ]</span></div>
-          <div class="img-block"><span class="lbl">After</span><span class="ph">[ Card v1 — 13 toggles ]</span></div>
+        <div class="img-grid">
+          <div class="img-block">
+            <span class="lbl">Toggle system</span>
+            <img src="assets/us-card-toggles.png" alt="Single Figma product card component with the 13-toggle properties panel visible — Card Type (Edit List), Device Type, Show Shelf, Show Check Bar, Show Pill String, Check Bar tablet/state, Shelf device/tray, Product Info, Selection Controls — each toggle producing a different render of the same underlying card.">
+          </div>
+          <div class="img-block">
+            <span class="lbl">Permutation · out-of-stock</span>
+            <img src="assets/us-card-oos.png" alt="One permutation produced by the toggle system — the out-of-stock card state with red Out of Stock chip up top, the product info beneath, a US Foods Suggested Substitute card linked underneath, and the same quantity controls and contract/recent-purchase chips as the standard card.">
+          </div>
         </div>
       </div>
 
@@ -1806,8 +1812,14 @@
           </div>
         </div>
         <div class="img-grid">
-          <div class="img-block"><span class="ph">[ Landing ]</span></div>
-          <div class="img-block"><span class="ph">[ Count mode ]</span></div>
+          <div class="img-block">
+            <span class="lbl">Landing</span>
+            <img src="assets/us-inventory-landing.png" alt="Inventory landing view (desktop) — shopping list with the Count Mode / Edit Mode toggle at top right, total value, completed-at metadata, area chips (All / Storeroom / Freezer / Pantry / Prep Area), Add Products / Update Prices actions, and the line items beneath with group, unit, case, total, value columns.">
+          </div>
+          <div class="img-block">
+            <span class="lbl">Count mode</span>
+            <img src="assets/us-inventory-countmode.png" alt="Count mode — the simplified counting view that strips chrome down to the count action; the same shopping-list rows render with minimal nav and a clear back path, so a chef counting stock on a phone in a walk-in only sees what they need to act on.">
+          </div>
         </div>
       </div>
 
@@ -1820,8 +1832,14 @@
           </div>
         </div>
         <div class="ba">
-          <div class="img-block"><span class="lbl">Idle</span><span class="ph">[ List, no selection ]</span></div>
-          <div class="img-block"><span class="lbl">Edit mode</span><span class="ph">[ Multi-select toolbar ]</span></div>
+          <div class="img-block">
+            <span class="lbl">Idle</span>
+            <img src="assets/us-edit-idle.png" alt="Edit mode entered but no rows selected yet — the list is in its idle state with the Count Mode / Edit Mode toggle showing Edit Mode active, the standard line items rendered, and no contextual toolbar.">
+          </div>
+          <div class="img-block">
+            <span class="lbl">Edit mode</span>
+            <img src="assets/us-edit-multiselect.png" alt="Multi-select state — two rows selected (visible offset/elevation), bottom-anchored green toolbar surfacing the bulk actions: 2 Products Selected · Deselect All · Move to Group · Copy to Group · Change Units · Delete. The long-press-to-select pattern borrowed from Squarespace plus the floating action toolbar borrowed from LinkedIn.">
+          </div>
         </div>
       </div>
 
@@ -1834,8 +1852,14 @@
           </div>
         </div>
         <div class="img-grid">
-          <div class="img-block"><span class="ph">[ Add non-USF item ]</span></div>
-          <div class="img-block"><span class="ph">[ List with mixed origins ]</span></div>
+          <div class="img-block">
+            <span class="lbl">Add non-USF item</span>
+            <img src="assets/us-nonusf-add.png" alt="Add Non-US Foods Products flow — the form where a member enters a product from a supplier outside US Foods, with the visual treatment that distinguishes it from the standard US Foods product cards in the same list.">
+          </div>
+          <div class="img-block">
+            <span class="lbl">List with mixed origins</span>
+            <img src="assets/us-nonusf-list.png" alt="Inventory list rendered with mixed origins — US Foods items rendered in the standard treatment alongside the distinct non-US Foods item treatment, so the source of every line is honest at a glance without breaking the unified list affordance.">
+          </div>
         </div>
       </div>
 
@@ -1849,14 +1873,32 @@
           </div>
         </div>
         <div class="img-grid iter">
-          <div class="img-block"><span class="ph">[ Card variation 1 ]</span></div>
-          <div class="img-block"><span class="ph">[ Card variation 2 ]</span></div>
-          <div class="img-block"><span class="ph">[ Card variation 3 ]</span></div>
-          <div class="img-block"><span class="ph">[ Card variation 4 ]</span></div>
+          <div class="img-block">
+            <span class="lbl">Iteration A</span>
+            <img src="assets/us-card-iter-a.png" alt="Inventory overview card iteration A — early treatment exploring how to surface inventory name, value, line count, status, and metadata on a single card.">
+          </div>
+          <div class="img-block">
+            <span class="lbl">Iteration B</span>
+            <img src="assets/us-card-iter-b.png" alt="Inventory overview card iteration B — second pass adjusting hierarchy and the placement of state/metadata.">
+          </div>
+          <div class="img-block">
+            <span class="lbl">Iteration C</span>
+            <img src="assets/us-card-iter-c.png" alt="Inventory overview card iteration C — refining the line-count and total-value pairing and the position of the completion-state tag.">
+          </div>
+          <div class="img-block">
+            <span class="lbl">Shipped</span>
+            <img src="assets/us-card-iter-final.png" alt="Inventory overview card final/shipped variation — completion state made legible via a vertical tag on the left rather than a buried label, with the line count and total value paired in a way that scans in one glance.">
+          </div>
         </div>
         <div class="ba">
-          <div class="img-block"><span class="lbl">Mobile</span><span class="ph">[ All Inventories landing page ]</span></div>
-          <div class="img-block"><span class="lbl">Desktop</span><span class="ph">[ All Inventories landing page ]</span></div>
+          <div class="img-block">
+            <span class="lbl">Mobile</span>
+            <img src="assets/us-all-inv-mobile.png" alt="All Inventories landing page on mobile — stacked inventory cards each summarizing its inventory at a glance, with the completion vertical tag, name, dates, value, and line-item count visible without drilling in.">
+          </div>
+          <div class="img-block">
+            <span class="lbl">Desktop</span>
+            <img src="assets/us-all-inv-desktop.png" alt="All Inventories landing page on desktop — the same cards in a tabular row layout: Name, Last Updated, Created, Products (with count badge), Value, and a Duplicate action; vertical tag at the left of each row makes completion status legible at a glance, with completed inventories standing out from in-progress ones.">
+          </div>
         </div>
       </div>
 
