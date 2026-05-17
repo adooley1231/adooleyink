@@ -6,8 +6,10 @@
 set -euo pipefail
 
 CANONICAL="/Users/annadooley/Downloads/anna-dooley-portfolio.html"
+CANONICAL_ASSETS="/Users/annadooley/Downloads/assets"
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 PUBLIC="$REPO_DIR/index.html"
+PUBLIC_ASSETS="$REPO_DIR/assets"
 MSG="${1:-Update portfolio}"
 
 if [[ ! -f "$CANONICAL" ]]; then
@@ -16,6 +18,13 @@ if [[ ! -f "$CANONICAL" ]]; then
 fi
 
 cp "$CANONICAL" "$PUBLIC"
+
+# Sync assets folder if it exists (videos, images, etc. referenced by case studies).
+if [[ -d "$CANONICAL_ASSETS" ]]; then
+  mkdir -p "$PUBLIC_ASSETS"
+  rsync -a --delete "$CANONICAL_ASSETS/" "$PUBLIC_ASSETS/"
+  echo "Synced assets: $(ls -1 "$PUBLIC_ASSETS" | wc -l | tr -d ' ') file(s), $(du -sh "$PUBLIC_ASSETS" | cut -f1)"
+fi
 
 # Find admin block boundaries dynamically so this survives unrelated edits.
 PHASE1_LINE=$(grep -n "ADMIN LAYER — Phase 1.1" "$PUBLIC" | head -1 | cut -d: -f1 || true)
@@ -32,7 +41,7 @@ echo "Public file: $(wc -l < "$PUBLIC" | tr -d ' ') lines, $(wc -c < "$PUBLIC" |
 echo "Remaining 'admin' refs (case-study text only): $(grep -ic admin "$PUBLIC")"
 
 cd "$REPO_DIR"
-git add index.html
+git add index.html assets 2>/dev/null || git add index.html
 if git diff --cached --quiet; then
   echo "No changes to commit."
   exit 0
