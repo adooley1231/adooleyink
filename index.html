@@ -1444,7 +1444,7 @@
           <i style="--w:.26"><span class="r">05</span><span class="p">2pt</span></i>
         </div>
       </div>
-      <div class="meta-line"><span>Web</span><span>Lead UX</span><span>2026</span></div>
+      <div class="meta-line"><span>Web</span><span>Lead UX</span><span>2026</span><span class="lock">Protected</span></div>
       <p>Replacing a fastest-finger booking race with a fairer, quarterly weighted lottery. Members got real levers; ambassadors got a portfolio dashboard; the React prototype became the alignment artifact.</p>
       <span class="enter">Open case study →</span>
     </button>
@@ -1476,7 +1476,7 @@
           <div class="pillar"><span class="n">04</span><span class="lbl">Editorial</span></div>
         </div>
       </div>
-      <div class="meta-line"><span>Web</span><span>Sr. Product</span><span>2025&ndash;26</span></div>
+      <div class="meta-line"><span>Web</span><span>Sr. Product</span><span>2025&ndash;26</span><span class="lock">Protected</span></div>
       <p>End-to-end product strategy for a private member community &mdash; full IA, MoSCoW prioritization across two phases of growth, and a Phase 3 system designed in advance of build.</p>
       <span class="enter">Open case study →</span>
     </button>
@@ -1493,7 +1493,7 @@
           <div class="line"><span class="k">App satisfaction</span><span class="v">3.50</span></div>
         </div>
       </div>
-      <div class="meta-line"><span>Native + Web</span><span>Sr. Product</span><span>2026</span></div>
+      <div class="meta-line"><span>Native + Web</span><span>Sr. Product</span><span>2026</span><span class="lock">Protected</span></div>
       <p>A self-initiated UX/UI audit across two mobile codebases &mdash; built without a mandate, dismissed at the leadership level, rebuilt around the member survey that validated it.</p>
       <span class="enter">Open case study →</span>
     </button>
@@ -1509,7 +1509,7 @@
           <div class="ln"><b>Ops</b><div class="stops"><em></em><em></em><em></em><em></em><em class="gap"></em><em></em><em></em></div></div>
         </div>
       </div>
-      <div class="meta-line"><span>CX Strategy</span><span>UX Strategist</span><span>2024</span></div>
+      <div class="meta-line"><span>CX Strategy</span><span>UX Strategist</span><span>2024</span><span class="lock">Protected</span></div>
       <p>Mapped an end-to-end lead management experience nobody had seen as a single system &mdash; through multi-population research and a stakeholder-validated opportunity framework.</p>
       <span class="enter">Open case study →</span>
     </button>
@@ -2844,11 +2844,15 @@
 
   // ---- Case view system ----
   const CASES = {
-    'destination-lottery':{ num: '01', title: 'Exclusive Resorts RAS', tpl: 'tpl-destination-lottery', locked: false, password: null },
+    'destination-lottery':{ num: '01', title: 'Exclusive Resorts RAS', tpl: 'tpl-destination-lottery', locked: true,  password: 'case-access-2026',
+                          lockedCopy: 'Recent client work. Email me for the password — I share it with hiring managers actively reviewing.' },
     'healthfirst':      { num: '02', title: 'Healthfirst Member Portal', tpl: 'tpl-healthfirst', locked: false, password: null },
-    'clubhouse':        { num: '03', title: 'The Clubhouse',         tpl: 'tpl-clubhouse',  locked: false, password: null },
-    'mobile-strategy':  { num: '04', title: 'Mobile Strategy',        tpl: 'tpl-mobile-strategy', locked: false, password: null },
-    'cx-blueprint':     { num: '05', title: 'CX Blueprint',          tpl: 'tpl-cx-blueprint', locked: false, password: null },
+    'clubhouse':        { num: '03', title: 'The Clubhouse',         tpl: 'tpl-clubhouse',  locked: true,  password: 'case-access-2026',
+                          lockedCopy: 'Recent client work. Email me for the password — I share it with hiring managers actively reviewing.' },
+    'mobile-strategy':  { num: '04', title: 'Mobile Strategy',        tpl: 'tpl-mobile-strategy', locked: true,  password: 'case-access-2026',
+                          lockedCopy: 'Recent internal strategy work. Email me for the password — I share it with hiring managers actively reviewing.' },
+    'cx-blueprint':     { num: '05', title: 'CX Blueprint',          tpl: 'tpl-cx-blueprint', locked: true,  password: 'case-access-2026',
+                          lockedCopy: 'Client CX strategy work. Email me for the password — I share it with hiring managers actively reviewing.' },
     'us-foods':         { num: '06', title: 'US Foods MOXē',         tpl: 'tpl-us-foods',   locked: false, password: null },
     // Hidden (not in ORDER or work-grid; still reachable by direct URL):
     'syngenta-it':      { num: '07', title: 'Syngenta IT Simplify',  tpl: 'tpl-locked',     locked: true,  password: 'syngenta-it-2024',
@@ -2882,14 +2886,38 @@
   let lastFocus = null;
   let currentSlug = null;
 
+  function isUnlocked(slug) {
+    try { return sessionStorage.getItem('unlocked:' + slug) === '1'; } catch (e) { return false; }
+  }
+  function markUnlocked(slug) {
+    try {
+      sessionStorage.setItem('unlocked:' + slug, '1');
+      // If multiple cases share the same password, unlock them all at once so a
+      // recruiter only enters the password once.
+      const pw = CASES[slug] && CASES[slug].password;
+      if (pw) {
+        Object.keys(CASES).forEach(k => {
+          if (CASES[k].locked && CASES[k].password === pw) {
+            sessionStorage.setItem('unlocked:' + k, '1');
+          }
+        });
+      }
+    } catch (e) {}
+  }
+
   function renderCaseInto(target, slug) {
     const def = CASES[slug];
     if (!def) return;
-    const tpl = document.getElementById(def.tpl);
+    // If locked AND not unlocked in this session AND we have real content to gate,
+    // route through the lock template instead of the case template.
+    const hasRealContent = def.tpl !== 'tpl-locked';
+    const showGate = def.locked && hasRealContent && !isUnlocked(slug);
+    const tplId = showGate ? 'tpl-locked' : def.tpl;
+    const tpl = document.getElementById(tplId);
     if (!tpl) return;
     target.innerHTML = '';
     const node = tpl.content.cloneNode(true);
-    if (def.locked) populateLocked(node, def);
+    if (def.locked && (showGate || !hasRealContent)) populateLocked(node, def);
     target.appendChild(node);
     initEmbeds(target);
     return def;
@@ -2939,22 +2967,29 @@
         const val = (input && input.value || '').trim();
         if (val === def.password) {
           err.textContent = '';
-          body.innerHTML = `
-            <div class="case-content">
-              <div class="case-hero">
-                <div class="num">Case ${def.num} · Unlocked</div>
-                <h1 id="case-title">${def.title}</h1>
-                <p class="lede">Access granted. Full case study content lives in this slot — placeholder until I drop in the deck.</p>
-              </div>
-              <div class="case-stub">
-                <div class="box">
-                  <h2>Content placeholder</h2>
-                  <p>Replace this template with the unlocked case-study content. Same section structure as US Foods MOXē above.</p>
-                  <a href="mailto:anna.lisa.dooley@gmail.com" class="btn">Email Anna →</a>
-                </div>
-              </div>
-            </div>`;
           haptic(12);
+          // Persist unlock for this session, then re-render the case with real content
+          // (if it exists). Cases with no real content behind the gate (syngenta-it)
+          // fall through to a simple "access granted" stub.
+          const slug = Object.keys(CASES).find(k => CASES[k] === def);
+          if (slug && def.tpl !== 'tpl-locked') {
+            markUnlocked(slug);
+            renderCaseInto(body, slug);
+          } else {
+            body.innerHTML = `
+              <div class="case-content">
+                <div class="case-hero">
+                  <div class="num">Case ${def.num} · Unlocked</div>
+                  <h1 id="case-title">${def.title}</h1>
+                  <p class="lede">Access granted. Full case study materials shared on request — email me for the deck.</p>
+                </div>
+                <div class="case-stub">
+                  <div class="box">
+                    <a href="mailto:anna.lisa.dooley@gmail.com" class="btn">Email Anna →</a>
+                  </div>
+                </div>
+              </div>`;
+          }
         } else {
           err.textContent = 'Wrong password. Email anna.lisa.dooley@gmail.com.';
           haptic([20, 30, 20]);
