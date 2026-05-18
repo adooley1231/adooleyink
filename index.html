@@ -2975,6 +2975,7 @@
           if (slug && def.tpl !== 'tpl-locked') {
             markUnlocked(slug);
             renderCaseInto(body, slug);
+            if (view) view.scrollTop = 0;
           } else {
             body.innerHTML = `
               <div class="case-content">
@@ -3010,12 +3011,17 @@
     const def = CASES[slug];
     if (!def) return;
 
-    const tpl = document.getElementById(def.tpl);
+    // Route through gate logic: locked cases with real content show tpl-locked
+    // until the password is entered (or until sessionStorage flags them unlocked).
+    const hasRealContent = def.tpl !== 'tpl-locked';
+    const showGate = def.locked && hasRealContent && !isUnlocked(slug);
+    const tplId = showGate ? 'tpl-locked' : def.tpl;
+    const tpl = document.getElementById(tplId);
     if (!tpl) return;
     body.innerHTML = '';
     const node = tpl.content.cloneNode(true);
 
-    if (def.locked) populateLocked(node, def);
+    if (def.locked && (showGate || !hasRealContent)) populateLocked(node, def);
     body.appendChild(node);
     initEmbeds(body);
     crumb.textContent = `${def.num} · ${def.title}`;
