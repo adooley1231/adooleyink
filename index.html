@@ -137,6 +137,28 @@
   nav .cta .arr { transition: transform .18s ease; }
   nav .cta:hover .arr { transform: translateX(3px); }
 
+  /* Mobile sticky-footer CTA — replaces the nav CTA below 720px */
+  .cta-mobile { display: none; }
+  @media (max-width: 720px) {
+    nav .cta { display: none; }
+    .cta-mobile {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+      padding: 16px 24px calc(16px + env(safe-area-inset-bottom));
+      background: var(--hi); color: var(--paper);
+      font-family: var(--mono); font-weight: 700; font-size: 14px;
+      letter-spacing: .06em; text-transform: uppercase; text-decoration: none;
+      border-top: var(--bw) solid var(--ink);
+      box-shadow: 0 -6px 18px rgba(0,0,0,.10);
+      transition: transform .22s ease, opacity .22s ease;
+    }
+    .cta-mobile:active { background: var(--ink); color: var(--hi); }
+    body.menu-open .cta-mobile,
+    body.case-open .cta-mobile { transform: translateY(110%); opacity: 0; pointer-events: none; }
+    /* Reserve space so the sticky CTA doesn't overlap content (footer/contact) */
+    body { padding-bottom: calc(56px + env(safe-area-inset-bottom)); }
+  }
+
   .theme-toggle {
     padding: 14px 16px; border-left: var(--bw) solid var(--ink);
     background: var(--paper); color: var(--ink); cursor: pointer;
@@ -1384,6 +1406,10 @@
   <a href="#refs">References <span>05</span></a>
   <a href="#contact">Contact <span>06</span></a>
 </div>
+
+<a href="#contact" class="cta-mobile" aria-label="Hire me — jump to contact">
+  Hire me <span class="arr" aria-hidden="true">→</span>
+</a>
 
 <main id="main">
 
