@@ -54,14 +54,19 @@
 
   /* ----- RESET ----- */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    overflow-x: clip;
+  }
   body {
     background: var(--paper);
     color: var(--ink);
     font-family: var(--body);
     font-weight: 400;
     line-height: 1.5;
-    overflow-x: hidden;
+    overflow-x: clip;
+    max-width: 100%;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
@@ -1346,9 +1351,33 @@
   }
 
   @media (max-width: 520px) {
-    .hero h1 { font-size: clamp(56px, 18vw, 120px); }
+    .hero h1 { font-size: clamp(48px, 16vw, 120px); }
     .work-card .num { font-size: 60px; }
     nav .brand { font-size: 16px; padding: 12px 14px; }
+
+    /* Stack AI grid (was 2x2) and footer grid (was 2x2) so labels don't truncate */
+    .ai .grid4 { grid-template-columns: 1fr; }
+    footer .grid { grid-template-columns: 1fr; }
+    footer .grid .col {
+      border-right: 0;
+      border-bottom: var(--bw) solid var(--paper);
+      min-height: 0;
+    }
+    footer .grid .col:last-child { border-bottom: 0; }
+  }
+  @media (max-width: 380px) {
+    /* Tiny screens (iPhone SE 1st-gen, 320–380px) — let display text shrink further
+       so the longest line still fits and we never trigger a horizontal scroll. */
+    .hero h1 { font-size: clamp(40px, 14.5vw, 56px); letter-spacing: -.04em; }
+    .work-card .num { font-size: 52px; }
+    .sec-head h2 { font-size: clamp(32px, 9vw, 40px); }
+    .hero { padding: 80px 14px 0; }
+  }
+
+  /* Safety net — long display words never push the viewport wider. */
+  .hero h1, .sec-head h2, .work-card .num, .work-card h3,
+  .case-hero h1, .case-section .heading h2 {
+    overflow-wrap: anywhere;
   }
 
   /* ----- REDUCED MOTION ----- */
