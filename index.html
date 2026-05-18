@@ -147,21 +147,16 @@
   }
   .theme-toggle:hover { background: var(--ink); color: var(--paper); }
   .theme-toggle .ico {
-    width: 12px; height: 12px; border-radius: 50%;
-    background: var(--ink);
-    box-shadow: inset -3px 0 0 0 var(--paper);
-    transition: background .18s ease, box-shadow .18s ease;
+    width: 14px; height: 14px; display: inline-flex;
+    align-items: center; justify-content: center;
+    color: var(--ink); transition: color .18s ease;
   }
-  .theme-toggle:hover .ico {
-    background: var(--paper);
-    box-shadow: inset -3px 0 0 0 var(--ink);
-  }
-  [data-theme="dark"] .theme-toggle .ico {
-    box-shadow: inset 3px 0 0 0 var(--paper);
-  }
-  [data-theme="dark"] .theme-toggle:hover .ico {
-    box-shadow: inset 3px 0 0 0 var(--ink);
-  }
+  .theme-toggle .ico svg { width: 14px; height: 14px; display: block; }
+  .theme-toggle .ico .sun  { display: none; }
+  .theme-toggle .ico .moon { display: block; }
+  [data-theme="dark"] .theme-toggle .ico .sun  { display: block; }
+  [data-theme="dark"] .theme-toggle .ico .moon { display: none; }
+  .theme-toggle:hover .ico { color: var(--paper); }
   .theme-toggle .lbl {
     font-feature-settings: "tnum"; min-width: 3.2em; text-align: left;
   }
@@ -1369,7 +1364,10 @@
     <a href="#refs">05 / Refs</a>
   </div>
   <button class="theme-toggle" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false">
-    <span class="ico" aria-hidden="true"></span>
+    <span class="ico" aria-hidden="true">
+      <svg class="moon" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.5 9.2A5 5 0 0 1 4.8 2.5a5.2 5.2 0 1 0 6.7 6.7z" fill="currentColor"/></svg>
+      <svg class="sun" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="7" cy="7" r="2.7" fill="currentColor"/><g stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><line x1="7" y1="0.6" x2="7" y2="2.1"/><line x1="7" y1="11.9" x2="7" y2="13.4"/><line x1="0.6" y1="7" x2="2.1" y2="7"/><line x1="11.9" y1="7" x2="13.4" y2="7"/><line x1="2.45" y1="2.45" x2="3.5" y2="3.5"/><line x1="10.5" y1="10.5" x2="11.55" y2="11.55"/><line x1="11.55" y1="2.45" x2="10.5" y2="3.5"/><line x1="3.5" y1="10.5" x2="2.45" y2="11.55"/></g></svg>
+    </span>
     <span class="lbl" aria-hidden="true">Night</span>
   </button>
   <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="menu-drawer">
