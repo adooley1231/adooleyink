@@ -1397,6 +1397,9 @@
     * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   }
 </style>
+
+<!-- Cloudflare Web Analytics — paste your token below (see analytics-setup.md) -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2192e83ca3274e7c9d0aa249ee9de474"}'></script>
 </head>
 <body>
 
@@ -3163,6 +3166,7 @@
   document.querySelectorAll('[data-case]').forEach(btn => {
     btn.addEventListener('click', () => {
       const slug = btn.getAttribute('data-case');
+      window.track && window.track('/case/' + slug);
       location.hash = `#case/${slug}`;
     });
   });
@@ -3314,6 +3318,34 @@
     }
   })();
 
+})();
+</script>
+
+<!-- Analytics: virtual pageviews for case studies and key CTAs.
+     Cloudflare Web Analytics auto-detects pushState. We push a virtual URL,
+     then replace it back so navigation/history stay intact. -->
+<script>
+(function () {
+  window.track = function (virtualPath) {
+    try {
+      var original = location.pathname + location.search + location.hash;
+      history.pushState({}, '', virtualPath);
+      history.replaceState({}, '', original);
+    } catch (e) { /* no-op */ }
+  };
+
+  // Track key CTA clicks. Use capture so we fire before navigation.
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    var dataLink = a.getAttribute('data-link');
+
+    if (dataLink === 'linkedin') window.track('/click/linkedin');
+    else if (dataLink === 'resume' || href === '/resume/' || href === '/resume') window.track('/click/resume');
+    else if (href.indexOf('mailto:') === 0) window.track('/click/email');
+    else if (/^https?:\/\//.test(href) && !href.includes('annadooleyink.com')) window.track('/click/outbound');
+  }, true);
 })();
 </script>
 
