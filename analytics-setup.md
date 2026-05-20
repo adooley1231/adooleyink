@@ -1,86 +1,56 @@
 # Analytics setup
 
-Cloudflare Web Analytics is wired into `index.html` and `resume/index.html`. You need to paste your account token in two places before it starts collecting data.
+## What's wired up
 
-## 1. Create a Cloudflare account + property
+**Cloudflare Web Analytics** — beacon installed in:
+- `index.html`
+- `resume/index.html`
+- `../../Job-Search/resume/anna-dooley-resume.html` (canonical résumé source)
 
-1. Go to https://dash.cloudflare.com/sign-up — free account, no credit card.
-2. Once in: left nav → **Analytics & Logs** → **Web Analytics**.
-3. Click **Add a site**.
-4. Choose **"Add manually" / "Without proxying through Cloudflare"** (since your DNS is on GitHub Pages, not Cloudflare).
-5. Hostname: `annadooleyink.com`
-6. Cloudflare gives you a snippet that looks like:
+Token already pasted in all three: `2192e83ca3274e7c9d0aa249ee9de474`.
 
-   ```html
-   <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
-     data-cf-beacon='{"token": "abc123def456..."}'></script>
-   ```
+## What you get
 
-7. Copy the token value (the long string after `"token":`).
+Cloudflare Web Analytics dashboard (https://dash.cloudflare.com → Analytics & Logs → Web Analytics → annadooleyink.com):
 
-## 2. Paste the token
+- **Total pageviews + unique visitors** by day/hour
+- **Top pages** — `/` and `/resume/` show as separate rows (so you'll know how many resume views vs portfolio views)
+- **Referrers** — LinkedIn, Google, direct, email (this is the most useful signal: where did this visitor come from?)
+- **Countries, browsers, devices**
+- **Time on page, bounce rate**
 
-Replace `REPLACE_WITH_CLOUDFLARE_TOKEN` in these three files:
+No cookies, no GDPR banner, ~5KB script, deferred load.
 
-- `index.html` (top of file, in `<head>`)
-- `resume/index.html` (in `<head>`)
-- `../../Job-Search/resume/anna-dooley-resume.html` (canonical resume source — also in `<head>`)
+## What you DON'T get (and how to add it)
 
-Fastest way:
+Cloudflare Web Analytics doesn't have a custom-events API, so you can't see "this visitor clicked the Healthfirst case study" or "this visitor clicked the LinkedIn link" out of the box.
 
-```bash
-cd /Users/annadooley/Portfolio/live-site
-sed -i '' 's/REPLACE_WITH_CLOUDFLARE_TOKEN/YOUR_TOKEN_HERE/g' index.html resume/index.html
-sed -i '' 's/REPLACE_WITH_CLOUDFLARE_TOKEN/YOUR_TOKEN_HERE/g' /Users/annadooley/Job-Search/resume/anna-dooley-resume.html
-```
+For that, two free options:
 
-## 3. Commit + push
+### Option A: Microsoft Clarity (recommended for portfolios)
+- Free, no caps
+- **Session recordings** — literally watch anonymized recordings of visitors moving through your site
+- **Heatmaps** — see exactly which case study cards get clicked, which sections people scroll past
+- Privacy-friendly (masks all text by default)
+- Setup: https://clarity.microsoft.com → create project → paste one `<script>` snippet alongside the CF beacon
 
-```bash
-cd /Users/annadooley/Portfolio/live-site
-git add index.html resume/index.html analytics-setup.md
-git commit -m "add Cloudflare Web Analytics + virtual pageview click tracking"
-git push
-```
+This is actually closer to what you asked for ("idea of who is clicking what") — you'll literally see clicks and scroll behavior on a real human's session, not just aggregate counts.
 
-(The canonical resume publishes separately via its own flow.)
+### Option B: Plausible (paid, $9/mo)
+- Clean custom event API
+- Better for "give me a count of how many people clicked X" funnel-style data
+- Less useful for "show me what happens" — that's Clarity's strength
 
-## 4. View your data
+If you want either added, just say the word.
 
-Dashboard: https://dash.cloudflare.com → Analytics & Logs → Web Analytics → annadooleyink.com
+## Viewing your data
 
-Expect first data within ~5 minutes of first visit.
-
-## What you'll see
-
-**Standard:**
-- Pageviews, unique visitors, time-on-site, bounce rate
-- Top referrers (LinkedIn, Google, direct, etc.)
-- Countries, browsers, devices
-- Top pages — `/`, `/resume/` show up as their own rows
-
-**Custom virtual pageviews** (added via the `window.track()` helper in `index.html`):
-- `/case/destination-lottery`, `/case/healthfirst`, `/case/clubhouse`, `/case/mobile-strategy`, `/case/cx-blueprint`, `/case/us-foods` — fires when a case study card is opened
-- `/click/email` — fires when any mailto link is clicked
-- `/click/linkedin` — fires when LinkedIn link is clicked
-- `/click/resume` — fires when résumé link is clicked from the home page
-- `/click/outbound` — fires for any other external link
-
-These all show up in the "Top pages" section of the Cloudflare dashboard alongside real pages. To see only click events, filter by path containing `/click/` or `/case/`.
-
-## Adding new tracked events
-
-In any click handler:
-
-```js
-window.track('/whatever-virtual-path');
-```
-
-That's it. It'll show up in Cloudflare within minutes.
+1. Visit annadooleyink.com (in an incognito window if you're testing your own traffic — your normal browsing might be filtered out)
+2. Go to https://dash.cloudflare.com → Analytics & Logs → Web Analytics → annadooleyink.com
+3. First data within ~5 min; full breakdowns within ~30 min
 
 ## Notes
 
-- No cookies, no GDPR banner needed (Cloudflare WA is privacy-friendly by design).
-- ~5KB script, loaded with `defer` so it doesn't block render.
-- The `track()` helper uses `history.pushState` + immediate `replaceState` to spoof a pageview without actually changing the visible URL or breaking the back button.
-- If you ever want richer event analytics (funnels, custom dimensions, conversion goals), Plausible ($9/mo at plausible.io) is the easy upgrade — same script pattern, ~30 seconds to swap in.
+- The CF beacon won't fire on `localhost` — it filters out non-public hostnames. Only live-site data shows up.
+- Cloudflare's free tier has no pageview cap.
+- If you ever change the domain (e.g., switch from annadooleyink.com), update the property in CF dashboard.
