@@ -670,6 +670,101 @@
   }
   .ai .pull .red { color: var(--hi); }
 
+  /* ----- AI: FLOWSCOPE CALLOUT ----- */
+  .ai .flowscope {
+    margin-top: 48px;
+    border: var(--bw) solid var(--paper);
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 0;
+  }
+  .ai .flowscope .shot {
+    border-right: var(--bw) solid var(--paper);
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .ai .flowscope .shot img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .ai .flowscope .copy {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .ai .flowscope .eyebrow {
+    font-family: var(--mono, monospace);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--hi);
+  }
+  .ai .flowscope h3 {
+    font-family: var(--display);
+    font-size: clamp(22px, 2vw, 32px);
+    line-height: 1.05;
+    letter-spacing: -.01em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .ai .flowscope .tagline {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .ai .flowscope .trio {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 4px 0;
+  }
+  .ai .flowscope .trio .row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .ai .flowscope .trio .row b {
+    font-family: var(--display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .01em;
+    color: var(--hi);
+  }
+  .ai .flowscope .closer {
+    font-family: var(--display);
+    font-size: clamp(16px, 1.6vw, 22px);
+    line-height: 1.15;
+    letter-spacing: -.01em;
+    text-transform: uppercase;
+    padding-top: 16px;
+    border-top: 1px solid var(--paper);
+  }
+  .ai .flowscope .links {
+    display: flex;
+    gap: 16px;
+    font-family: var(--mono, monospace);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+  }
+  .ai .flowscope .links a {
+    color: var(--paper);
+    text-decoration: none;
+    border-bottom: 1px solid var(--paper);
+    padding-bottom: 2px;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .ai .flowscope .links a:hover {
+    color: var(--hi);
+    border-bottom-color: var(--hi);
+  }
+
   /* ----- STRATEGY STACK ----- */
   .strat-stack {}
   .strat-row {
@@ -1312,6 +1407,15 @@
     .ai .grid4 { grid-template-columns: 1fr 1fr; }
     .ai .body { padding: 36px var(--pad); }
 
+    .ai .flowscope { grid-template-columns: 1fr; }
+    .ai .flowscope .shot {
+      border-right: 0;
+      border-bottom: var(--bw) solid var(--paper);
+    }
+    .ai .flowscope .copy { padding: 24px; gap: 16px; }
+    .ai .flowscope .trio .row { grid-template-columns: 1fr; gap: 2px; }
+    .ai .flowscope .trio .row b { font-size: 14px; }
+
     .strat-row {
       grid-template-columns: 56px 1fr;
       grid-template-rows: auto auto;
@@ -1619,6 +1723,27 @@
         <div class="n">04</div>
         <h4>Stakeholder demos</h4>
         <p>Real flows, real recoveries, built fast enough to walk through in a working session. Feedback gets specific. Dev gets a working spec, not a slide.</p>
+      </div>
+    </div>
+
+    <div class="flowscope">
+      <div class="shot">
+        <img src="assets/flowscope-canvas.png" alt="FlowScope canvas — six screens connected by trigger edges with an Authenticated? decision diamond, sidebar showing path filters and tag filters for error/loading/empty states, dark theme." loading="lazy" />
+      </div>
+      <div class="copy">
+        <div class="eyebrow">Building this</div>
+        <h3>FlowScope</h3>
+        <p class="tagline">Designers are now building in code. Once you have 8 screens of it, there's no way to see the system. FlowScope is the zoom-out &mdash; assemble the flow, surface every state across viewports, present end-to-end, and hand off to dev with comments lifted back to Claude Code as code references.</p>
+        <div class="trio">
+          <div class="row"><b>Zoom out</b><span>Assemble your vibe-coded prototypes into one system view. Walk the flow end-to-end the way a user would.</span></div>
+          <div class="row"><b>See every state</b><span>Error, loading, empty, success &mdash; across desktop and mobile, in context of the flow. Spot gaps before dev does.</span></div>
+          <div class="row"><b>Comment &amp; hand off</b><span>Comments lift code references &mdash; file, component, line &mdash; and route back to Claude Code or Cursor to implement. The canvas becomes the handoff artifact.</span></div>
+        </div>
+        <div class="closer">The bridge between building in code and presenting like a designer.</div>
+        <div class="links">
+          <a href="https://adooley1231.github.io/flowscope-poc/" target="_blank" rel="noopener">Live demo &rarr;</a>
+          <a href="https://github.com/adooley1231/flowscope-poc" target="_blank" rel="noopener">GitHub &rarr;</a>
+        </div>
       </div>
     </div>
 
