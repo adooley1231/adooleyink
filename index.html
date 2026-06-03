@@ -31,6 +31,7 @@
     --acc: #0033ff;
     --green: #00853a;       /* darker green, AA-safe on cream */
     --paper-2: #e2dccb;     /* one step darker for subtle elevation */
+    --hairline: rgba(10,10,10,.12); /* subtle inter-item rule on cream */
     --display: 'Bungee', Impact, sans-serif;
     --body: 'Space Grotesk', system-ui, sans-serif;
     --mono: 'IBM Plex Mono', ui-monospace, monospace;
@@ -49,6 +50,7 @@
     --hi: #e83a14;
     --acc: #5b6dff;
     --green: #3acf7a;
+    --hairline: rgba(237,229,208,.14);
   }
   [data-theme="dark"] .case-locked input:focus { background: var(--paper-2); }
 
@@ -766,36 +768,33 @@
   }
 
   /* ----- STRATEGY STACK ----- */
-  .strat-stack {}
-  .strat-row {
-    border-bottom: var(--bw) solid var(--ink);
-    display: grid; grid-template-columns: 100px 1fr 1.4fr;
-    align-items: stretch;
-    transition: background .18s ease, color .18s ease;
+  .strat-stack {
+    padding: 56px var(--pad) 64px;
   }
-  .strat-row:last-child { border-bottom: 0; }
-  .strat-row > * {
-    padding: 28px var(--pad); border-right: var(--bw) solid var(--ink);
-    display: flex; flex-direction: column; justify-content: center;
+  .strat-item {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    column-gap: 56px;
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
   }
-  .strat-row > *:last-child { border-right: 0; }
-  .strat-row .num {
-    font-family: var(--display); font-size: 56px; line-height: .85;
-    letter-spacing: -.04em; background: var(--paper);
+  .strat-item:first-of-type { border-top: 0; padding-top: 8px; }
+  .strat-item:last-of-type { padding-bottom: 0; }
+  .strat-item .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+    opacity: .55; margin-bottom: 10px;
   }
-  .strat-row h4 {
-    font-family: var(--display); font-size: 24px;
-    letter-spacing: -.02em; text-transform: uppercase; line-height: 1;
+  .strat-item h4 {
+    font-family: var(--body); font-weight: 700;
+    font-size: clamp(22px, 2.4vw, 30px);
+    letter-spacing: -.02em; line-height: 1.1;
+    max-width: 18ch;
   }
-  .strat-row p { font-size: 14px; line-height: 1.6; }
-  .strat-row .arr {
-    font-family: var(--display); font-size: 36px;
-    text-align: center; align-items: center; justify-content: center;
-    background: var(--paper);
+  .strat-item p {
+    font-size: 16px; line-height: 1.6;
+    max-width: 44ch;
+    align-self: end;
   }
-  .strat-row:hover { background: var(--hi); color: var(--paper); }
-  .strat-row:hover .num,
-  .strat-row:hover .arr { background: var(--ink); color: var(--paper); }
 
   /* ----- ABOUT ----- */
   .about { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; }
@@ -1416,23 +1415,14 @@
     .ai .flowscope .trio .row { grid-template-columns: 1fr; gap: 2px; }
     .ai .flowscope .trio .row b { font-size: 14px; }
 
-    .strat-row {
-      grid-template-columns: 56px 1fr;
-      grid-template-rows: auto auto;
+    .strat-stack { padding: 32px var(--pad) 40px; }
+    .strat-item {
+      grid-template-columns: 1fr;
+      row-gap: 14px;
+      padding: 28px 0;
     }
-    .strat-row > * { border-right: 0; padding: 18px 16px; }
-    .strat-row .num {
-      grid-row: 1 / 3;
-      font-size: 26px;
-      padding: 18px 8px;
-      align-items: flex-start;
-      border-right: var(--bw) solid var(--ink);
-    }
-    .strat-row > div:nth-child(2) { padding: 18px 16px 6px; border-bottom: 0; }
-    .strat-row > div:nth-child(2) h4 { font-size: 18px; line-height: 1.05; }
-    .strat-row > div:nth-child(3) { padding: 0 16px 18px; border-bottom: 0; border-right: 0; grid-column: 2; }
-    .strat-row > div:nth-child(3) p { font-size: 14px; }
-    .strat-row .arr { display: none; }
+    .strat-item h4 { font-size: 22px; max-width: none; }
+    .strat-item p { font-size: 15px; max-width: none; }
 
     .about { grid-template-columns: 1fr; }
     .about .l { border-right: 0; border-bottom: var(--bw) solid var(--ink); padding: 36px var(--pad); }
@@ -1758,35 +1748,29 @@
     <span class="tag">06 modes</span>
   </div>
   <div class="strat-stack">
-    <div class="strat-row reveal">
-      <div class="num">01</div>
-      <div><h4>Find the drivers, not the symptoms.</h4></div>
-      <div><p>35+ interviews, 370 insights, 4 drivers. The strategy is naming what&rsquo;s actually holding the system up &mdash; and what isn&rsquo;t worth fixing.</p></div>
+    <div class="strat-item reveal">
+      <div><div class="eyebrow">01.</div><h4>Find the drivers, not the symptoms.</h4></div>
+      <p>35+ interviews, 370 insights, 4 drivers. The strategy is naming what&rsquo;s actually holding the system up &mdash; and what isn&rsquo;t worth fixing.</p>
     </div>
-    <div class="strat-row reveal">
-      <div class="num">02</div>
-      <div><h4>Make alignment a deliverable.</h4></div>
-      <div><p>A blueprint sales, marketing, and product can all read stops alignment from being a meeting. The artifact does the work.</p></div>
+    <div class="strat-item reveal">
+      <div><div class="eyebrow">02.</div><h4>Make alignment a deliverable.</h4></div>
+      <p>A blueprint sales, marketing, and product can all read stops alignment from being a meeting. The artifact does the work.</p>
     </div>
-    <div class="strat-row reveal">
-      <div class="num">03</div>
-      <div><h4>Heuristics, not hunches.</h4></div>
-      <div><p>NN/g&rsquo;s ten heuristics, applied with discipline, sort &ldquo;this feels off&rdquo; into prioritizable, business-aligned moves.</p></div>
+    <div class="strat-item reveal">
+      <div><div class="eyebrow">03.</div><h4>Heuristics, not hunches.</h4></div>
+      <p>NN/g&rsquo;s ten heuristics, applied with discipline, sort &ldquo;this feels off&rdquo; into prioritizable, business-aligned moves.</p>
     </div>
-    <div class="strat-row reveal">
-      <div class="num">04</div>
-      <div><h4>Toggles over redesigns.</h4></div>
-      <div><p>One product card. 13 toggles. 40+ permutations. Engineering implements once; product turns the dials.</p></div>
+    <div class="strat-item reveal">
+      <div><div class="eyebrow">04.</div><h4>Toggles over redesigns.</h4></div>
+      <p>One product card. 13 toggles. 40+ permutations. Engineering implements once; product turns the dials.</p>
     </div>
-    <div class="strat-row reveal">
-      <div class="num">05</div>
-      <div><h4>Design two sprints ahead.</h4></div>
-      <div><p>Specs at refinement, bi-weekly engineering syncs, component usage held to in code. Process is a design surface too.</p></div>
+    <div class="strat-item reveal">
+      <div><div class="eyebrow">05.</div><h4>Design two sprints ahead.</h4></div>
+      <p>Specs at refinement, bi-weekly engineering syncs, component usage held to in code. Process is a design surface too.</p>
     </div>
-    <div class="strat-row reveal">
-      <div class="num">06</div>
-      <div><h4>Translate UX into a number.</h4></div>
-      <div><p>Findability ties to engagement. Hierarchy ties to conversion. The audit lands when leadership sees what it pays back.</p></div>
+    <div class="strat-item reveal">
+      <div><div class="eyebrow">06.</div><h4>Translate UX into a number.</h4></div>
+      <p>Findability ties to engagement. Hierarchy ties to conversion. The audit lands when leadership sees what it pays back.</p>
     </div>
   </div>
 </section>
