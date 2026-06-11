@@ -27,7 +27,7 @@
   :root {
     --paper: #ebe5d6;
     --ink: #0a0a0a;
-    --hi: #d63100;          /* darker than #ff3d00 for AA on cream */
+    --hi: #c12d00;          /* AA-safe (~5:1) on cream for small text */
     --acc: #0033ff;
     --green: #00853a;       /* darker green, AA-safe on cream */
     --paper-2: #e2dccb;     /* one step darker for subtle elevation */
@@ -1569,7 +1569,7 @@
   <div class="strip" role="status" aria-live="polite">
     <span class="live">STATUS: <span class="green">AVAILABLE</span></span>
     <span id="clock">DENVER · LOADING…</span>
-    <span>FORMER LIFE: MARKETING + AUTOMATION (5 YRS)</span>
+    <span>ORIGIN STORY: MARKETING + AUTOMATION (5 YRS)</span>
     <span><a href="#work" style="color:inherit;text-decoration:none">SCROLL ↓</a></span>
   </div>
 </header>
@@ -1583,7 +1583,7 @@
 <section id="work" aria-labelledby="work-h">
   <div class="sec-head">
     <h2 id="work-h">Selected <span class="red">Work</span></h2>
-    <span class="tag">2022 — 2025 · 06 cases</span>
+    <span class="tag">2024 — 2026 · 06 cases</span>
   </div>
 
   <div class="work-grid">
@@ -1733,7 +1733,7 @@
     </div>
     <div class="strat-item reveal">
       <div><div class="eyebrow">02.</div><h4>Make alignment a deliverable.</h4></div>
-      <p>A blueprint sales, marketing, and product can all read stops alignment from being a meeting. The artifact does the work.</p>
+      <p>A blueprint that sales, marketing, and product can all read stops alignment from being a meeting. The artifact does the work.</p>
     </div>
     <div class="strat-item reveal">
       <div><div class="eyebrow">03.</div><h4>Heuristics, not hunches.</h4></div>
@@ -1804,7 +1804,6 @@
         <div class="closer">The bridge between building in code and presenting like a designer.</div>
         <div class="links">
           <a href="https://adooley1231.github.io/flowscope-poc/" target="_blank" rel="noopener">Live demo &rarr;</a>
-          <a href="https://github.com/adooley1231/flowscope-poc" target="_blank" rel="noopener">GitHub &rarr;</a>
         </div>
       </div>
     </div>
@@ -1865,7 +1864,7 @@
   </div>
   <div class="colophon">
     <span>© 2026 Anna Dooley Ink</span>
-    <span>Set in Archivo Black · Space Grotesk · IBM Plex Mono</span>
+    <span>Set in Bungee · Space Grotesk · IBM Plex Mono</span>
     <span>v.04 — built &amp; designed by Anna</span>
   </div>
 </footer>
@@ -2743,7 +2742,7 @@
           <input type="password" placeholder="Password" aria-label="Case study password" required>
           <button type="submit">Unlock</button>
         </form>
-        <div class="err" data-err></div>
+        <div class="err" data-err role="alert"></div>
         <p class="ask">No password? <a href="mailto:anna.lisa.dooley@gmail.com?subject=Case%20study%20access">Email me — I'll send it.</a></p>
       </div>
     </div>
